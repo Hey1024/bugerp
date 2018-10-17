@@ -10,6 +10,8 @@ export function getToken() {
 }
 
 export function setToken(token) {
+  console.log('token:')
+  console.log(encrypt(token))
   return Cookies.set(TokenKey, encrypt(token), {
     expires: inFifteenMinutes
   })
