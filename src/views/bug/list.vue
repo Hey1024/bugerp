@@ -1,101 +1,96 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item" :placeholder="$t('table.title')" v-model="listQuery.title">
-      </el-input>
-      <el-select clearable style="width: 90px" class="filter-item" v-model="listQuery.status" :placeholder="$t('table.status')">
-        <el-option v-for="item,index in statuslist" :key="index" :label="item.value" :value="item.label">
-        </el-option>
+      <el-input :placeholder="$t('table.title')" v-model="listQuery.title" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter"/>
+      <el-select v-model="listQuery.status" :placeholder="$t('table.status')" clearable style="width: 90px" class="filter-item">
+        <el-option v-for="(item, index) in statuslist" :key="index" :label="item.value" :value="item.label"/>
       </el-select>
-      <el-select clearable style="width: 90px" class="filter-item" v-model="listQuery.level" :placeholder="$t('table.level')">
-        <el-option v-for="item in levels" :key="item" :label="item" :value="item">
-        </el-option>
+      <el-select v-model="listQuery.level" :placeholder="$t('table.level')" clearable style="width: 90px" class="filter-item">
+        <el-option v-for="item in levels" :key="item" :label="item" :value="item"/>
       </el-select>
-      <el-select clearable class="filter-item" style="width: 130px" v-model="listQuery.project" :placeholder="$t('table.project')">
-        <el-option v-for="item in  projectnames" :key="item" :label="item" :value="item">
-        </el-option>
+      <el-select v-model="listQuery.project" :placeholder="$t('table.project')" clearable class="filter-item" style="width: 130px">
+        <el-option v-for="item in projectnames" :key="item" :label="item" :value="item"/>
       </el-select>
       <!--<el-select @change='handleFilter' style="width: 140px" class="filter-item" v-model="listQuery.sort">-->
       <!--<el-option v-for="item in sortOptions" :key="item.key" :label="item.label" :value="item.key">-->
       <!--</el-option>-->
       <!--</el-select>-->
-      <el-button class="filter-item" type="primary" v-waves icon="el-icon-search" @click="handleFilter">{{$t('table.search')}}</el-button>
+      <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">{{ $t('table.search') }}</el-button>
       <!--<el-button class="filter-item" style="margin-left: 10px;" @click="handleCreate" type="primary" icon="el-icon-edit">{{$t('table.add')}}</el-button>-->
       <!--<el-button class="filter-item" type="primary" :loading="downloadLoading" v-waves icon="el-icon-download" @click="handleDownload">{{$t('table.export')}}</el-button>-->
       <!--<el-checkbox class="filter-item" style='margin-left:15px;' @change='tableKey=tableKey+1' v-model="showReviewer">{{$t('table.reviewer')}}</el-checkbox>-->
     </div>
-    <el-table :data="list" v-loading.body="listLoading" border fit highlight-current-row style="width: 100%">
+    <el-table v-loading.body="listLoading" :data="list" border fit highlight-current-row style="width: 100%">
 
-      <el-table-column align="center" :label="$t('table.id')" width="50">
+      <el-table-column :label="$t('table.id')" align="center" width="50">
         <template slot-scope="scope">
-          <span>{{scope.row.id}}</span>
+          <span>{{ scope.row.id }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column width="150px" align="center" :label="$t('table.date')">
+      <el-table-column :label="$t('table.date')" width="150px" align="center">
         <template slot-scope="scope">
-          <span>{{scope.row.date | parseTime('{y}-{m}-{d} {h}:{i}')}}</span>
+          <span>{{ scope.row.date | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column width="100px" align="center" :label="$t('table.project')">
+      <el-table-column :label="$t('table.project')" width="100px" align="center">
         <template slot-scope="scope">
-          <span>{{scope.row.projectname}}</span>
+          <span>{{ scope.row.projectname }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column width="80px" align="center" :label="$t('table.level')">
+      <el-table-column :label="$t('table.level')" width="80px" align="center">
         <template slot-scope="scope">
-          <span>{{scope.row.level}}</span>
+          <span>{{ scope.row.level }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column width="100px" align="center" :label="$t('table.importance')">
+      <el-table-column :label="$t('table.importance')" width="100px" align="center">
         <template slot-scope="scope">
-          <span>{{scope.row.importance}}</span>
+          <span>{{ scope.row.importance }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column align="center" :label="$t('table.status')" width="110">
+      <el-table-column :label="$t('table.status')" align="center" width="110">
         <template slot-scope="scope">
-          <el-select  style="width: 100px" class="filter-item" v-model="scope.row.status" @change="changestatus(scope.row)" >
-            <el-option v-for="item,index in statuslist" :key="index" :label="item.value" :value="item.label">
-            </el-option>
+          <el-select v-model="scope.row.status" style="width: 100px" class="filter-item" @change="changestatus(scope.row)" >
+            <el-option v-for="(item, index) in statuslist" :key="index" :label="item.value" :value="item.label"/>
           </el-select>
           <!--<el-tag :type="scope.row.status | statusFilter">{{scope.row.status}}</el-tag>-->
         </template>
       </el-table-column>
 
-      <el-table-column min-width="300px" align="center" :label="$t('table.title')">
+      <el-table-column :label="$t('table.title')" min-width="300px" align="center">
         <template slot-scope="scope">
 
-          <router-link class="link-type" align="center" :to="'/showbug/'+scope.row.id">
+          <router-link :to="'/showbug/'+scope.row.id" class="link-type" align="center">
             <span>{{ scope.row.title }}</span>
           </router-link>
         </template>
       </el-table-column>
 
-      <el-table-column align="center" :label="$t('table.actions')" width="230" class-name="small-padding fixed-width">
+      <el-table-column :label="$t('table.actions')" align="center" width="230" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <router-link :to="'/example/edit/'+scope.row.id">
-            <el-button type="primary" size="mini" >{{$t('list.edit')}}</el-button>
+          <router-link :to="'/bug/edit/'+scope.row.id">
+            <el-button type="primary" size="mini" >{{ $t('list.edit') }}</el-button>
           </router-link>
-          <el-button type="success" size="mini" @click="handleClose(scope.row)">{{$t('list.close')}}</el-button>
-          <el-button type="danger" size="mini" @click="handleRemove(scope.row)">{{$t('list.remove')}}</el-button>
+          <el-button type="success" size="mini" @click="handleClose(scope.row)">{{ $t('list.close') }}</el-button>
+          <el-button type="danger" size="mini" @click="handleRemove(scope.row)">{{ $t('list.remove') }}</el-button>
         </template>
       </el-table-column>
     </el-table>
 
     <div class="pagination-container">
-      <el-pagination background
-       @size-change="handleSizeChange"
-       @current-change="handleCurrentChange"
-       :current-page="listQuery.page"
-       :page-sizes="[10,15,20, 30]"
-       :page-size="listQuery.limit"
-       layout="total, sizes, prev, pager, next, jumper"
-       :total="total">
-      </el-pagination>
+      <el-pagination
+        :current-page="listQuery.page"
+        :page-sizes="[10,15,20, 30]"
+        :page-size="listQuery.limit"
+        :total="total"
+        background
+        layout="total, sizes, prev, pager, next, jumper"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"/>
     </div>
   </div>
 </template>
@@ -120,9 +115,22 @@ const calendarTypeKeyValue = calendarTypeOptions.reduce((acc, cur) => {
 }, {})
 
 export default {
-  name: 'articleList',
+  name: 'ArticleList',
   directives: {
     waves
+  },
+  filters: {
+    statusFilter(status) {
+      const statusMap = {
+        published: 'success',
+        draft: 'info',
+        deleted: 'danger'
+      }
+      return statusMap[status]
+    },
+    typeFilter(type) {
+      return calendarTypeKeyValue[type]
+    }
   },
   data() {
     return {
@@ -140,19 +148,6 @@ export default {
       projectnames: [],
       statuslist: [],
       levels: ['高', '中', '低']
-    }
-  },
-  filters: {
-    statusFilter(status) {
-      const statusMap = {
-        published: 'success',
-        draft: 'info',
-        deleted: 'danger'
-      }
-      return statusMap[status]
-    },
-    typeFilter(type) {
-      return calendarTypeKeyValue[type]
     }
   },
   activated() {
