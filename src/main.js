@@ -18,6 +18,15 @@ import './permission' // permission control
 // import './mock' // simulation data
 
 import * as filters from './filters' // global filters
+// Vue-cli生成的工程文件的src/main.js
+import hljs from 'highlight.js'
+import 'highlight.js/styles/googlecode.css'
+Vue.directive('highlight', function(el) {
+  const blocks = el.querySelectorAll('pre code')
+  blocks.forEach((block) => {
+    hljs.highlightBlock(block)
+  })
+})
 
 Vue.use(Element, {
   size: 'medium', // set element-ui default size
