@@ -1,8 +1,8 @@
 <template>
   <div class="createPost-container">
-    <el-form class="form-container" :model="postForm" :rules="rules" ref="postForm">
+    <el-form ref="postForm" :model="postForm" :rules="rules" class="form-container" >
 
-      <sticky :className="'sub-navbar '+postForm.status">
+      <sticky :class-name="'sub-navbar ' + postForm.status">
         <!--<CommentDropdown v-model="postForm.comment_disabled" />-->
 
         <!--<SourceUrlDropdown v-model="postForm.source_uri" />-->
@@ -16,10 +16,11 @@
           <!--<el-col :span="24" >-->
           <el-form-item style="margin-bottom: 40px;" prop="title" label="文章标题：">
             <el-input
-              placeholder="请输入标题"
               v-model="postForm.title"
-              clearable :maxlength="100" style="width: 80%;">
-            </el-input>
+              :maxlength="100"
+              placeholder="请输入标题"
+              clearable
+              style="width: 80%;"/>
           </el-form-item>
         </el-row>
         <el-row>
@@ -30,8 +31,7 @@
                   v-for="item in projectnames"
                   :key="item.value"
                   :label="item.label"
-                  :value="item.value">
-                </el-option>
+                  :value="item.value"/>
               </el-select>
             </el-form-item>
           </el-col>
@@ -42,8 +42,7 @@
                   v-for="item in envnames"
                   :key="item.value"
                   :label="item.label"
-                  :value="item.value">
-                </el-option>
+                  :value="item.value"/>
               </el-select>
             </el-form-item>
           </el-col>
@@ -55,8 +54,7 @@
                   v-for="item in classname"
                   :key="item.value"
                   :label="item.label"
-                  :value="item.value">
-                </el-option>
+                  :value="item.value"/>
               </el-select>
             </el-form-item>
           </el-col>
@@ -69,8 +67,7 @@
                   v-for="item in versions"
                   :key="item.value"
                   :label="item.label"
-                  :value="item.value">
-                </el-option>
+                  :value="item.value"/>
               </el-select>
             </el-form-item>
           </el-col>
@@ -81,8 +78,7 @@
                   v-for="item in levels"
                   :key="item.value"
                   :label="item.label"
-                  :value="item.value">
-                </el-option>
+                  :value="item.value"/>
               </el-select>
             </el-form-item>
           </el-col>
@@ -96,8 +92,7 @@
                   v-for="item in importances"
                   :key="item.value"
                   :label="item.label"
-                  :value="item.value">
-                </el-option>
+                  :value="item.value"/>
               </el-select>
             </el-form-item>
           </el-col>
@@ -146,8 +141,7 @@
                   v-for="item in oses"
                   :key="item.value"
                   :label="item.label"
-                  :value="item.value">
-                </el-option>
+                  :value="item.value"/>
               </el-select>
             </el-form-item>
           </el-col>
@@ -164,17 +158,15 @@
                   v-for="item in users"
                   :key="item.value"
                   :label="item.label"
-                  :value="item.value">
-                </el-option>
+                  :value="item.value"/>
               </el-select>
             </el-form-item>
           </el-col>
         </el-row>
         <!--</template>-->
         <el-form-item style="margin-bottom: 40px;">
-
           <div class="editor-container">
-            <Tinymce :height=400 ref="editor" v-model="postForm.content"/>
+            <Tinymce ref="editor" v-model="postForm.content" height="400"/>
           </div>
         </el-form-item>
 
@@ -185,7 +177,6 @@
       <!--<span class="word-counter" v-show="contentShortLength">{{contentShortLength}}字</span>-->
       <!--</el-form-item>-->
 
-
       <!--<div style="margin-bottom: 20px;">-->
       <!--<Upload v-model="postForm.image_uri" />-->
       <!--</div>-->
@@ -195,307 +186,308 @@
 </template>
 
 <script>
-  import Tinymce from '@/components/Tinymce'
-  import Upload from '@/components/Upload/singleImage3'
-  import MDinput from '@/components/MDinput'
-  import Multiselect from 'vue-multiselect'// 使用的一个多选框组件，element-ui的select不能满足所有需求
-  import 'vue-multiselect/dist/vue-multiselect.min.css'// 多选框组件css
-  import Sticky from '@/components/Sticky' // 粘性header组件
-  import { validateURL } from '@/utils/validate'
-  import { fetchArticle, createArticle } from '@/api/article'
-  import { getproject, getusers, getversion, getplatform, getclasses, getenvs } from '@/api/createarticle'
-  import { userSearch } from '@/api/remoteSearch'
-  import Warning from './Warning'
-  // import { removeToken } from '@/utils/auth'
-  import { CommentDropdown, PlatformDropdown, SourceUrlDropdown } from './Dropdown'
+import Tinymce from '@/components/Tinymce'
+import Upload from '@/components/Upload/singleImage3'
+import MDinput from '@/components/MDinput'
+import Multiselect from 'vue-multiselect'// 使用的一个多选框组件，element-ui的select不能满足所有需求
+import 'vue-multiselect/dist/vue-multiselect.min.css'// 多选框组件css
+import Sticky from '@/components/Sticky' // 粘性header组件
+import { validateURL } from '@/utils/validate'
+import { fetchArticle, createArticle } from '@/api/article'
+import { getproject, getusers, getversion, getplatform, getclasses, getenvs } from '@/api/createarticle'
+import { userSearch } from '@/api/remoteSearch'
+import Warning from './Warning'
+// import { removeToken } from '@/utils/auth'
+import { CommentDropdown, PlatformDropdown, SourceUrlDropdown } from './Dropdown'
 
-  const defaultForm = {
-    // status: 'draft',
-    title: '', // 文章题目
-    content: '', // 文章内容
-    // content_short: '', // 文章摘要
-    // source_uri: '', // 文章外链
-    // image_uri: '', // 文章图片
-    // display_time: undefined, // 前台展示时间
-    id: -1,
-    // platforms: ['a-platform'],
-    // comment_disabled: false,
-    selectusers: [],
-    projectname: '',
-    level: '中',
-    envname: '测试',
-    importance: '一般',
-    selectclass: 'bug',
-    appversion: '1.25',
-    selectoses: []
-  }
+const defaultForm = {
+  // status: 'draft',
+  title: '', // 文章题目
+  content: '', // 文章内容
+  // content_short: '', // 文章摘要
+  // source_uri: '', // 文章外链
+  // image_uri: '', // 文章图片
+  // display_time: undefined, // 前台展示时间
+  id: -1,
+  // platforms: ['a-platform'],
+  // comment_disabled: false,
+  selectusers: [],
+  projectname: '',
+  level: '中',
+  envname: '测试',
+  importance: '一般',
+  selectclass: 'bug',
+  appversion: '1.25',
+  selectoses: []
+}
 
-  export default {
-    name: 'articleDetail',
-    components: {
-      Tinymce,
-      MDinput,
-      Upload,
-      Multiselect,
-      Sticky,
-      Warning,
-      CommentDropdown,
-      PlatformDropdown,
-      SourceUrlDropdown
-    },
-    props: {
-      isEdit: {
-        type: Boolean,
-        default: false
+export default {
+  name: 'ArticleDetail',
+  components: {
+    Tinymce,
+    MDinput,
+    Upload,
+    Multiselect,
+    Sticky,
+    Warning,
+    CommentDropdown,
+    PlatformDropdown,
+    SourceUrlDropdown
+  },
+  props: {
+    isEdit: {
+      type: Boolean,
+      default: false
+    }
+  },
+  data() {
+    const validateRequire = (rule, value, callback) => {
+      if (value === '') {
+        this.$message({
+          message: rule.field + '为必传项',
+          type: 'error'
+        })
+        callback(null)
+      } else {
+        callback()
       }
-    },
-    data() {
-      const validateRequire = (rule, value, callback) => {
-        if (value === '') {
+    }
+    const validateSourceUri = (rule, value, callback) => {
+      if (value) {
+        if (validateURL(value)) {
+          callback()
+        } else {
           this.$message({
-            message: rule.field + '为必传项',
+            message: '外链url填写不正确',
             type: 'error'
           })
           callback(null)
-        } else {
-          callback()
         }
-      }
-      const validateSourceUri = (rule, value, callback) => {
-        if (value) {
-          if (validateURL(value)) {
-            callback()
-          } else {
-            this.$message({
-              message: '外链url填写不正确',
-              type: 'error'
-            })
-            callback(null)
-          }
-        } else {
-          callback()
-        }
-      }
-      return {
-        postForm: Object.assign({}, defaultForm),
-        loading: false,
-        userListOptions: [],
-        rules: {
-          image_uri: [{ validator: validateRequire }],
-          title: [{ validator: validateRequire }],
-          content: [{ validator: validateRequire }],
-          source_uri: [{ validator: validateSourceUri, trigger: 'blur' }]
-        },
-        classname: [],
-        versions: [],
-        importances: [
-          { value: '致命', label: '致命' },
-          { value: '严重', label: '严重' },
-          { value: '一般', label: '一般' },
-          { value: '建议', label: '建议' }
-        ],
-        levels: [
-          { value: '高', label: '高' },
-          { value: '中', label: '中' },
-          { value: '低', label: '低' }
-        ],
-        oses: [],
-        users: [],
-        projectnames: [],
-        envnames: []
-      }
-    },
-    computed: {
-      contentShortLength() {
-        return this.postForm.content_short.length
-      }
-    },
-    activated() {
-      this.getspuser()
-      this.getplatform()
-      this.getversion()
-      this.getclasses()
-      this.getpname()
-      this.getenv()
-    },
-    created() {
-      this.getspuser()
-      this.getpname()
-      this.getplatform()
-      this.getversion()
-      this.getclasses()
-      this.getenv()
-      if (this.isEdit) {
-        const id = this.$route.params && this.$route.params.id
-        this.fetchData(id)
       } else {
-        this.postForm = Object.assign({}, defaultForm)
-      }
-    },
-    methods: {
-      getenv() {
-        getenvs().then(response => {
-          const arr = response.data
-          for (let i = 0; i < arr.length; i++) {
-            const aa = {}
-            aa.value = arr[i]
-            aa.label = arr[i]
-            this.envnames.push(aa)
-          }
-        })
-      },
-      getpname() {
-        getproject().then(response => {
-          const arr = response.data
-          for (let i = 0; i < arr.length; i++) {
-            const aa = {}
-            aa.value = arr[i]
-            aa.label = arr[i]
-            if (arr[i] === 'all') {
-              continue
-            }
-            this.projectnames.push(aa)
-          }
-        })
-      },
-      getclasses() {
-        getclasses().then(response => {
-          const arr = response.data
-          for (let i = 0; i < arr.length; i++) {
-            const aa = {}
-            aa.value = arr[i]
-            aa.label = arr[i]
-            this.classname.push(aa)
-          }
-        }).catch(err => {
-          console.log(err)
-        })
-      },
-      getplatform() {
-        getplatform().then(response => {
-          const arr = response.data
-          for (let i = 0; i < arr.length; i++) {
-            const aa = {}
-            aa.value = arr[i]
-            aa.label = arr[i]
-            this.oses.push(aa)
-          }
-        }).catch(err => {
-          console.log(err)
-        })
-      },
-      getversion() {
-        getversion().then(response => {
-          const arr = response.data
-          for (let i = 0; i < arr.length; i++) {
-            const aa = {}
-            aa.value = arr[i]
-            aa.label = arr[i]
-            this.versions.push(aa)
-          }
-        }).catch(err => {
-          console.log(err)
-        })
-      },
-      getspuser() {
-        getusers().then(response => {
-          const arr = response.data
-          // console.log(arr)
-          // return
-          for (let i = 0; i < arr.length; i++) {
-            const aa = {}
-            aa.value = arr[i].nickname + '(' + arr[i].realname + ')'
-            aa.label = arr[i].nickname + '(' + arr[i].realname + ')'
-            this.users.push(aa)
-          }
-        }).catch(err => {
-          console.log(err)
-        })
-      },
-      fetchData(id) {
-        fetchArticle(id).then(response => {
-          const dd = response.data
-          this.postForm.projectname = dd.projectname
-          this.postForm.title = dd.title
-          this.postForm.content = dd.content
-          this.postForm.id = dd.id
-          this.postForm.importance = dd.importance
-          this.postForm.selectclass = dd.selectclass
-          this.postForm.appversion = dd.appversion
-          this.postForm.selectusers = dd.spusers.split(',')
-          this.postForm.selectoses = dd.selectoses.split(',')
-          // Just for test
-          // this.postForm.title += `   Article Id:${this.postForm.id}`
-          // this.postForm.content_short += `   Article Id:${this.postForm.id}`
-        }).catch(err => {
-          console.log(err)
-        })
-      },
-      submitForm() {
-        // this.postForm.display_time = parseInt(this.display_time / 1000)
-        if (this.postForm.title.length > 30) {
-          this.$message({
-            message: '标题长度必须小于30位',
-            type: 'error'
-          })
-          return
-        }
-        if (this.postForm.selectusers.length < 1) {
-          this.$message({
-            message: '请选择指定给谁',
-            type: 'error'
-          })
-          return
-        }
-        this.$refs.postForm.validate(valid => {
-          if (valid) {
-            createArticle(this.postForm).then(resp => {
-              if (resp.data === 'fail') {
-                this.$notify({
-                  title: '失败',
-                  message: '发布' + this.postForm.selectclass + '失败',
-                  type: 'error',
-                  duration: 2000
-                })
-                return
-              }
-              this.$notify({
-                title: '成功',
-                message: '发布' + this.postForm.selectclass + '成功',
-                type: 'success',
-                duration: 2000
-              })
-              this.$router.push('/example/list')
-            })
-          } else {
-            return false
-          }
-        })
-      },
-      draftForm() {
-        if (this.postForm.content.length === 0 || this.postForm.title.length === 0) {
-          this.$message({
-            message: '请填写必要的标题和内容',
-            type: 'warning'
-          })
-          return
-        }
-        this.$message({
-          message: '保存成功',
-          type: 'success',
-          showClose: true,
-          duration: 1000
-        })
-        // this.postForm.status = 'draft'
-      },
-      getRemoteUserList(query) {
-        userSearch(query).then(response => {
-          if (!response.data.items) return
-          this.userListOptions = response.data.items.map(v => v.name)
-        })
+        callback()
       }
     }
+    return {
+      postForm: Object.assign({}, defaultForm),
+      loading: false,
+      userListOptions: [],
+      rules: {
+        image_uri: [{ validator: validateRequire }],
+        title: [{ validator: validateRequire }],
+        content: [{ validator: validateRequire }],
+        source_uri: [{ validator: validateSourceUri, trigger: 'blur' }]
+      },
+      classname: [],
+      versions: [],
+      importances: [
+        { value: '致命', label: '致命' },
+        { value: '严重', label: '严重' },
+        { value: '一般', label: '一般' },
+        { value: '建议', label: '建议' }
+      ],
+      levels: [
+        { value: '高', label: '高' },
+        { value: '中', label: '中' },
+        { value: '低', label: '低' }
+      ],
+      oses: [],
+      users: [],
+      projectnames: [],
+      envnames: []
+    }
+  },
+  computed: {
+    contentShortLength() {
+      return this.postForm.content_short.length
+    }
+  },
+  activated() {
+    this.getspuser()
+    this.getplatform()
+    this.getversion()
+    this.getclasses()
+    this.getpname()
+    this.getenv()
+  },
+  created() {
+    this.getspuser()
+    this.getpname()
+    this.getplatform()
+    this.getversion()
+    this.getclasses()
+    this.getenv()
+    if (this.isEdit) {
+      const id = this.$route.params && this.$route.params.id
+      this.fetchData(id)
+    } else {
+      this.postForm = Object.assign({}, defaultForm)
+    }
+  },
+  methods: {
+    getenv() {
+      getenvs().then(response => {
+        const arr = response.data
+        for (let i = 0; i < arr.length; i++) {
+          const aa = {}
+          aa.value = arr[i]
+          aa.label = arr[i]
+          this.envnames.push(aa)
+        }
+      })
+    },
+    getpname() {
+      getproject().then(response => {
+        const arr = response.data
+        for (let i = 0; i < arr.length; i++) {
+          const aa = {}
+          aa.value = arr[i]
+          aa.label = arr[i]
+          if (arr[i] === 'all') {
+            continue
+          }
+          this.projectnames.push(aa)
+        }
+      })
+    },
+    getclasses() {
+      getclasses().then(response => {
+        const arr = response.data
+        for (let i = 0; i < arr.length; i++) {
+          const aa = {}
+          aa.value = arr[i]
+          aa.label = arr[i]
+          this.classname.push(aa)
+        }
+      }).catch(err => {
+        console.log(err)
+      })
+    },
+    getplatform() {
+      getplatform().then(response => {
+        const arr = response.data
+        for (let i = 0; i < arr.length; i++) {
+          const aa = {}
+          aa.value = arr[i]
+          aa.label = arr[i]
+          this.oses.push(aa)
+        }
+      }).catch(err => {
+        console.log(err)
+      })
+    },
+    getversion() {
+      getversion().then(response => {
+        const arr = response.data
+        for (let i = 0; i < arr.length; i++) {
+          const aa = {}
+          aa.value = arr[i]
+          aa.label = arr[i]
+          this.versions.push(aa)
+        }
+      }).catch(err => {
+        console.log(err)
+      })
+    },
+    getspuser() {
+      getusers().then(response => {
+        const arr = response.data
+        // console.log(arr)
+        // return
+        for (let i = 0; i < arr.length; i++) {
+          const aa = {}
+          aa.value = arr[i].nickname + '(' + arr[i].realname + ')'
+          aa.label = arr[i].nickname + '(' + arr[i].realname + ')'
+          this.users.push(aa)
+        }
+      }).catch(err => {
+        console.log(err)
+      })
+    },
+    fetchData(id) {
+      fetchArticle(id).then(response => {
+        const dd = response.data
+        this.postForm.projectname = dd.projectname
+        this.postForm.title = dd.title
+        this.postForm.content = dd.content
+        this.postForm.id = dd.id
+        this.postForm.importance = dd.importance
+        this.postForm.selectclass = dd.selectclass
+        this.postForm.appversion = dd.appversion
+        this.postForm.selectusers = dd.spusers.split(',')
+        this.postForm.selectoses = dd.selectoses.split(',')
+        // Just for test
+        // this.postForm.title += `   Article Id:${this.postForm.id}`
+        // this.postForm.content_short += `   Article Id:${this.postForm.id}`
+      }).catch(err => {
+        console.log(err)
+      })
+    },
+    submitForm() {
+      // this.postForm.display_time = parseInt(this.display_time / 1000)
+      if (this.postForm.title.length > 30) {
+        this.$message({
+          message: '标题长度必须小于30位',
+          type: 'error'
+        })
+        return
+      }
+      if (this.postForm.selectusers.length < 1) {
+        this.$message({
+          message: '请选择指定给谁',
+          type: 'error'
+        })
+        return
+      }
+      this.$refs.postForm.validate(valid => {
+        if (valid) {
+          console.log(this.postForm)
+          createArticle(this.postForm).then(resp => {
+            if (resp.data === 'fail') {
+              this.$notify({
+                title: '失败',
+                message: '发布' + this.postForm.selectclass + '失败',
+                type: 'error',
+                duration: 2000
+              })
+              return
+            }
+            this.$notify({
+              title: '成功',
+              message: '发布' + this.postForm.selectclass + '成功',
+              type: 'success',
+              duration: 2000
+            })
+            this.$router.push('/bug/list')
+          })
+        } else {
+          return false
+        }
+      })
+    },
+    draftForm() {
+      if (this.postForm.content.length === 0 || this.postForm.title.length === 0) {
+        this.$message({
+          message: '请填写必要的标题和内容',
+          type: 'warning'
+        })
+        return
+      }
+      this.$message({
+        message: '保存成功',
+        type: 'success',
+        showClose: true,
+        duration: 1000
+      })
+      // this.postForm.status = 'draft'
+    },
+    getRemoteUserList(query) {
+      userSearch(query).then(response => {
+        if (!response.data.items) return
+        this.userListOptions = response.data.items.map(v => v.name)
+      })
+    }
   }
+}
 
 </script>
 
