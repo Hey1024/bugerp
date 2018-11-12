@@ -438,6 +438,13 @@ export default {
         })
         return
       }
+      if (this.postForm.projectname.length < 1) {
+        this.$message({
+          message: '请原则项目名称',
+          type: 'error'
+        })
+        return
+      }
       this.$refs.postForm.validate(valid => {
         if (valid) {
           console.log(this.postForm)
