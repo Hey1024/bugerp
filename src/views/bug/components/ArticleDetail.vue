@@ -166,7 +166,7 @@
         <!--</template>-->
         <el-form-item style="margin-bottom: 40px;">
           <div class="editor-container">
-            <Tinymce ref="editor" v-model="postForm.content" height="400"/>
+            <Tinymce ref="editor" v-model="postForm.content"/>
           </div>
         </el-form-item>
 

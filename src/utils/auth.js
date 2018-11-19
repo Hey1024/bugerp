@@ -10,8 +10,6 @@ export function getToken() {
 }
 
 export function setToken(token) {
-  console.log('token:')
-  console.log(encrypt(token))
   return Cookies.set(TokenKey, encrypt(token), {
     expires: inFifteenMinutes
   })
@@ -47,15 +45,3 @@ kiMMhwhKp/HYBQjlfQIDAQAB
 -----END PUBLIC KEY-----`)
   return jes.encrypt(key)
 }
-
-export function decrypt(key) {
-  const jes = new JSEncrypt()
-  jes.setPublicKey(`-----BEGIN PUBLIC KEY-----
-MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCyXfaibtNAqJtvDrsEGZG7yi4D
-BPNkSHZD4DYQtNDHNJUkP4pTB9tZvQ1+d02Tt/YHNy8N+z0rRSVQwISt2VuPwNta
-ldeprfs35msB5BFP4H0OlwZ2Woz7ImhNq7TrR0Usc6ExjlCxZg6zxnEL90vE4y/i
-kiMMhwhKp/HYBQjlfQIDAQAB
------END PUBLIC KEY-----`)
-  return jes.decrypt(key)
-}
-
