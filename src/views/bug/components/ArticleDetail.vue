@@ -275,7 +275,8 @@ export default {
         image_uri: [{ validator: validateRequire }],
         title: [{ validator: validateRequire }],
         content: [{ validator: validateRequire }],
-        source_uri: [{ validator: validateSourceUri, trigger: 'blur' }]
+        source_uri: [{ validator: validateSourceUri }]
+        // source_uri: [{ validator: validateSourceUri, trigger: 'blur' }]
       },
       classname: [],
       versions: [],

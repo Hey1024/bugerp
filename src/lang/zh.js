@@ -69,7 +69,9 @@ export default {
     pubversion: '发布版本',
     versionlist: '版本列表',
     usermanager: '用户管理',
-    bug: 'bug'
+    bug: 'bug',
+    userManager: '用户中心',
+    project: '项目管理'
   },
   navbar: {
     logOut: '退出登录',

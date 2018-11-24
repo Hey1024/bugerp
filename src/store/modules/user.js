@@ -82,7 +82,7 @@ const user = {
       return new Promise((resolve, reject) => {
         getUserInfo(state.token).then(response => {
           const data = response.data
-          console.log(data)
+          console.log('xxx' + data)
           if (data.roles && data.roles.length > 0) { // 验证返回的roles是否是一个非空数组
             commit('SET_ROLES', data.roles)
           } else {

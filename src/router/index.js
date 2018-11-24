@@ -11,6 +11,7 @@ import componentsRouter from './modules/components'
 // import chartsRouter from './modules/charts'
 import tableRouter from './modules/table'
 import setting from './modules/setting'
+import userRoute from './modules/user'
 // import nestedRouter from './modules/nested'
 
 /** note: submenu only apppear when children.length>=1
@@ -152,6 +153,7 @@ export const asyncRouterMap = [
   // chartsRouter,
   // nestedRouter,
   tableRouter,
+  userRoute,
 
   {
     path: '/bug',

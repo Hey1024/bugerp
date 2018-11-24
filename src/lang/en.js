@@ -70,7 +70,9 @@ export default {
     pubversion: 'pubversion',
     versionlist: 'versionlist',
     usermanager: 'usermanager',
-    bug: 'bug'
+    bug: 'bug',
+    userManager: 'userManager',
+    project: 'project'
   },
   navbar: {
     logOut: 'Log Out',
