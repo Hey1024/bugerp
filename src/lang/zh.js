@@ -71,7 +71,9 @@ export default {
     usermanager: '用户管理',
     bug: 'bug',
     userManager: '用户中心',
-    project: '项目管理'
+    project: '项目管理',
+    env: '环境管理',
+    runos: '运行平台'
   },
   navbar: {
     logOut: '退出登录',

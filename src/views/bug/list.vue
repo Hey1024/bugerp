@@ -290,6 +290,7 @@ export default {
         this.total = response.data
       })
       fetchList(this.listQuery).then(response => {
+        console.log(response.data)
         if (response.data.length === 0) {
           this.$notify({
             message: '没有查到数据',

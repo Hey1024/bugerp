@@ -214,7 +214,7 @@ const defaultForm = {
   selectusers: [],
   projectname: '',
   level: '中',
-  envname: '测试',
+  envname: '',
   importance: '一般',
   selectclass: 'bug',
   appversion: '1.25',
@@ -244,7 +244,7 @@ export default {
     const validateRequire = (rule, value, callback) => {
       if (value === '') {
         this.$message({
-          message: rule.field + '为必传项',
+          message: rule + '为必传项',
           type: 'error'
         })
         callback(null)
@@ -328,6 +328,7 @@ export default {
     getenv() {
       getenvs().then(response => {
         const arr = response.data
+        console.log(arr)
         for (let i = 0; i < arr.length; i++) {
           const aa = {}
           aa.value = arr[i]

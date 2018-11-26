@@ -72,7 +72,9 @@ export default {
     usermanager: 'usermanager',
     bug: 'bug',
     userManager: 'userManager',
-    project: 'project'
+    project: 'project',
+    env: 'env',
+    runos: 'runos'
   },
   navbar: {
     logOut: 'Log Out',
