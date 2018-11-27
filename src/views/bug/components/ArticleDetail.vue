@@ -449,7 +449,6 @@ export default {
       }
       this.$refs.postForm.validate(valid => {
         if (valid) {
-          console.log(this.postForm)
           createArticle(this.postForm).then(resp => {
             if (resp.data === 'fail') {
               this.$notify({

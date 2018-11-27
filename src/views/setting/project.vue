@@ -22,7 +22,7 @@
         <template slot-scope="scope">
           <el-button
             size="mini"
-            @click="updatep(scope.row)">编辑</el-button>
+            @click="updatep(scope.row)">修改</el-button>
           <el-button
             size="mini"
             type="danger"

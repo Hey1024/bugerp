@@ -22,7 +22,7 @@
         <template slot-scope="scope">
           <el-button
             size="mini"
-            @click="updatep(scope.row)">编辑</el-button>
+            @click="updatep(scope.row)">修改</el-button>
           <el-button
             size="mini"
             type="danger"
@@ -30,10 +30,10 @@
         </template>
       </el-table-column>
     </el-table>
-    <el-button @click="addp">添加项目名</el-button>
-    <el-dialog :visible.sync="dialogFormVisible" title="项目管理">
+    <el-button @click="addp">添加运行平台</el-button>
+    <el-dialog :visible.sync="dialogFormVisible" title="平台管理">
       <el-form :model="form">
-        <el-form-item :label-width="formLabelWidth" label="项目名">
+        <el-form-item :label-width="formLabelWidth" label="平台">
           <el-input v-model="form.osname" autocomplete="off"/>
         </el-form-item>
       </el-form>

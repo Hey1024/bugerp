@@ -74,7 +74,8 @@ export default {
     userManager: 'userManager',
     project: 'project',
     env: 'env',
-    runos: 'runos'
+    runos: 'runos',
+    uploadhead: 'uploadhead'
   },
   navbar: {
     logOut: 'Log Out',

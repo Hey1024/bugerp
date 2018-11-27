@@ -2,17 +2,16 @@
   <div>
 
     <el-form class="form-container" >
-      <div style="height: 20px"></div>
-    <el-form-item style="margin-bottom: 40px;" label="项目名称：">
-      <el-select v-model="versionlist.projectname" placeholder="请选择">
-        <el-option
-          v-for="item in projectnames"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value">
-        </el-option>
-      </el-select>
-    </el-form-item>
+      <div style="height: 20px"/>
+      <el-form-item style="margin-bottom: 40px;" label="项目名称：">
+        <el-select v-model="versionlist.projectname" placeholder="请选择">
+          <el-option
+            v-for="item in projectnames"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"/>
+        </el-select>
+      </el-form-item>
 
       <el-form-item style="margin-bottom: 40px;" label="运行平台：">
         <el-select v-model="versionlist.platform" placeholder="请选择">
@@ -20,8 +19,7 @@
             v-for="item in platforms"
             :key="item.value"
             :label="item.label"
-            :value="item.value">
-          </el-option>
+            :value="item.value"/>
         </el-select>
       </el-form-item>
 
@@ -31,33 +29,35 @@
             v-for="item in runenvs"
             :key="item.value"
             :label="item.label"
-            :value="item.value">
-          </el-option>
+            :value="item.value"/>
         </el-select>
       </el-form-item>
 
       <el-form-item style="margin-bottom: 40px;" label="版本号：">
         <el-input
-          placeholder="请输入标题"
           v-model="versionlist.version"
-          clearable :maxlength="100" style="width: 30%;">
-        </el-input>
+          :maxlength="100"
+          placeholder="请输入版本号"
+          clearable
+          style="width: 30%;"/>
       </el-form-item>
 
-      <el-form-item style="margin-bottom: 40px;"  label="iphone下载地址 ：">
+      <el-form-item style="margin-bottom: 40px;" label="iphone下载地址 ：">
         <el-input
-          placeholder="请输入标题"
           v-model="versionlist.iphoneurl"
-          clearable :maxlength="100" style="width: 60%;">
-        </el-input>
+          :maxlength="100"
+          placeholder="请输入iphone下载地址"
+          clearable
+          style="width: 60%;"/>
       </el-form-item>
 
-      <el-form-item style="margin-bottom: 40px;"  label="非iphone下载地址:">
+      <el-form-item style="margin-bottom: 40px;" label="非iphone下载地址:">
         <el-input
-          placeholder="请输入标题"
           v-model="versionlist.notiphoneurl"
-          clearable :maxlength="100" style="width: 60%;">
-        </el-input>
+          :maxlength="100"
+          placeholder="请输入非iphone下载地址"
+          clearable
+          style="width: 60%;"/>
       </el-form-item>
 
       <el-col :span="2" class="text-center">
@@ -74,7 +74,7 @@
 import { getplatform, getproject, getenvs } from '@/api/createarticle'
 import { addversion } from '@/api/version'
 export default {
-  name: 'pubversion',
+  name: 'Pubversion',
   data() {
     return {
       versionlist: {

@@ -39,6 +39,16 @@ const userRoute = {
         icon: 'user',
         roles: ['admin', 'manager']
       }
+    },
+    {
+      path: 'uploadhead',
+      component: () => import('@/views/user/headImg'),
+      name: 'uploadhead',
+      meta: {
+        title: 'uploadhead',
+        icon: 'user',
+        roles: ['admin', 'manager']
+      }
     }
   ]
 }

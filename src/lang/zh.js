@@ -73,7 +73,8 @@ export default {
     userManager: '用户中心',
     project: '项目管理',
     env: '环境管理',
-    runos: '运行平台'
+    runos: '运行平台',
+    uploadhead: '上传头像'
   },
   navbar: {
     logOut: '退出登录',
