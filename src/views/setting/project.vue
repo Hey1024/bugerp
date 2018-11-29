@@ -91,6 +91,8 @@ export default {
               break
             }
           }
+        } else if (resp.data.statuscode === 500) {
+          this.$message.warning('这个项目存在bug，请先删除')
         }
       })
     },

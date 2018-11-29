@@ -122,7 +122,7 @@ export default {
         page: 1,
         limit: 15
       },
-      total: 14
+      total: 0
     }
   },
   created() {
@@ -130,16 +130,17 @@ export default {
   },
   methods: {
     getversionlist() {
-      getversion().then(response => {
+      getversion(this.listQuery).then(response => {
         console.log(response.data)
-        if (response.data === 'fail') {
-          this.$message({
-            message: '修改失败',
-            type: 'error'
-          })
-          return
+        if (response.data.statuscode === 0) {
+          this.list = response.data.versionlist
+          this.total = response.data.versionlist.length
+          // this.$message({
+          //   message: '',
+          //   type: 'error'
+          // })
+          // return
         }
-        this.list = response.data
       })
     },
     handleSizeChange(val) {

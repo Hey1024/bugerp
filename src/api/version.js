@@ -8,9 +8,10 @@ export function addversion(data) {
   })
 }
 
-export function getversion() {
+export function getversion(data) {
   return request({
     url: '/version/list',
-    method: 'post'
+    method: 'post',
+    data: data
   })
 }
