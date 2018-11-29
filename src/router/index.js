@@ -132,21 +132,21 @@ export const asyncRouterMap = [
   //   ]
   // },
 
-  {
-    path: '/icon',
-    component: Layout,
-    meta: {
-      roles: ['admin']
-    },
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/svg-icons/index'),
-        name: 'icons',
-        meta: { title: 'icons', icon: 'icon', noCache: true, roles: ['admin'] }
-      }
-    ]
-  },
+  // {
+  //   path: '/icon',
+  //   component: Layout,
+  //   meta: {
+  //     roles: ['admin']
+  //   },
+  //   children: [
+  //     {
+  //       path: 'index',
+  //       component: () => import('@/views/svg-icons/index'),
+  //       name: 'icons',
+  //       meta: { title: 'icons', icon: 'icon', noCache: true, roles: ['admin'] }
+  //     }
+  //   ]
+  // },
 
   /** When your routing table is too long, you can split it into small modules**/
   componentsRouter,

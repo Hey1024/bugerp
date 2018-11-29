@@ -153,7 +153,8 @@ export default {
     nickname: '昵称',
     role: '角色',
     email: '邮箱',
-    reset: '重置密码'
+    reset: '重置密码',
+    remove: '删除'
   },
   errorLog: {
     tips: '请点击右上角bug小图标',

@@ -153,7 +153,8 @@ export default {
     nickname: 'nickname',
     role: 'role',
     email: 'email',
-    reset: 'reset'
+    reset: 'reset',
+    remove: 'remove'
   },
   errorLog: {
     tips: 'Please click the bug icon in the upper right corner',

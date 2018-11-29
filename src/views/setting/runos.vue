@@ -34,7 +34,7 @@
     <el-dialog :visible.sync="dialogFormVisible" title="平台管理">
       <el-form :model="form">
         <el-form-item :label-width="formLabelWidth" label="平台">
-          <el-input v-model="form.osname" autocomplete="off"/>
+          <el-input v-model="form.osname" auto-complete="off"/>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">

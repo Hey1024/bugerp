@@ -21,36 +21,42 @@
       <!--<el-checkbox class="filter-item" style='margin-left:15px;' @change='tableKey=tableKey+1' v-model="showReviewer">{{$t('table.reviewer')}}</el-checkbox>-->
     </div>
 
-    <el-table :key='tableKey' :data="list" v-loading="listLoading" border fit highlight-current-row
-              style="width: 100%;min-height:350px;">
-      <el-table-column align="center" :label="$t('table.id')" width="65">
+    <el-table
+      v-loading="listLoading"
+      :key="tableKey"
+      :data="list"
+      border
+      fit
+      highlight-current-row
+      style="width: 100%;min-height:350px;">
+      <el-table-column :label="$t('table.id')" align="center" width="65">
         <template slot-scope="scope">
-          <span>{{scope.row.id}}</span>
+          <span>{{ scope.row.id }}</span>
         </template>
       </el-table-column>
-      <el-table-column width="150px" align="center" :label="$t('table.date')">
+      <el-table-column :label="$t('table.date')" width="150px" align="center">
         <template slot-scope="scope">
-          <span>{{scope.row.date | parseTime('{y}-{m}-{d} {h}:{i}')}}</span>
+          <span>{{ scope.row.date | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column width="110px" align="center" :label="$t('table.project')">
+      <el-table-column :label="$t('table.project')" width="110px" align="center">
         <template slot-scope="scope">
-          <span>{{scope.row.projectname}}</span>
+          <span>{{ scope.row.projectname }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column width="100px" align="center" :label="$t('table.platform')">
+      <el-table-column :label="$t('table.platform')" width="100px" align="center">
         <template slot-scope="scope">
-          <router-link class="link-type" :to="'/components/back-to-top/'+scope.row.id">
-            <span class="link-type" >{{scope.row.platform}}</span>
+          <router-link :to="'/components/back-to-top/'+scope.row.id" class="link-type">
+            <span class="link-type" >{{ scope.row.platform }}</span>
           </router-link>
           <!--<el-tag>{{scope.row.type | typeFilter}}</el-tag>-->
         </template>
       </el-table-column>
-      <el-table-column width="110px" align="center" :label="$t('table.runenv')">
+      <el-table-column :label="$t('table.runenv')" width="110px" align="center">
         <template slot-scope="scope">
-          <span>{{scope.row.runenv}}</span>
+          <span>{{ scope.row.runenv }}</span>
         </template>
       </el-table-column>
       <!--<el-table-column width="110px" v-if='showReviewer' align="center" :label="$t('table.reviewer')">-->
@@ -58,15 +64,15 @@
       <!--<span style='color:red;'>{{scope.row.reviewer}}</span>-->
       <!--</template>-->
       <!--</el-table-column>-->
-      <el-table-column width="90px" align="center" :label="$t('table.version')">
+      <el-table-column :label="$t('table.version')" width="90px" align="center">
         <template slot-scope="scope">
-          <span>{{scope.row.version}}</span>
+          <span>{{ scope.row.version }}</span>
           <!--<svg-icon v-for="n in +scope.row.importance" icon-class="star" class="meta-item__icon" :key="n"></svg-icon>-->
         </template>
       </el-table-column>
-      <el-table-column width="130px" align="center" :label="$t('table.iphoneurl')">
+      <el-table-column :label="$t('table.iphoneurl')" width="130px" align="center">
         <template slot-scope="scope">
-          <span>{{scope.row.iphoneurl}}</span>
+          <span>{{ scope.row.iphoneurl }}</span>
           <!--<svg-icon v-for="n in +scope.row.importance" icon-class="star" class="meta-item__icon" :key="n"></svg-icon>-->
         </template>
       </el-table-column>
@@ -76,31 +82,29 @@
       <!--<span v-else>0</span>-->
       <!--</template>-->
       <!--</el-table-column>-->
-      <el-table-column class-name="status-col" :label="$t('table.notiphoneurl')" width="150">
+      <el-table-column :label="$t('table.notiphoneurl')" class-name="status-col" width="150">
         <template slot-scope="scope">
-          <span>{{scope.row.notiphoneurl}}</span>
+          <span>{{ scope.row.notiphoneurl }}</span>
           <!--<el-tag :type="scope.row.status | statusFilter">{{scope.row.status}}</el-tag>-->
         </template>
       </el-table-column>
-      <el-table-column align="center" :label="$t('table.actions')" width="230" class-name="small-padding fixed-width">
-      <template slot-scope="scope">
-      <!--<el-button type="primary" size="mini"  @click="handleUpdate(scope.row)">{{$t('table.pass')}}</el-button>-->
-      <el-button  size="mini" type="success"  @click="handleModifyStatus(scope.row)">{{$t('table.change')}}
-      </el-button>
-      <!--&lt;!&ndash;v-if="scope.row.status!='published'"&ndash;&gt;-->
-      <el-button v-if="scope.row.status!='draft'" size="mini" @click="handleModifyStatus(scope.row,'draft')">{{$t('table.remove')}}
-      </el-button>
-      <!--<el-button  size="mini" type="danger" @click="handleStopStatus(scope.row)">{{ scope.row.stop }}-->
-      <!--</el-button>-->
-      </template>
+      <el-table-column :label="$t('table.actions')" align="center" width="230" class-name="small-padding fixed-width">
+        <template slot-scope="scope">
+          <!--<el-button type="primary" size="mini"  @click="handleUpdate(scope.row)">{{$t('table.pass')}}</el-button>-->
+          <el-button size="mini" type="success" @click="handleModifyStatus(scope.row)">{{ $t('table.change') }}
+          </el-button>
+          <!--&lt;!&ndash;v-if="scope.row.status!='published'"&ndash;&gt;-->
+          <el-button v-if="scope.row.status!='draft'" size="mini" @click="handleModifyStatus(scope.row,'draft')">{{ $t('table.remove') }}
+          </el-button>
+        <!--<el-button  size="mini" type="danger" @click="handleStopStatus(scope.row)">{{ scope.row.stop }}-->
+        <!--</el-button>-->
+        </template>
       </el-table-column>
     </el-table>
 
     <div class="pagination-container">
-      <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="listQuery.page" :page-sizes="[10,20,30, 50]" :page-size="listQuery.limit" layout="total, sizes, prev, pager, next, jumper" :total="total">
-      </el-pagination>
+      <el-pagination :current-page="listQuery.page" :page-sizes="[10,20,30, 50]" :page-size="listQuery.limit" :total="total" background layout="total, sizes, prev, pager, next, jumper" @size-change="handleSizeChange" @current-change="handleCurrentChange"/>
     </div>
-
 
   </div>
 </template>
@@ -108,7 +112,7 @@
 <script>
 import { getversion } from '@/api/version'
 export default {
-  name: 'versionlist',
+  name: 'Versionlist',
   data() {
     return {
       list: null,

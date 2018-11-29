@@ -34,7 +34,7 @@
     <el-dialog :visible.sync="dialogFormVisible" title="运行环境">
       <el-form :model="form">
         <el-form-item :label-width="formLabelWidth" label="环境名">
-          <el-input v-model="form.name" autocomplete="off"/>
+          <el-input v-model="form.name" auto-complete="off"/>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">

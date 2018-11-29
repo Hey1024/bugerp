@@ -34,7 +34,7 @@
     <el-dialog :visible.sync="dialogFormVisible" title="项目管理">
       <el-form :model="form">
         <el-form-item :label-width="formLabelWidth" label="项目名">
-          <el-input v-model="form.name" autocomplete="off"/>
+          <el-input v-model="form.projectname" auto-complete="off"/>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -53,7 +53,7 @@ export default {
     return {
       dialogFormVisible: false,
       form: {
-        name: '',
+        projectname: '',
         delivery: false,
         id: -1
       },
@@ -97,29 +97,33 @@ export default {
     updatep(row) {
       this.dialogFormVisible = true
       this.form.id = row.id
-      this.form.name = row.projectname
-      updateProjectName(this.form).then(resp => {
-        if (resp.data.statuscode === 0) {
-          const fl = this.form.length
-          for (let i = 0; i < fl; i++) {
-            if (this.tableData[i].id === row.id) {
-              this.tableData[i].projectname = row.projectname
-              break
-            }
-          }
-        }
-      })
+      this.form.projectname = row.projectname
     },
     confirm() {
       this.dialogFormVisible = false
-      addProjectName(this.form.name).then(resp => {
-        if (resp.data.statuscode === 0) {
-          this.tableData.push({
-            id: resp.data.id,
-            projectname: this.form.name
-          })
-        }
-      })
+      console.log(this.form)
+      if (this.form.id === -1) {
+        addProjectName(this.form.projectname).then(resp => {
+          if (resp.data.statuscode === 0) {
+            this.tableData.push({
+              id: resp.data.id,
+              projectname: this.form.projectname
+            })
+          }
+        })
+      } else {
+        updateProjectName(this.form).then(resp => {
+          if (resp.data.statuscode === 0) {
+            const fl = this.tableData.length
+            for (let i = 0; i < fl; i++) {
+              if (this.tableData[i].id === this.form.id) {
+                this.tableData[i].projectname = this.form.projectname
+                break
+              }
+            }
+          }
+        })
+      }
     },
     cancel() {
       this.dialogFormVisible = false

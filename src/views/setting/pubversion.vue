@@ -61,7 +61,7 @@
       </el-form-item>
 
       <el-col :span="2" class="text-center">
-        <el-button type="success" plain @click="addversion">修改</el-button>
+        <el-button type="success" plain @click="addversion">增加</el-button>
       </el-col>
       <el-col :span="2" class="text-center">
         <el-button type="warning" plain @click="clean">清空</el-button>
@@ -147,7 +147,11 @@ export default {
     },
     addversion() {
       addversion(this.versionlist).then(response => {
-        console.log(response.data)
+        if (response.data.statuscode === 0) {
+          this.$message.success('添加成功')
+        } else {
+          this.$message.success('错误码' + response.data.statuscode)
+        }
       })
     }
   }
