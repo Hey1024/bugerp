@@ -1,36 +1,36 @@
 import request from '@/utils/request'
 
-export function getenvs() {
+export function getEnv() {
   return request({
-    url: '/article/getenv',
+    url: '/get/env',
     method: 'post'
   })
 }
 
-export function getproject() {
+export function getProject() {
   return request({
-    url: '/article/getproject',
+    url: '/get/project',
     method: 'post'
   })
 }
 
-export function getusers() {
+export function getUsers() {
   return request({
-    url: '/article/getuser',
+    url: '/get/user',
     method: 'post'
   })
 }
 
-export function getversion() {
+export function getVersion() {
   return request({
-    url: '/article/getversion',
+    url: '/get/version',
     method: 'post'
   })
 }
 
-export function getplatform() {
+export function getOs() {
   return request({
-    url: '/article/getplatform',
+    url: '/get/os',
     method: 'post'
   })
 }

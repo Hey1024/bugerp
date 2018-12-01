@@ -194,7 +194,7 @@ import 'vue-multiselect/dist/vue-multiselect.min.css'// 多选框组件css
 import Sticky from '@/components/Sticky' // 粘性header组件
 import { validateURL } from '@/utils/validate'
 import { fetchArticle, createArticle } from '@/api/article'
-import { getproject, getusers, getversion, getplatform, getclasses, getenvs } from '@/api/createarticle'
+import { getProject, getUsers, getVersion, getOs, getEnv } from '@/api/createarticle'
 import { userSearch } from '@/api/remoteSearch'
 import Warning from './Warning'
 // import { removeToken } from '@/utils/auth'
@@ -303,19 +303,19 @@ export default {
     }
   },
   activated() {
-    this.getspuser()
-    this.getplatform()
+    this.getuser()
+    this.getos()
     this.getversion()
-    this.getclasses()
-    this.getpname()
+    // this.getclasses()
+    this.getproject()
     this.getenv()
   },
   created() {
-    this.getspuser()
-    this.getpname()
-    this.getplatform()
+    this.getuser()
+    this.getproject()
+    this.getos()
     this.getversion()
-    this.getclasses()
+    // this.getclasses()
     this.getenv()
     if (this.isEdit) {
       const id = this.$route.params && this.$route.params.id
@@ -326,80 +326,86 @@ export default {
   },
   methods: {
     getenv() {
-      getenvs().then(response => {
-        const arr = response.data
-        console.log(arr)
-        for (let i = 0; i < arr.length; i++) {
-          const aa = {}
-          aa.value = arr[i]
-          aa.label = arr[i]
-          this.envnames.push(aa)
-        }
-      })
-    },
-    getpname() {
-      getproject().then(response => {
-        const arr = response.data
-        for (let i = 0; i < arr.length; i++) {
-          const aa = {}
-          aa.value = arr[i]
-          aa.label = arr[i]
-          if (arr[i] === 'all') {
-            continue
+      getEnv().then(response => {
+        if (response.data.statuscode === 0) {
+          const arr = response.data.envlist
+          for (let i = 0; i < arr.length; i++) {
+            const aa = {}
+            aa.value = arr[i]
+            aa.label = arr[i]
+            this.envnames.push(aa)
           }
-          this.projectnames.push(aa)
         }
       })
     },
-    getclasses() {
-      getclasses().then(response => {
-        const arr = response.data
-        for (let i = 0; i < arr.length; i++) {
-          const aa = {}
-          aa.value = arr[i]
-          aa.label = arr[i]
-          this.classname.push(aa)
+    getproject() {
+      getProject().then(response => {
+        if (response.data.statuscode === 0) {
+          const arr = response.data.projectlist
+          for (let i = 0; i < arr.length; i++) {
+            const aa = {}
+            aa.value = arr[i]
+            aa.label = arr[i]
+            this.projectnames.push(aa)
+          }
         }
-      }).catch(err => {
-        console.log(err)
       })
     },
-    getplatform() {
-      getplatform().then(response => {
-        const arr = response.data
-        for (let i = 0; i < arr.length; i++) {
-          const aa = {}
-          aa.value = arr[i]
-          aa.label = arr[i]
-          this.oses.push(aa)
+    // getclasses() {
+    //   getclasses().then(response => {
+    //     const arr = response.data
+    //     for (let i = 0; i < arr.length; i++) {
+    //       const aa = {}
+    //       aa.value = arr[i]
+    //       aa.label = arr[i]
+    //       this.classname.push(aa)
+    //     }
+    //   }).catch(err => {
+    //     console.log(err)
+    //   })
+    // },
+    getos() {
+      getOs().then(response => {
+        console.log(response.data)
+        if (response.data.statuscode === 0) {
+          const arr = response.data.oslist
+          for (let i = 0; i < arr.length; i++) {
+            const aa = {}
+            aa.value = arr[i]
+            aa.label = arr[i]
+            this.oses.push(aa)
+          }
         }
       }).catch(err => {
         console.log(err)
       })
     },
     getversion() {
-      getversion().then(response => {
-        const arr = response.data
-        for (let i = 0; i < arr.length; i++) {
-          const aa = {}
-          aa.value = arr[i]
-          aa.label = arr[i]
-          this.versions.push(aa)
+      getVersion().then(response => {
+        if (response.data.statuscode === 0) {
+          const arr = response.data.versionlist
+          for (let i = 0; i < arr.length; i++) {
+            const aa = {}
+            aa.value = arr[i]
+            aa.label = arr[i]
+            this.versions.push(aa)
+          }
         }
       }).catch(err => {
         console.log(err)
       })
     },
-    getspuser() {
-      getusers().then(response => {
-        const arr = response.data
-        // console.log(arr)
-        // return
-        for (let i = 0; i < arr.length; i++) {
-          const aa = {}
-          aa.value = arr[i].nickname + '(' + arr[i].realname + ')'
-          aa.label = arr[i].nickname + '(' + arr[i].realname + ')'
-          this.users.push(aa)
+    getuser() {
+      getUsers().then(response => {
+        if (response.data.statuscode === 0) {
+          const arr = response.data.users
+          // return
+          for (let i = 0; i < arr.length; i++) {
+            const aa = {}
+            aa.value = arr[i].nickname + '(' + arr[i].realname + ')'
+            aa.label = arr[i].nickname + '(' + arr[i].realname + ')'
+            this.users.push(aa)
+          }
         }
       }).catch(err => {
         console.log(err)

@@ -99,7 +99,7 @@
 import { fetchList, gettotalcount, closeBug, removeBug } from '@/api/list'
 import { changeStatus, getstatuslist } from '@/api/bugs'
 import waves from '@/directive/waves' // 水波纹指令
-import { getproject, getTotal } from '@/api/createarticle'
+import { getproject } from '@/api/createarticle'
 
 const calendarTypeOptions = [
   { key: 'CN', display_name: 'China' },
@@ -286,9 +286,11 @@ export default {
     },
     getList() {
       this.listLoading = true
-      getTotal(this.listQuery).then(response => {
-        this.total = response.data
-      })
+      // url: '/bug/gettotal'
+      // getTotal(this.listQuery).then(response => {
+      //   this.total = response.data
+      // })
+      // url: '/article/list',
       fetchList(this.listQuery).then(response => {
         console.log(response.data)
         if (response.data.length === 0) {

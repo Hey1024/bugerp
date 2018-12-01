@@ -134,6 +134,7 @@ export default {
         console.log(response.data)
         if (response.data.statuscode === 0) {
           this.list = response.data.versionlist
+          console.log(this.list)
           this.total = response.data.versionlist.length
           // this.$message({
           //   message: '',

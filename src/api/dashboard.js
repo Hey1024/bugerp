@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function getlist() {
   return request({
-    url: '/dashboard/list',
+    url: '/dashboard/usercount',
     method: 'post'
   })
 }
@@ -23,11 +23,10 @@ export function fetchPv(pv) {
   })
 }
 
-export function getprojectlist(project) {
+export function getprojectlist() {
   return request({
-    url: '/dashboard/project',
-    method: 'post',
-    data: project
+    url: '/dashboard/projectcount',
+    method: 'post'
   })
 }
 

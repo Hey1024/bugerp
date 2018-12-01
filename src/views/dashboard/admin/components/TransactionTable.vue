@@ -2,17 +2,17 @@
   <el-table :data="list" style="width: 100%;padding-top: 15px;">
     <el-table-column label="Id" min-width="200">
       <template slot-scope="scope">
-        {{scope.row.id }}
+        {{ scope.row.id }}
       </template>
     </el-table-column>
     <el-table-column label="Title" width="195" align="center">
       <template slot-scope="scope">
-        {{scope.row.title }}
+        {{ scope.row.title }}
       </template>
     </el-table-column>
     <el-table-column label="Status" width="100" align="center">
       <template slot-scope="scope">
-        <el-tag :type="scope.row.status "> {{scope.row.status}}</el-tag>
+        <el-tag :type="scope.row.status "> {{ scope.row.status }}</el-tag>
       </template>
     </el-table-column>
   </el-table>
@@ -22,11 +22,6 @@
 import { fetchList } from '@/api/transaction'
 
 export default {
-  data() {
-    return {
-      list: null
-    }
-  },
   filters: {
     statusFilter(status) {
       const statusMap = {
@@ -37,6 +32,11 @@ export default {
     },
     orderNoFilter(str) {
       return str.substring(0, 30)
+    }
+  },
+  data() {
+    return {
+      list: null
     }
   },
   created() {
