@@ -16,9 +16,9 @@ export function fetchPv(pv) {
   })
 }
 
-export function createArticle(data) {
+export function createBug(data) {
   return request({
-    url: '/article/create',
+    url: '/bug/create',
     method: 'post',
     data: data
   })

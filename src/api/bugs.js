@@ -7,9 +7,9 @@ export function getallbugs() {
   })
 }
 
-export function getstatuslist() {
+export function getStatus() {
   return request({
-    url: '/bug/getstatuslist',
+    url: '/get/status',
     method: 'post'
   })
 }

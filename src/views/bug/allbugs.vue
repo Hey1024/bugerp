@@ -6,10 +6,10 @@
         <el-option v-for="(item, index) in statuslist" :key="index" :label="item.value" :value="item.label"/>
       </el-select>
       <el-select v-model="listQuery.level" :placeholder="$t('table.level')" clearable style="width: 90px" class="filter-item">
-        <el-option v-for="item in levels" :key="item" :label="item" :value="item"/>
+        <el-option v-for="(item, index) in levels" :key="index" :label="item" :value="item"/>
       </el-select>
       <el-select v-model="listQuery.project" :placeholder="$t('table.project')" clearable class="filter-item" style="width: 130px">
-        <el-option v-for="item in projectnames" :key="item" :label="item" :value="item"/>
+        <el-option v-for="(item, index) in projectnames" :key="index" :label="item" :value="item"/>
       </el-select>
       <!--<el-select @change='handleFilter' style="width: 140px" class="filter-item" v-model="listQuery.sort">-->
       <!--<el-option v-for="item in sortOptions" :key="item.key" :label="item.label" :value="item.key">-->
@@ -98,31 +98,9 @@
       </el-table-column>
       <el-table-column :label="$t('table.actions')" align="center" width="230" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <!--<el-select-->
-          <!--v-model="changestatus"-->
-          <!--multiple-->
-          <!--filterable-->
-          <!--allow-create-->
-          <!--default-first-option-->
-          <!--placeholder="修改状态">-->
-          <!--<el-option-->
-          <!--v-for="item,index in statuslist"-->
-          <!--:key="index"-->
-          <!--:label="item.label"-->
-          <!--:value="item.value">-->
-          <!--</el-option>-->
-          <!--</el-select>-->
           <el-select v-model="scope.row.status" style="width: 200px" class="filter-item" placeholder="修改状态" @change="changestatus(scope.row)">
             <el-option v-for="(item, index) in statuslist" :key="index" :label="item.value" :value="item.label"/>
           </el-select>
-          <!--<el-button type="primary" size="mini"  @click="handleUpdate(scope.row)">{{$t('table.pass')}}</el-button>-->
-          <!--<el-button  size="mini" type="success" :disabled="scope.row.disable" @click="handleModifyStatus(scope.row)">{{ scope.row.action }}-->
-          <!--</el-button>-->
-          <!--v-if="scope.row.status!='published'"-->
-          <!--<el-button v-if="scope.row.status!='draft'" size="mini" @click="handleModifyStatus(scope.row,'draft')">{{$t('table.draft')}}-->
-          <!--</el-button>-->
-          <!--<el-button  size="mini" type="danger" @click="handleStopStatus(scope.row)">{{ scope.row.stop }}-->
-          <!--</el-button>-->
         </template>
       </el-table-column>
     </el-table>
@@ -206,8 +184,8 @@
 </template>
 
 <script>
-import { getstatuslist, searchbugs, changeStatus } from '@/api/bugs'
-import { getproject, getTotal } from '@/api/createarticle'
+import { getStatus, searchbugs, changeStatus } from '@/api/bugs'
+import { getProject } from '@/api/createarticle'
 import waves from '@/directive/waves' // 水波纹指令
 import { parseTime } from '@/utils'
 
@@ -247,16 +225,16 @@ export default {
       users: [],
       tableKey: 0,
       list: null,
-      total: null,
+      total: 0,
       listLoading: true,
       importanceOptions: [],
       listQuery: {
         page: 1,
         limit: 15,
-        level: undefined,
-        project: undefined,
-        title: undefined,
-        status: undefined
+        level: '',
+        project: '',
+        title: '',
+        status: ''
       },
       // importanceOptions: [1, 2, 3, 4, 5],
       calendarTypeOptions,
@@ -305,28 +283,20 @@ export default {
   },
   activated() {
     this.getList()
-    this.getpname()
+    this.getprojectname()
   },
   created() {
     this.getList()
     this.getstatus()
-    this.getpname()
+    this.getprojectname()
     // this.gettaskstatus()
   },
   methods: {
-    getpname() {
-      getproject().then(response => {
-        this.projectnames = response.data
-        // const arr = response.data
-        // for (let i = 0; i < arr.length; i++) {
-        //   const aa = {}
-        //   aa.value = arr[i]
-        //   aa.label = arr[i]
-        //   if (arr[i] === 'all') {
-        //     continue
-        //   }
-        //   this.projectnames.push(aa)
-        // }
+    getprojectname() {
+      getProject().then(response => {
+        if (response.data.statuscode === 0) {
+          this.projectnames = response.data.projectlist
+        }
       })
     },
     changestatus(row) {
@@ -351,44 +321,58 @@ export default {
       })
     },
     getstatus() {
-      getstatuslist().then(response => {
-        const tmp = response.data
-        const sl = response.data.length
-        for (let i = 0; i < sl; i++) {
-          const aa = {}
-          aa.value = tmp[i]
-          aa.label = tmp[i]
-          this.statuslist.push(aa)
+      getStatus().then(response => {
+        if (response.data.statuscode === 0) {
+          const arr = response.data.statuslist
+          const sl = arr.length
+          for (let i = 0; i < sl; i++) {
+            const aa = {}
+            aa.value = arr[i]
+            aa.label = arr[i]
+            this.statuslist.push(aa)
+          }
         }
       })
     },
     getList() {
       this.listLoading = true
-      getTotal(this.listQuery).then(response => {
-        this.total = response.data
-      })
+      // listQuery: {
+      //   page: 1,
+      //     limit: 15,
+      //     level: undefined,
+      //     project: undefined,
+      //     title: undefined,
+      //     status: undefined
+      // },
+      // getTotal(this.listQuery).then(response => {
+      //   this.total = response.data
+      // })
+      // console.log(this.listQuery)
       searchbugs(this.listQuery).then(response => {
-        if (response.data === '') {
-          this.$notify({
-            title: '成功',
-            message: '没有数据',
-            type: 'notice'
-          })
-          this.list = null
-          this.listLoading = false
-          return
+        if (response.data.statuscode === 0) {
+          this.total = response.data.total
         }
-        if (response.data === 'fail') {
-          this.$notify({
-            title: '失败',
-            message: '操作失败',
-            type: 'error'
-          })
-          this.listLoading = false
-          return
-        }
-        this.list = response.data
-        // this.getList()
+        // if (response.data === '') {
+        //   this.$notify({
+        //     title: '成功',
+        //     message: '没有数据',
+        //     type: 'notice'
+        //   })
+        //   this.list = null
+        //   this.listLoading = false
+        //   return
+        // }
+        // if (response.data === 'fail') {
+        //   this.$notify({
+        //     title: '失败',
+        //     message: '操作失败',
+        //     type: 'error'
+        //   })
+        //   this.listLoading = false
+        //   return
+        // }
+        // this.list = response.data
+        // // this.getList()
         this.listLoading = false
       })
     },

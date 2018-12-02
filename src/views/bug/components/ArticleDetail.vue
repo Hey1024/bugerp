@@ -148,10 +148,7 @@
           <el-col :span="16">
             <el-form-item style="margin-bottom: 40px;" label="分配任务给：">
               <el-select
-                v-model="postForm.selectusers"
-                multiple
-                filterable
-                allow-create
+                v-model="postForm.selectuser"
                 default-first-option
                 placeholder="请选择指定的用户">
                 <el-option
@@ -193,7 +190,7 @@ import Multiselect from 'vue-multiselect'// 使用的一个多选框组件，ele
 import 'vue-multiselect/dist/vue-multiselect.min.css'// 多选框组件css
 import Sticky from '@/components/Sticky' // 粘性header组件
 import { validateURL } from '@/utils/validate'
-import { fetchArticle, createArticle } from '@/api/article'
+import { fetchArticle, createBug } from '@/api/article'
 import { getProject, getUsers, getVersion, getOs, getEnv } from '@/api/createarticle'
 import { userSearch } from '@/api/remoteSearch'
 import Warning from './Warning'
@@ -204,14 +201,8 @@ const defaultForm = {
   // status: 'draft',
   title: '', // 文章题目
   content: '', // 文章内容
-  // content_short: '', // 文章摘要
-  // source_uri: '', // 文章外链
-  // image_uri: '', // 文章图片
-  // display_time: undefined, // 前台展示时间
   id: -1,
-  // platforms: ['a-platform'],
-  // comment_disabled: false,
-  selectusers: [],
+  selectuser: '',
   projectname: '',
   level: '中',
   envname: '',
@@ -421,7 +412,7 @@ export default {
         this.postForm.importance = dd.importance
         this.postForm.selectclass = dd.selectclass
         this.postForm.appversion = dd.appversion
-        this.postForm.selectusers = dd.spusers.split(',')
+        this.postForm.selectusers = dd.spusers
         this.postForm.selectoses = dd.selectoses.split(',')
         // Just for test
         // this.postForm.title += `   Article Id:${this.postForm.id}`
@@ -432,14 +423,14 @@ export default {
     },
     submitForm() {
       // this.postForm.display_time = parseInt(this.display_time / 1000)
-      if (this.postForm.title.length > 30) {
+      if (this.postForm.title.length > 40) {
         this.$message({
-          message: '标题长度必须小于30位',
+          message: '标题长度必须小于40位',
           type: 'error'
         })
         return
       }
-      if (this.postForm.selectusers.length < 1) {
+      if (this.postForm.selectuser.length < 1) {
         this.$message({
           message: '请选择指定给谁',
           type: 'error'
@@ -448,29 +439,23 @@ export default {
       }
       if (this.postForm.projectname.length < 1) {
         this.$message({
-          message: '请原则项目名称',
+          message: '请选择项目名称',
           type: 'error'
         })
         return
       }
       this.$refs.postForm.validate(valid => {
         if (valid) {
-          createArticle(this.postForm).then(resp => {
-            if (resp.data === 'fail') {
+          console.log(this.postForm)
+          createBug(this.postForm).then(resp => {
+            if (resp.data.statuscode === 0) {
               this.$notify({
-                title: '失败',
-                message: '发布' + this.postForm.selectclass + '失败',
-                type: 'error',
+                title: '成功',
+                message: '发布' + this.postForm.selectclass + '成功',
+                type: 'success',
                 duration: 2000
               })
-              return
             }
-            this.$notify({
-              title: '成功',
-              message: '发布' + this.postForm.selectclass + '成功',
-              type: 'success',
-              duration: 2000
-            })
             this.$router.push('/bug/list')
           })
         } else {

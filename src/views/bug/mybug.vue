@@ -3,13 +3,13 @@
     <div class="filter-container">
       <el-input :placeholder="$t('table.title')" v-model="listQuery.title" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter"/>
       <el-select v-model="listQuery.status" :placeholder="$t('table.status')" clearable style="width: 90px" class="filter-item">
-        <el-option v-for="(item, index) in statuslist" :key="index" :label="item.value" :value="item.label"/>
+        <el-option v-for="(item, index) in statuslist" :key="index" :label="item" :value="item"/>
       </el-select>
       <el-select v-model="listQuery.level" :placeholder="$t('table.level')" clearable style="width: 90px" class="filter-item">
-        <el-option v-for="item in levels" :key="item" :label="item" :value="item"/>
+        <el-option v-for="(item, index) in levels" :key="index" :label="item" :value="item"/>
       </el-select>
       <el-select v-model="listQuery.project" :placeholder="$t('table.project')" clearable class="filter-item" style="width: 130px">
-        <el-option v-for="item in projectnames" :key="item" :label="item" :value="item"/>
+        <el-option v-for="(item, index) in projectnames" :key="index" :label="item" :value="item"/>
       </el-select>
       <!--<el-select @change='handleFilter' style="width: 140px" class="filter-item" v-model="listQuery.sort">-->
       <!--<el-option v-for="item in sortOptions" :key="item.key" :label="item.label" :value="item.key">-->
@@ -55,7 +55,7 @@
       <el-table-column :label="$t('table.status')" align="center" width="110">
         <template slot-scope="scope">
           <el-select v-model="scope.row.status" style="width: 100px" class="filter-item" @change="changestatus(scope.row)" >
-            <el-option v-for="(item, index) in statuslist" :key="index" :label="item.value" :value="item.label"/>
+            <el-option v-for="(item, index) in statuslist" :key="index" :label="item" :value="item"/>
           </el-select>
           <!--<el-tag :type="scope.row.status | statusFilter">{{scope.row.status}}</el-tag>-->
         </template>
@@ -96,10 +96,10 @@
 </template>
 
 <script>
-import { fetchList, gettotalcount, closeBug, removeBug } from '@/api/list'
-import { changeStatus, getstatuslist } from '@/api/bugs'
+import { getAllBugs, closeBug, removeBug } from '@/api/list'
+import { changeStatus, getStatus } from '@/api/bugs'
 import waves from '@/directive/waves' // 水波纹指令
-import { getproject } from '@/api/createarticle'
+import { getProject } from '@/api/createarticle'
 
 const calendarTypeOptions = [
   { key: 'CN', display_name: 'China' },
@@ -156,36 +156,22 @@ export default {
   },
   created() {
     this.getList()
-    this.gettotalcount()
     this.getstatus()
     this.getpname()
   },
   methods: {
     getstatus() {
-      getstatuslist().then(response => {
-        const tmp = response.data
-        const sl = response.data.length
-        for (let i = 0; i < sl; i++) {
-          const aa = {}
-          aa.value = tmp[i]
-          aa.label = tmp[i]
-          this.statuslist.push(aa)
+      getStatus().then(response => {
+        if (response.data.statuscode === 0) {
+          this.statuslist = response.data.statuslist
         }
       })
     },
     getpname() {
-      getproject().then(response => {
-        this.projectnames = response.data
-        // const arr = response.data
-        // for (let i = 0; i < arr.length; i++) {
-        //   const aa = {}
-        //   aa.value = arr[i]
-        //   aa.label = arr[i]
-        //   if (arr[i] === 'all') {
-        //     continue
-        //   }
-        //   this.projectnames.push(aa)
-        // }
+      getProject().then(response => {
+        if (response.data.statuscode === 0) {
+          this.projectnames = response.data.projectlist
+        }
       })
     },
     handleClose(row) {
@@ -279,11 +265,11 @@ export default {
         })
       })
     },
-    gettotalcount() {
-      gettotalcount().then(response => {
-        this.total = parseInt(response.data)
-      })
-    },
+    // gettotalcount() {
+    //   gettotalcount().then(response => {
+    //     this.total = parseInt(response.data)
+    //   })
+    // },
     getList() {
       this.listLoading = true
       // url: '/bug/gettotal'
@@ -291,26 +277,12 @@ export default {
       //   this.total = response.data
       // })
       // url: '/article/list',
-      fetchList(this.listQuery).then(response => {
+      getAllBugs(this.listQuery).then(response => {
         console.log(response.data)
-        if (response.data.length === 0) {
-          this.$notify({
-            message: '没有查到数据',
-            type: 'notice'
-          })
-          this.list = null
-          this.listLoading = false
-          return
+        if (response.data.statuscode === 0) {
+          this.list = response.data.articlelist
+          this.total = response.data.articlelist.length
         }
-        if (response.data === 'fail') {
-          this.$notify({
-            message: '查询失败',
-            type: 'error'
-          })
-          this.listLoading = false
-          return
-        }
-        this.list = response.data
         this.listLoading = false
       })
     }

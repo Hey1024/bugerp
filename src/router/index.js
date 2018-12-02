@@ -182,13 +182,13 @@ export const asyncRouterMap = [
         hidden: true
       },
       {
-        path: 'list',
-        component: () => import('@/views/bug/list'),
+        path: 'mybug',
+        component: () => import('@/views/bug/mybug'),
         name: 'articleList',
         meta: { title: 'articleList', icon: 'guide' }
       },
       {
-        path: 'bugs',
+        path: 'allbugs',
         component: () => import('@/views/bug/allbugs'),
         name: 'bugs',
         meta: {

@@ -16,9 +16,9 @@ export function removeBug(id) {
   })
 }
 
-export function fetchList(query) {
+export function getAllBugs(query) {
   return request({
-    url: '/article/list',
+    url: '/bug/getallbugs',
     method: 'post',
     data: query
   })
