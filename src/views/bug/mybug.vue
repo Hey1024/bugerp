@@ -98,6 +98,7 @@
 <script>
 import { getAllBugs, closeBug, removeBug } from '@/api/list'
 import { changeStatus, getStatus } from '@/api/bugs'
+import { searchMyBugs } from '@/api/search'
 import waves from '@/directive/waves' // 水波纹指令
 import { getProject } from '@/api/createarticle'
 
@@ -209,7 +210,7 @@ export default {
         status: row.status
       }
       changeStatus(param).then(response => {
-        if (response.data === 'ok') {
+        if (response.data.statuscode === 0) {
           this.$notify({
             title: '成功',
             message: '修改成功',
@@ -226,7 +227,9 @@ export default {
     },
     handleFilter() {
       this.listQuery.page = 1
-      this.getList()
+      searchMyBugs(this.listQuery).then(resp => {
+        console.log(resp.data)
+      })
     },
     handleSizeChange(val) {
       this.listQuery.limit = val
@@ -265,18 +268,8 @@ export default {
         })
       })
     },
-    // gettotalcount() {
-    //   gettotalcount().then(response => {
-    //     this.total = parseInt(response.data)
-    //   })
-    // },
     getList() {
       this.listLoading = true
-      // url: '/bug/gettotal'
-      // getTotal(this.listQuery).then(response => {
-      //   this.total = response.data
-      // })
-      // url: '/article/list',
       getAllBugs(this.listQuery).then(response => {
         console.log(response.data)
         if (response.data.statuscode === 0) {

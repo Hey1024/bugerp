@@ -49,17 +49,17 @@ const setting = {
         icon: 'bug',
         roles: ['admin', 'manager', 'cocosmanager', 'cocos']
       }
-    },
-    {
-      path: 'runos',
-      component: () => import('@/views/setting/runos'),
-      name: 'osmanager',
-      meta: {
-        title: 'runos',
-        icon: 'bug',
-        roles: ['admin', 'manager', 'cocosmanager', 'cocos']
-      }
     }
+    // {
+    //   path: 'runos',
+    //   component: () => import('@/views/setting/runos'),
+    //   name: 'osmanager',
+    //   meta: {
+    //     title: 'runos',
+    //     icon: 'bug',
+    //     roles: ['admin', 'manager', 'cocosmanager', 'cocos']
+    //   }
+    // }
   ]
 }
 

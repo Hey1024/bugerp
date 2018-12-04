@@ -45,15 +45,6 @@
           <span>{{ scope.row.projectname }}</span>
         </template>
       </el-table-column>
-
-      <el-table-column :label="$t('table.platform')" width="100px" align="center">
-        <template slot-scope="scope">
-          <router-link :to="'/components/back-to-top/'+scope.row.id" class="link-type">
-            <span class="link-type" >{{ scope.row.platform }}</span>
-          </router-link>
-          <!--<el-tag>{{scope.row.type | typeFilter}}</el-tag>-->
-        </template>
-      </el-table-column>
       <el-table-column :label="$t('table.runenv')" width="110px" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.runenv }}</span>
@@ -94,7 +85,7 @@
           <el-button size="mini" type="success" @click="handleModifyStatus(scope.row)">{{ $t('table.change') }}
           </el-button>
           <!--&lt;!&ndash;v-if="scope.row.status!='published'"&ndash;&gt;-->
-          <el-button v-if="scope.row.status!='draft'" size="mini" @click="handleModifyStatus(scope.row,'draft')">{{ $t('table.remove') }}
+          <el-button v-if="scope.row.status!='draft'" size="mini" @click="handleRemove(scope.row,'draft')">{{ $t('table.remove') }}
           </el-button>
         <!--<el-button  size="mini" type="danger" @click="handleStopStatus(scope.row)">{{ scope.row.stop }}-->
         <!--</el-button>-->
@@ -110,7 +101,7 @@
 </template>
 
 <script>
-import { getversion } from '@/api/version'
+import { getVersion, removeVersion } from '@/api/version'
 export default {
   name: 'Versionlist',
   data() {
@@ -130,11 +121,10 @@ export default {
   },
   methods: {
     getversionlist() {
-      getversion(this.listQuery).then(response => {
+      getVersion(this.listQuery).then(response => {
         console.log(response.data)
         if (response.data.statuscode === 0) {
           this.list = response.data.versionlist
-          console.log(this.list)
           this.total = response.data.versionlist.length
           // this.$message({
           //   message: '',
@@ -154,6 +144,18 @@ export default {
     },
     handleModifyStatus() {
       console.log(1111)
+    },
+    handleRemove(row) {
+      removeVersion(row.id).then(resp => {
+        if (resp.data.statuscode === 0) {
+          const l = this.list.length
+          for (let i = 0; i < l; i++) {
+            if (this.list[i].id === row.id) {
+              this.list.splice(i, 1)
+            }
+          }
+        }
+      })
     }
   }
 }

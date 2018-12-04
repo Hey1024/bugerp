@@ -128,23 +128,6 @@
         <!--</el-row>-->
         <!--<template>-->
         <el-row>
-          <el-col :span="8">
-            <el-form-item style="margin-bottom: 40px;" label="运行平台：">
-              <el-select
-                v-model="postForm.selectoses"
-                multiple
-                filterable
-                allow-create
-                default-first-option
-                placeholder="请选择平台">
-                <el-option
-                  v-for="item in oses"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"/>
-              </el-select>
-            </el-form-item>
-          </el-col>
           <el-col :span="16">
             <el-form-item style="margin-bottom: 40px;" label="分配任务给：">
               <el-select
@@ -191,7 +174,7 @@ import 'vue-multiselect/dist/vue-multiselect.min.css'// 多选框组件css
 import Sticky from '@/components/Sticky' // 粘性header组件
 import { validateURL } from '@/utils/validate'
 import { fetchArticle, createBug } from '@/api/article'
-import { getProject, getUsers, getVersion, getOs, getEnv } from '@/api/createarticle'
+import { getProject, getUsers, getVersion, getEnv } from '@/api/createarticle'
 import { userSearch } from '@/api/remoteSearch'
 import Warning from './Warning'
 // import { removeToken } from '@/utils/auth'
@@ -295,7 +278,6 @@ export default {
   },
   activated() {
     this.getuser()
-    this.getos()
     this.getversion()
     // this.getclasses()
     this.getproject()
@@ -304,7 +286,6 @@ export default {
   created() {
     this.getuser()
     this.getproject()
-    this.getos()
     this.getversion()
     // this.getclasses()
     this.getenv()
@@ -355,22 +336,22 @@ export default {
     //     console.log(err)
     //   })
     // },
-    getos() {
-      getOs().then(response => {
-        console.log(response.data)
-        if (response.data.statuscode === 0) {
-          const arr = response.data.oslist
-          for (let i = 0; i < arr.length; i++) {
-            const aa = {}
-            aa.value = arr[i]
-            aa.label = arr[i]
-            this.oses.push(aa)
-          }
-        }
-      }).catch(err => {
-        console.log(err)
-      })
-    },
+    // getos() {
+    //   getOs().then(response => {
+    //     console.log(response.data)
+    //     if (response.data.statuscode === 0) {
+    //       const arr = response.data.oslist
+    //       for (let i = 0; i < arr.length; i++) {
+    //         const aa = {}
+    //         aa.value = arr[i]
+    //         aa.label = arr[i]
+    //         this.oses.push(aa)
+    //       }
+    //     }
+    //   }).catch(err => {
+    //     console.log(err)
+    //   })
+    // },
     getversion() {
       getVersion().then(response => {
         if (response.data.statuscode === 0) {
@@ -413,7 +394,6 @@ export default {
         this.postForm.selectclass = dd.selectclass
         this.postForm.appversion = dd.appversion
         this.postForm.selectusers = dd.spusers
-        this.postForm.selectoses = dd.selectoses.split(',')
         // Just for test
         // this.postForm.title += `   Article Id:${this.postForm.id}`
         // this.postForm.content_short += `   Article Id:${this.postForm.id}`
@@ -456,7 +436,7 @@ export default {
                 duration: 2000
               })
             }
-            this.$router.push('/bug/list')
+            this.$router.push('/bug/allbugs')
           })
         } else {
           return false

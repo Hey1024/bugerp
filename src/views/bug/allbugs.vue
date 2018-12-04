@@ -90,12 +90,6 @@
           <!--<span v-else>0</span>-->
         </template>
       </el-table-column>
-      <el-table-column :label="$t('table.status')" class-name="status-col" width="100">
-        <template slot-scope="scope">
-          <span>{{ scope.row.status }}</span>
-          <!--<el-tag :type="scope.row.status | statusFilter">{{scope.row.status}}</el-tag>-->
-        </template>
-      </el-table-column>
       <el-table-column :label="$t('table.actions')" align="center" width="230" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-select v-model="scope.row.status" style="width: 200px" class="filter-item" placeholder="修改状态" @change="changestatus(scope.row)">
@@ -184,7 +178,8 @@
 </template>
 
 <script>
-import { getStatus, searchbugs, changeStatus } from '@/api/bugs'
+import { getStatus, changeStatus } from '@/api/bugs'
+import { getAllBugs } from '@/api/list'
 import { getProject } from '@/api/createarticle'
 import waves from '@/directive/waves' // 水波纹指令
 import { parseTime } from '@/utils'
@@ -305,7 +300,7 @@ export default {
         status: row.status
       }
       changeStatus(param).then(response => {
-        if (response.data === 'ok') {
+        if (response.data.statuscode === 0) {
           this.$notify({
             title: '成功',
             message: '修改成功',
@@ -336,43 +331,11 @@ export default {
     },
     getList() {
       this.listLoading = true
-      // listQuery: {
-      //   page: 1,
-      //     limit: 15,
-      //     level: undefined,
-      //     project: undefined,
-      //     title: undefined,
-      //     status: undefined
-      // },
-      // getTotal(this.listQuery).then(response => {
-      //   this.total = response.data
-      // })
-      // console.log(this.listQuery)
-      searchbugs(this.listQuery).then(response => {
+      getAllBugs(this.listQuery).then(response => {
         if (response.data.statuscode === 0) {
           this.total = response.data.total
+          this.list = response.data.articlelist
         }
-        // if (response.data === '') {
-        //   this.$notify({
-        //     title: '成功',
-        //     message: '没有数据',
-        //     type: 'notice'
-        //   })
-        //   this.list = null
-        //   this.listLoading = false
-        //   return
-        // }
-        // if (response.data === 'fail') {
-        //   this.$notify({
-        //     title: '失败',
-        //     message: '操作失败',
-        //     type: 'error'
-        //   })
-        //   this.listLoading = false
-        //   return
-        // }
-        // this.list = response.data
-        // // this.getList()
         this.listLoading = false
       })
     },

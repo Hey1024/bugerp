@@ -24,9 +24,9 @@ export function createBug(data) {
   })
 }
 
-export function updateArticle(data) {
+export function passBug(data) {
   return request({
-    url: '/article/update',
+    url: '/bug/pass',
     method: 'post',
     data
   })
@@ -40,9 +40,9 @@ export function uploadimg(data) {
   })
 }
 
-export function showArticle(id) {
+export function showBug(id) {
   return request({
-    url: '/article/show',
+    url: '/bug/show',
     method: 'get',
     params: { id }
   })

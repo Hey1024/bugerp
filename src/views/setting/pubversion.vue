@@ -6,30 +6,20 @@
       <el-form-item style="margin-bottom: 40px;" label="项目名称：">
         <el-select v-model="versionlist.projectname" placeholder="请选择">
           <el-option
-            v-for="item in projectnames"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"/>
-        </el-select>
-      </el-form-item>
-
-      <el-form-item style="margin-bottom: 40px;" label="运行平台：">
-        <el-select v-model="versionlist.platform" placeholder="请选择">
-          <el-option
-            v-for="item in platforms"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"/>
+            v-for="(item, index) in projectnames"
+            :key="index"
+            :label="item"
+            :value="item"/>
         </el-select>
       </el-form-item>
 
       <el-form-item style="margin-bottom: 40px;" label="运行环境：">
         <el-select v-model="versionlist.runenv" placeholder="请选择">
           <el-option
-            v-for="item in runenvs"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"/>
+            v-for="(item, index) in runenvs"
+            :key="index"
+            :label="item"
+            :value="item"/>
         </el-select>
       </el-form-item>
 
@@ -71,8 +61,8 @@
 </template>
 
 <script>
-import { getplatform, getproject, getenvs } from '@/api/createarticle'
-import { addversion } from '@/api/version'
+import { getProject, getEnv } from '@/api/createarticle'
+import { addVersion } from '@/api/version'
 export default {
   name: 'Pubversion',
   data() {
@@ -93,48 +83,35 @@ export default {
   created() {
     this.getprojectname()
     this.getrunenv()
-    this.getplatformlist()
+    // this.getplatformlist()
   },
   methods: {
     getprojectname() {
-      getproject().then(response => {
-        const data = response.data
-        const ml = data.length
-        for (let i = 0; i < ml; i++) {
-          if (data[i] === 'all') {
-            continue
-          }
-          const a = {}
-          a.value = data[i]
-          a.label = data[i]
-          this.projectnames.push(a)
+      getProject().then(response => {
+        if (response.data.statuscode === 0) {
+          this.projectnames = response.data.projectlist
         }
       })
     },
     getrunenv() {
-      getenvs().then(response => {
-        const data = response.data
-        const ml = data.length
-        for (let i = 0; i < ml; i++) {
-          const a = {}
-          a.value = data[i]
-          a.label = data[i]
-          this.runenvs.push(a)
+      getEnv().then(response => {
+        if (response.data.statuscode === 0) {
+          this.runenvs = response.data.envlist
         }
       })
     },
-    getplatformlist() {
-      getplatform().then(response => {
-        const data = response.data
-        const ml = data.length
-        for (let i = 0; i < ml; i++) {
-          const a = {}
-          a.value = data[i]
-          a.label = data[i]
-          this.platforms.push(a)
-        }
-      })
-    },
+    // getplatformlist() {
+    //   getplatform().then(response => {
+    //     const data = response.data
+    //     const ml = data.length
+    //     for (let i = 0; i < ml; i++) {
+    //       const a = {}
+    //       a.value = data[i]
+    //       a.label = data[i]
+    //       this.platforms.push(a)
+    //     }
+    //   })
+    // },
     clean() {
       this.versionlist = {
         projectname: '',
@@ -146,8 +123,10 @@ export default {
       }
     },
     addversion() {
-      addversion(this.versionlist).then(response => {
-        if (response.data.statuscode === 0) {
+      addVersion(this.versionlist).then(response => {
+        if (response.data.statuscode === 11) {
+          this.$message.success('版本存在')
+        } else if (response.data.statuscode === 0) {
           this.$message.success('添加成功')
         } else {
           this.$message.success('错误码' + response.data.statuscode)
