@@ -159,8 +159,7 @@
 
 <script>
 import { fetchPv, updateArticle } from '@/api/article'
-import { getUsers } from '@/api/createarticle'
-import { getStatus } from '@/api/bugs'
+import { getUsers, getStatus } from '@/api/get'
 import { taskList, changetask, stoptask } from '@/api/table'
 import waves from '@/directive/waves' // 水波纹指令
 import { parseTime } from '@/utils'

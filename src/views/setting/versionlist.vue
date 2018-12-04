@@ -40,16 +40,16 @@
         </template>
       </el-table-column>
 
-      <el-table-column :label="$t('table.project')" width="110px" align="center">
-        <template slot-scope="scope">
-          <span>{{ scope.row.projectname }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column :label="$t('table.runenv')" width="110px" align="center">
-        <template slot-scope="scope">
-          <span>{{ scope.row.runenv }}</span>
-        </template>
-      </el-table-column>
+      <!--<el-table-column :label="$t('table.project')" width="110px" align="center">-->
+      <!--<template slot-scope="scope">-->
+      <!--<span>{{ scope.row.projectname }}</span>-->
+      <!--</template>-->
+      <!--</el-table-column>-->
+      <!--<el-table-column :label="$t('table.runenv')" width="110px" align="center">-->
+      <!--<template slot-scope="scope">-->
+      <!--<span>{{ scope.row.runenv }}</span>-->
+      <!--</template>-->
+      <!--</el-table-column>-->
       <!--<el-table-column width="110px" v-if='showReviewer' align="center" :label="$t('table.reviewer')">-->
       <!--<template slot-scope="scope">-->
       <!--<span style='color:red;'>{{scope.row.reviewer}}</span>-->

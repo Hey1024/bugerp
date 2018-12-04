@@ -97,10 +97,10 @@
 
 <script>
 import { getAllBugs, closeBug, removeBug } from '@/api/list'
-import { changeStatus, getStatus } from '@/api/bugs'
+import { changeStatus } from '@/api/bugs'
 import { searchMyBugs } from '@/api/search'
 import waves from '@/directive/waves' // 水波纹指令
-import { getProject } from '@/api/createarticle'
+import { getProject, getStatus } from '@/api/get'
 
 const calendarTypeOptions = [
   { key: 'CN', display_name: 'China' },

@@ -23,43 +23,29 @@
               style="width: 80%;"/>
           </el-form-item>
         </el-row>
-        <!--<el-row>-->
-        <!--<el-col :span="8">-->
-        <!--<el-form-item style="margin-bottom: 40px;" label="项目名称：">-->
-        <!--<el-select v-model="postForm.projectname" placeholder="请选择">-->
-        <!--<el-option-->
-        <!--v-for="item in projectnames"-->
-        <!--:key="item.value"-->
-        <!--:label="item.label"-->
-        <!--:value="item.value"/>-->
-        <!--</el-select>-->
-        <!--</el-form-item>-->
-        <!--</el-col>-->
-        <!--<el-col :span="8">-->
-        <!--<el-form-item style="margin-bottom: 40px;" label="运行环境：">-->
-        <!--<el-select v-model="postForm.envname" placeholder="请选择">-->
-        <!--<el-option-->
-        <!--v-for="item in envnames"-->
-        <!--:key="item.value"-->
-        <!--:label="item.label"-->
-        <!--:value="item.value"/>-->
-        <!--</el-select>-->
-        <!--</el-form-item>-->
-        <!--</el-col>-->
-        <!--<Warning />-->
-        <!--<el-col :span="8">-->
-        <!--<el-form-item style="margin-bottom: 40px;" label="文章类别：">-->
-        <!--<el-select v-model="postForm.selectclass" placeholder="请选择">-->
-        <!--<el-option-->
-        <!--v-for="item in classname"-->
-        <!--:key="item.value"-->
-        <!--:label="item.label"-->
-        <!--:value="item.value"/>-->
-        <!--</el-select>-->
-        <!--</el-form-item>-->
-        <!--</el-col>-->
-        <!--</el-row>-->
         <el-row>
+          <el-col :span="8">
+            <el-form-item style="margin-bottom: 40px;" label="项目名称：">
+              <el-select v-model="postForm.projectname" placeholder="请选择">
+                <el-option
+                  v-for="item in projectnames"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"/>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item style="margin-bottom: 40px;" label="运行环境：">
+              <el-select v-model="postForm.envname" placeholder="请选择">
+                <el-option
+                  v-for="item in envnames"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"/>
+              </el-select>
+            </el-form-item>
+          </el-col>
           <el-col :span="8">
             <el-form-item style="margin-bottom: 40px;" label="应用版本：">
               <el-select v-model="postForm.appversion" placeholder="请选择">
@@ -71,6 +57,21 @@
               </el-select>
             </el-form-item>
           </el-col>
+          <!--<Warning />-->
+          <!--<el-col :span="8">-->
+          <!--<el-form-item style="margin-bottom: 40px;" label="文章类别：">-->
+          <!--<el-select v-model="postForm.selectclass" placeholder="请选择">-->
+          <!--<el-option-->
+          <!--v-for="item in classname"-->
+          <!--:key="item.value"-->
+          <!--:label="item.label"-->
+          <!--:value="item.value"/>-->
+          <!--</el-select>-->
+          <!--</el-form-item>-->
+          <!--</el-col>-->
+        </el-row>
+        <el-row>
+
           <el-col :span="8">
             <el-form-item style="margin-bottom: 40px;" label="优先级别：">
               <el-select v-model="postForm.level" placeholder="请选择">
@@ -90,6 +91,20 @@
               <el-select v-model="postForm.importance" placeholder="请选择">
                 <el-option
                   v-for="item in importances"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"/>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item style="margin-bottom: 40px;" label="分配任务：">
+              <el-select
+                v-model="postForm.selectuser"
+                default-first-option
+                placeholder="请选择指定的用户">
+                <el-option
+                  v-for="item in users"
                   :key="item.value"
                   :label="item.label"
                   :value="item.value"/>
@@ -127,22 +142,7 @@
         <!--</el-col>-->
         <!--</el-row>-->
         <!--<template>-->
-        <el-row>
-          <el-col :span="16">
-            <el-form-item style="margin-bottom: 40px;" label="分配任务给：">
-              <el-select
-                v-model="postForm.selectuser"
-                default-first-option
-                placeholder="请选择指定的用户">
-                <el-option
-                  v-for="item in users"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"/>
-              </el-select>
-            </el-form-item>
-          </el-col>
-        </el-row>
+        <el-row/>
         <!--</template>-->
         <el-form-item style="margin-bottom: 40px;">
           <div class="editor-container">
@@ -174,8 +174,8 @@ import 'vue-multiselect/dist/vue-multiselect.min.css'// 多选框组件css
 import Sticky from '@/components/Sticky' // 粘性header组件
 import { validateURL } from '@/utils/validate'
 import { fetchArticle, createBug } from '@/api/article'
-import { getUsers, getVersion } from '@/api/createarticle'
 import { userSearch } from '@/api/remoteSearch'
+import { getEnv, getProject, getUsers, getVersion } from '@/api/get'
 import Warning from './Warning'
 // import { removeToken } from '@/utils/auth'
 import { CommentDropdown, PlatformDropdown, SourceUrlDropdown } from './Dropdown'
@@ -186,9 +186,9 @@ const defaultForm = {
   content: '', // 文章内容
   id: -1,
   selectuser: '',
-  // projectname: '',
+  projectname: '',
   level: '中',
-  // envname: '',
+  envname: '',
   importance: '一般',
   // selectclass: 'bug',
   appversion: '1.25'
@@ -280,15 +280,15 @@ export default {
     this.getuser()
     this.getversion()
     // this.getclasses()
-    // this.getproject()
-    // this.getenv()
+    this.getproject()
+    this.getenv()
   },
   created() {
     this.getuser()
-    // this.getproject()
+    this.getproject()
     this.getversion()
     // this.getclasses()
-    // this.getenv()
+    this.getenv()
     if (this.isEdit) {
       const id = this.$route.params && this.$route.params.id
       this.fetchData(id)
@@ -297,32 +297,32 @@ export default {
     }
   },
   methods: {
-    // getenv() {
-    //   getEnv().then(response => {
-    //     if (response.data.statuscode === 0) {
-    //       const arr = response.data.envlist
-    //       for (let i = 0; i < arr.length; i++) {
-    //         const aa = {}
-    //         aa.value = arr[i]
-    //         aa.label = arr[i]
-    //         this.envnames.push(aa)
-    //       }
-    //     }
-    //   })
-    // },
-    // getproject() {
-    //   getProject().then(response => {
-    //     if (response.data.statuscode === 0) {
-    //       const arr = response.data.projectlist
-    //       for (let i = 0; i < arr.length; i++) {
-    //         const aa = {}
-    //         aa.value = arr[i]
-    //         aa.label = arr[i]
-    //         this.projectnames.push(aa)
-    //       }
-    //     }
-    //   })
-    // },
+    getenv() {
+      getEnv().then(response => {
+        if (response.data.statuscode === 0) {
+          const arr = response.data.envlist
+          for (let i = 0; i < arr.length; i++) {
+            const aa = {}
+            aa.value = arr[i]
+            aa.label = arr[i]
+            this.envnames.push(aa)
+          }
+        }
+      })
+    },
+    getproject() {
+      getProject().then(response => {
+        if (response.data.statuscode === 0) {
+          const arr = response.data.projectlist
+          for (let i = 0; i < arr.length; i++) {
+            const aa = {}
+            aa.value = arr[i]
+            aa.label = arr[i]
+            this.projectnames.push(aa)
+          }
+        }
+      })
+    },
     // getclasses() {
     //   getclasses().then(response => {
     //     const arr = response.data
@@ -415,13 +415,13 @@ export default {
         })
         return
       }
-      // if (this.postForm.projectname.length < 1) {
-      //   this.$message({
-      //     message: '请选择项目名称',
-      //     type: 'error'
-      //   })
-      //   return
-      // }
+      if (this.postForm.projectname.length < 1) {
+        this.$message({
+          message: '请选择项目名称',
+          type: 'error'
+        })
+        return
+      }
       this.$refs.postForm.validate(valid => {
         if (valid) {
           console.log(this.postForm)

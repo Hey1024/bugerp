@@ -81,8 +81,7 @@
 <script>
 // import BackToTop from '@/components/BackToTop'
 import { showBug, passBug } from '@/api/article'
-import { getUsers } from '@/api/createarticle'
-import { getStatus } from '@/api/bugs'
+import { getUsers, getStatus } from '@/api/get'
 import Sticky from '@/components/Sticky' // 粘性header组件
 // import { getProject } from '@/utils/auth'
 

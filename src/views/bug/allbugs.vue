@@ -178,10 +178,10 @@
 </template>
 
 <script>
-import { getStatus, changeStatus } from '@/api/bugs'
+import { changeStatus } from '@/api/bugs'
 import { getAllBugs } from '@/api/list'
 import { searchAllBugs } from '@/api/search'
-import { getProject } from '@/api/createarticle'
+import { getProject, getStatus } from '@/api/get'
 import waves from '@/directive/waves' // 水波纹指令
 import { parseTime } from '@/utils'
 
@@ -341,12 +341,18 @@ export default {
       })
     },
     handleFilter() {
+      this.listLoading = true
       this.listQuery.page = 1
       if (this.listQuery.level === '' && this.listQuery.title === '' && this.listQuery.status === '' && this.listQuery.project === '') {
         this.getList()
       } else {
-        console.log(this.listQuery)
-        searchAllBugs(this.listQuery)
+        searchAllBugs(this.listQuery).then(resp => {
+          if (resp.data.statuscode === 0) {
+            this.total = resp.data.total
+            this.list = resp.data.articlelist
+          }
+          this.listLoading = false
+        })
       }
     },
     handleSizeChange(val) {

@@ -1,5 +1,12 @@
 import request from '@/utils/request'
 
+export function getStatus() {
+  return request({
+    url: '/get/status',
+    method: 'post'
+  })
+}
+
 export function getEnv() {
   return request({
     url: '/get/env',
@@ -34,19 +41,3 @@ export function getOs() {
     method: 'post'
   })
 }
-
-export function getclasses() {
-  return request({
-    url: '/article/getclasses',
-    method: 'post'
-  })
-}
-
-export function getTotal(param) {
-  return request({
-    url: '/bug/gettotal',
-    method: 'post',
-    data: param
-  })
-}
-

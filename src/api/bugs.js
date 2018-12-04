@@ -7,13 +7,6 @@ export function getallbugs() {
   })
 }
 
-export function getStatus() {
-  return request({
-    url: '/get/status',
-    method: 'post'
-  })
-}
-
 export function searchbugs(query) {
   return request({
     url: '/bug/search',
