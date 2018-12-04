@@ -10,9 +10,9 @@ export function closeBug(id) {
 
 export function removeBug(id) {
   return request({
-    url: '/list/removebug',
-    method: 'post',
-    data: id
+    url: '/bug/remove',
+    method: 'get',
+    params: { id }
   })
 }
 

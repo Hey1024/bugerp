@@ -9,7 +9,7 @@ import Layout from '@/views/layout/Layout'
 /* Router Modules */
 import componentsRouter from './modules/components'
 // import chartsRouter from './modules/charts'
-import tableRouter from './modules/table'
+// import tableRouter from './modules/table'
 import setting from './modules/setting'
 import userRoute from './modules/user'
 // import nestedRouter from './modules/nested'
@@ -152,7 +152,7 @@ export const asyncRouterMap = [
   componentsRouter,
   // chartsRouter,
   // nestedRouter,
-  tableRouter,
+  // tableRouter,
   userRoute,
 
   {
@@ -193,6 +193,16 @@ export const asyncRouterMap = [
         name: 'bugs',
         meta: {
           title: 'allbugs',
+          icon: 'bug',
+          roles: ['admin', 'testmanager', 'testpre', 'test', 'manager']
+        }
+      },
+      {
+        path: 'mytask',
+        component: () => import('@/views/bug/mytask'),
+        name: 'mytask',
+        meta: {
+          title: 'mytask',
           icon: 'bug',
           roles: ['admin', 'testmanager', 'testpre', 'test', 'manager']
         }

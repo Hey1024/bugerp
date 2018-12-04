@@ -75,7 +75,8 @@ export default {
     project: 'project',
     env: 'env',
     runos: 'runos',
-    uploadhead: 'uploadhead'
+    uploadhead: 'uploadhead',
+    mytask: 'mytask'
   },
   navbar: {
     logOut: 'Log Out',

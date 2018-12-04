@@ -23,42 +23,42 @@
               style="width: 80%;"/>
           </el-form-item>
         </el-row>
-        <el-row>
-          <el-col :span="8">
-            <el-form-item style="margin-bottom: 40px;" label="项目名称：">
-              <el-select v-model="postForm.projectname" placeholder="请选择">
-                <el-option
-                  v-for="item in projectnames"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"/>
-              </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item style="margin-bottom: 40px;" label="运行环境：">
-              <el-select v-model="postForm.envname" placeholder="请选择">
-                <el-option
-                  v-for="item in envnames"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"/>
-              </el-select>
-            </el-form-item>
-          </el-col>
-          <!--<Warning />-->
-          <el-col :span="8">
-            <el-form-item style="margin-bottom: 40px;" label="文章类别：">
-              <el-select v-model="postForm.selectclass" placeholder="请选择">
-                <el-option
-                  v-for="item in classname"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"/>
-              </el-select>
-            </el-form-item>
-          </el-col>
-        </el-row>
+        <!--<el-row>-->
+        <!--<el-col :span="8">-->
+        <!--<el-form-item style="margin-bottom: 40px;" label="项目名称：">-->
+        <!--<el-select v-model="postForm.projectname" placeholder="请选择">-->
+        <!--<el-option-->
+        <!--v-for="item in projectnames"-->
+        <!--:key="item.value"-->
+        <!--:label="item.label"-->
+        <!--:value="item.value"/>-->
+        <!--</el-select>-->
+        <!--</el-form-item>-->
+        <!--</el-col>-->
+        <!--<el-col :span="8">-->
+        <!--<el-form-item style="margin-bottom: 40px;" label="运行环境：">-->
+        <!--<el-select v-model="postForm.envname" placeholder="请选择">-->
+        <!--<el-option-->
+        <!--v-for="item in envnames"-->
+        <!--:key="item.value"-->
+        <!--:label="item.label"-->
+        <!--:value="item.value"/>-->
+        <!--</el-select>-->
+        <!--</el-form-item>-->
+        <!--</el-col>-->
+        <!--<Warning />-->
+        <!--<el-col :span="8">-->
+        <!--<el-form-item style="margin-bottom: 40px;" label="文章类别：">-->
+        <!--<el-select v-model="postForm.selectclass" placeholder="请选择">-->
+        <!--<el-option-->
+        <!--v-for="item in classname"-->
+        <!--:key="item.value"-->
+        <!--:label="item.label"-->
+        <!--:value="item.value"/>-->
+        <!--</el-select>-->
+        <!--</el-form-item>-->
+        <!--</el-col>-->
+        <!--</el-row>-->
         <el-row>
           <el-col :span="8">
             <el-form-item style="margin-bottom: 40px;" label="应用版本：">
@@ -174,7 +174,7 @@ import 'vue-multiselect/dist/vue-multiselect.min.css'// 多选框组件css
 import Sticky from '@/components/Sticky' // 粘性header组件
 import { validateURL } from '@/utils/validate'
 import { fetchArticle, createBug } from '@/api/article'
-import { getProject, getUsers, getVersion, getEnv } from '@/api/createarticle'
+import { getUsers, getVersion } from '@/api/createarticle'
 import { userSearch } from '@/api/remoteSearch'
 import Warning from './Warning'
 // import { removeToken } from '@/utils/auth'
@@ -186,13 +186,13 @@ const defaultForm = {
   content: '', // 文章内容
   id: -1,
   selectuser: '',
-  projectname: '',
+  // projectname: '',
   level: '中',
-  envname: '',
+  // envname: '',
   importance: '一般',
-  selectclass: 'bug',
-  appversion: '1.25',
-  selectoses: []
+  // selectclass: 'bug',
+  appversion: '1.25'
+  // selectoses: []
 }
 
 export default {
@@ -280,15 +280,15 @@ export default {
     this.getuser()
     this.getversion()
     // this.getclasses()
-    this.getproject()
-    this.getenv()
+    // this.getproject()
+    // this.getenv()
   },
   created() {
     this.getuser()
-    this.getproject()
+    // this.getproject()
     this.getversion()
     // this.getclasses()
-    this.getenv()
+    // this.getenv()
     if (this.isEdit) {
       const id = this.$route.params && this.$route.params.id
       this.fetchData(id)
@@ -297,32 +297,32 @@ export default {
     }
   },
   methods: {
-    getenv() {
-      getEnv().then(response => {
-        if (response.data.statuscode === 0) {
-          const arr = response.data.envlist
-          for (let i = 0; i < arr.length; i++) {
-            const aa = {}
-            aa.value = arr[i]
-            aa.label = arr[i]
-            this.envnames.push(aa)
-          }
-        }
-      })
-    },
-    getproject() {
-      getProject().then(response => {
-        if (response.data.statuscode === 0) {
-          const arr = response.data.projectlist
-          for (let i = 0; i < arr.length; i++) {
-            const aa = {}
-            aa.value = arr[i]
-            aa.label = arr[i]
-            this.projectnames.push(aa)
-          }
-        }
-      })
-    },
+    // getenv() {
+    //   getEnv().then(response => {
+    //     if (response.data.statuscode === 0) {
+    //       const arr = response.data.envlist
+    //       for (let i = 0; i < arr.length; i++) {
+    //         const aa = {}
+    //         aa.value = arr[i]
+    //         aa.label = arr[i]
+    //         this.envnames.push(aa)
+    //       }
+    //     }
+    //   })
+    // },
+    // getproject() {
+    //   getProject().then(response => {
+    //     if (response.data.statuscode === 0) {
+    //       const arr = response.data.projectlist
+    //       for (let i = 0; i < arr.length; i++) {
+    //         const aa = {}
+    //         aa.value = arr[i]
+    //         aa.label = arr[i]
+    //         this.projectnames.push(aa)
+    //       }
+    //     }
+    //   })
+    // },
     // getclasses() {
     //   getclasses().then(response => {
     //     const arr = response.data
@@ -386,12 +386,10 @@ export default {
     fetchData(id) {
       fetchArticle(id).then(response => {
         const dd = response.data
-        this.postForm.projectname = dd.projectname
         this.postForm.title = dd.title
         this.postForm.content = dd.content
         this.postForm.id = dd.id
         this.postForm.importance = dd.importance
-        this.postForm.selectclass = dd.selectclass
         this.postForm.appversion = dd.appversion
         this.postForm.selectusers = dd.spusers
         // Just for test
@@ -417,13 +415,13 @@ export default {
         })
         return
       }
-      if (this.postForm.projectname.length < 1) {
-        this.$message({
-          message: '请选择项目名称',
-          type: 'error'
-        })
-        return
-      }
+      // if (this.postForm.projectname.length < 1) {
+      //   this.$message({
+      //     message: '请选择项目名称',
+      //     type: 'error'
+      //   })
+      //   return
+      // }
       this.$refs.postForm.validate(valid => {
         if (valid) {
           console.log(this.postForm)

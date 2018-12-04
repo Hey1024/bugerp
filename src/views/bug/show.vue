@@ -23,6 +23,9 @@
           <el-col :span="5">
             <span>版本：{{ bug.appversion }}</span>
           </el-col>
+          <el-col :span="5">
+            <span>状态：{{ bug.status }}</span>
+          </el-col>
         </el-row>
 
       </el-card>
@@ -81,7 +84,7 @@ import { showBug, passBug } from '@/api/article'
 import { getUsers } from '@/api/createarticle'
 import { getStatus } from '@/api/bugs'
 import Sticky from '@/components/Sticky' // 粘性header组件
-import { getProject } from '@/utils/auth'
+// import { getProject } from '@/utils/auth'
 
 export default {
   name: 'ShowBug',
@@ -156,7 +159,7 @@ export default {
       // })
     },
     getusers() {
-      getUsers(getProject()).then(response => {
+      getUsers().then(response => {
         if (response.data.statuscode === 0) {
           const data = response.data.users
           const l = data.length
@@ -175,9 +178,9 @@ export default {
       if (id % 1 === 0) {
         this.temp.id = parseInt(id)
         showBug(id).then(response => {
+          console.log(response.data)
           if (response.data.statuscode === 0) {
-            console.log(this.bug)
-            this.temp.status = response.data.status
+            this.bug = response.data
           }
         })
       }

@@ -7,3 +7,11 @@ export function searchMyBugs(data) {
     data: data
   })
 }
+
+export function searchAllBugs(data) {
+  return request({
+    url: '/search/allbugs',
+    method: 'post',
+    data: data
+  })
+}

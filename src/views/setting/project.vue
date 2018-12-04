@@ -83,6 +83,10 @@ export default {
     },
     handleDelete(id) {
       deleteProjectName(id).then(resp => {
+        if (resp.data.statuscode === 11) {
+          this.$message.warning('这个项目存在bug，请先删除')
+          return
+        }
         if (resp.data.statuscode === 0) {
           const fl = this.tableData.length
           for (let i = 0; i < fl; i++) {
@@ -91,8 +95,6 @@ export default {
               break
             }
           }
-        } else if (resp.data.statuscode === 500) {
-          this.$message.warning('这个项目存在bug，请先删除')
         }
       })
     },
@@ -103,7 +105,6 @@ export default {
     },
     confirm() {
       this.dialogFormVisible = false
-      console.log(this.form)
       if (this.form.id === -1) {
         addProjectName(this.form.projectname).then(resp => {
           if (resp.data.statuscode === 0) {
@@ -115,6 +116,10 @@ export default {
         })
       } else {
         updateProjectName(this.form).then(resp => {
+          if (resp.data.id === 0) {
+            this.$message.warning('存在项目名')
+            return
+          }
           if (resp.data.statuscode === 0) {
             const fl = this.tableData.length
             for (let i = 0; i < fl; i++) {

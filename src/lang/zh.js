@@ -74,7 +74,8 @@ export default {
     project: '项目管理',
     env: '环境管理',
     runos: '运行平台',
-    uploadhead: '上传头像'
+    uploadhead: '上传头像',
+    mytask: '我的任务'
   },
   navbar: {
     logOut: '退出登录',

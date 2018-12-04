@@ -180,6 +180,7 @@
 <script>
 import { getStatus, changeStatus } from '@/api/bugs'
 import { getAllBugs } from '@/api/list'
+import { searchAllBugs } from '@/api/search'
 import { getProject } from '@/api/createarticle'
 import waves from '@/directive/waves' // 水波纹指令
 import { parseTime } from '@/utils'
@@ -341,7 +342,12 @@ export default {
     },
     handleFilter() {
       this.listQuery.page = 1
-      this.getList()
+      if (this.listQuery.level === '' && this.listQuery.title === '' && this.listQuery.status === '' && this.listQuery.project === '') {
+        this.getList()
+      } else {
+        console.log(this.listQuery)
+        searchAllBugs(this.listQuery)
+      }
     },
     handleSizeChange(val) {
       this.listQuery.limit = val

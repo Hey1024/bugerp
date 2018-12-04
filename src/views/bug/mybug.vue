@@ -20,7 +20,7 @@
       <!--<el-button class="filter-item" type="primary" :loading="downloadLoading" v-waves icon="el-icon-download" @click="handleDownload">{{$t('table.export')}}</el-button>-->
       <!--<el-checkbox class="filter-item" style='margin-left:15px;' @change='tableKey=tableKey+1' v-model="showReviewer">{{$t('table.reviewer')}}</el-checkbox>-->
     </div>
-    <el-table v-loading.body="listLoading" :data="list" border fit highlight-current-row style="width: 100%">
+    <el-table :data="list" border fit highlight-current-row style="width: 100%">
 
       <el-table-column :label="$t('table.id')" align="center" width="50">
         <template slot-scope="scope">
@@ -182,7 +182,8 @@ export default {
         type: 'warning'
       }).then(() => {
         closeBug(row.id).then(response => {
-          if (response.data === 'ok') {
+          if (response.data.statuscode === 0) {
+            console.log(response.data)
             this.list = this.list.filter(items => {
               return items.id !== row.id
             })

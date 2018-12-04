@@ -1,8 +1,8 @@
 import request from '@/utils/request'
 
-export function getlist() {
+export function taskList() {
   return request({
-    url: '/table/getlist',
+    url: '/task/list',
     method: 'post'
   })
 }

@@ -124,7 +124,7 @@ export default {
     },
     addversion() {
       addVersion(this.versionlist).then(response => {
-        if (response.data.statuscode === 11) {
+        if (response.data.statuscode === 1 && response.data.id !== 0) {
           this.$message.success('版本存在')
         } else if (response.data.statuscode === 0) {
           this.$message.success('添加成功')
