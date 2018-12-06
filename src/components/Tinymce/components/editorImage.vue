@@ -56,7 +56,6 @@ export default {
         return
       }
       const arr = Object.keys(this.listObj).map(v => this.listObj[v])
-      console.log('9999999')
       uploadimg(arr[0]).then(res => {
         console.log(res.data)
       }).catch(error => {

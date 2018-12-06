@@ -15,3 +15,11 @@ export function searchAllBugs(data) {
     data: data
   })
 }
+
+export function userSearch(name) {
+  return request({
+    url: '/search/user',
+    method: 'get',
+    params: { name }
+  })
+}

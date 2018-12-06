@@ -179,7 +179,7 @@
 
 <script>
 import { changeStatus } from '@/api/bugs'
-import { getAllBugs } from '@/api/list'
+import { getAllBugs } from '@/api/bugs'
 import { searchAllBugs } from '@/api/search'
 import { getProject, getStatus } from '@/api/get'
 import waves from '@/directive/waves' // 水波纹指令

@@ -48,7 +48,7 @@
           </el-col>
           <el-col :span="8">
             <el-form-item style="margin-bottom: 40px;" label="应用版本：">
-              <el-select v-model="postForm.appversion" placeholder="请选择">
+              <el-select v-model="postForm.version" placeholder="请选择">
                 <el-option
                   v-for="item in versions"
                   :key="item.value"
@@ -112,36 +112,6 @@
             </el-form-item>
           </el-col>
         </el-row>
-        <!--<div class="postInfo-container">-->
-        <!--<el-row>-->
-        <!--<el-col :span="8">-->
-        <!--<el-form-item label-width="45px" label="作者:" class="postInfo-container-item">-->
-        <!--<el-select v-model="postForm.author" filterable remote placeholder="搜索用户" :remote-method="getRemoteUserList">-->
-        <!--<el-option v-for="(item,index) in userListOptions" :key="item+index" :label="item" :value="item">-->
-        <!--</el-option>-->
-        <!--</el-select>-->
-        <!--</el-form-item>-->
-        <!--</el-col>-->
-
-        <!--<el-col :span="10">-->
-        <!--<el-form-item label-width="80px" label="发布时间:" class="postInfo-container-item">-->
-        <!--<el-date-picker v-model="postForm.display_time" type="datetime" format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期时间">-->
-        <!--</el-date-picker>-->
-        <!--</el-form-item>-->
-        <!--</el-col>-->
-
-        <!--<el-col :span="6">-->
-        <!--<el-form-item label-width="60px" label="重要性:" class="postInfo-container-item">-->
-        <!--<el-rate style="margin-top:8px;" v-model="postForm.importance" :max='5' :colors="['#99A9BF', '#F7BA2A', '#FF9900']" :low-threshold="1"-->
-        <!--:high-threshold="5">-->
-        <!--</el-rate>-->
-        <!--</el-form-item>-->
-        <!--</el-col>-->
-        <!--</el-row>-->
-        <!--</div>-->
-        <!--</el-col>-->
-        <!--</el-row>-->
-        <!--<template>-->
         <el-row/>
         <!--</template>-->
         <el-form-item style="margin-bottom: 40px;">
@@ -173,8 +143,7 @@ import Multiselect from 'vue-multiselect'// 使用的一个多选框组件，ele
 import 'vue-multiselect/dist/vue-multiselect.min.css'// 多选框组件css
 import Sticky from '@/components/Sticky' // 粘性header组件
 import { validateURL } from '@/utils/validate'
-import { fetchArticle, createBug } from '@/api/article'
-import { userSearch } from '@/api/remoteSearch'
+import { fetchBug, createBug } from '@/api/bugs'
 import { getEnv, getProject, getUsers, getVersion } from '@/api/get'
 import Warning from './Warning'
 // import { removeToken } from '@/utils/auth'
@@ -291,6 +260,7 @@ export default {
     this.getenv()
     if (this.isEdit) {
       const id = this.$route.params && this.$route.params.id
+      this.postForm.id = parseInt(id)
       this.fetchData(id)
     } else {
       this.postForm = Object.assign({}, defaultForm)
@@ -323,35 +293,6 @@ export default {
         }
       })
     },
-    // getclasses() {
-    //   getclasses().then(response => {
-    //     const arr = response.data
-    //     for (let i = 0; i < arr.length; i++) {
-    //       const aa = {}
-    //       aa.value = arr[i]
-    //       aa.label = arr[i]
-    //       this.classname.push(aa)
-    //     }
-    //   }).catch(err => {
-    //     console.log(err)
-    //   })
-    // },
-    // getos() {
-    //   getOs().then(response => {
-    //     console.log(response.data)
-    //     if (response.data.statuscode === 0) {
-    //       const arr = response.data.oslist
-    //       for (let i = 0; i < arr.length; i++) {
-    //         const aa = {}
-    //         aa.value = arr[i]
-    //         aa.label = arr[i]
-    //         this.oses.push(aa)
-    //       }
-    //     }
-    //   }).catch(err => {
-    //     console.log(err)
-    //   })
-    // },
     getversion() {
       getVersion().then(response => {
         if (response.data.statuscode === 0) {
@@ -384,17 +325,18 @@ export default {
       })
     },
     fetchData(id) {
-      fetchArticle(id).then(response => {
-        const dd = response.data
-        this.postForm.title = dd.title
-        this.postForm.content = dd.content
-        this.postForm.id = dd.id
-        this.postForm.importance = dd.importance
-        this.postForm.appversion = dd.appversion
-        this.postForm.selectusers = dd.spusers
-        // Just for test
-        // this.postForm.title += `   Article Id:${this.postForm.id}`
-        // this.postForm.content_short += `   Article Id:${this.postForm.id}`
+      fetchBug(id).then(response => {
+        if (response.data.statuscode === 0) {
+          console.log(response.data)
+          const dd = response.data
+          this.postForm.title = dd.title
+          this.postForm.content = dd.content
+          this.postForm.importance = dd.importance
+          this.postForm.version = dd.version
+          this.postForm.selectuser = dd.handle
+          this.postForm.envname = dd.env
+          this.postForm.projectname = dd.projectname
+        }
       }).catch(err => {
         console.log(err)
       })
@@ -426,15 +368,25 @@ export default {
         if (valid) {
           console.log(this.postForm)
           createBug(this.postForm).then(resp => {
+            console.log(resp.data)
             if (resp.data.statuscode === 0) {
-              this.$notify({
-                title: '成功',
-                message: '发布' + this.postForm.selectclass + '成功',
-                type: 'success',
-                duration: 2000
-              })
+              if (this.postForm.id > 0) {
+                this.$notify({
+                  title: '成功',
+                  message: '发布' + this.postForm.selectclass + '成功',
+                  type: 'success',
+                  duration: 2000
+                })
+              } else {
+                this.$notify({
+                  title: '成功',
+                  message: '修改' + this.postForm.selectclass + '成功',
+                  type: 'success',
+                  duration: 2000
+                })
+              }
             }
-            this.$router.push('/bug/allbugs')
+            // this.$router.push('/bug/allbugs')
           })
         } else {
           return false
@@ -456,12 +408,6 @@ export default {
         duration: 1000
       })
       // this.postForm.status = 'draft'
-    },
-    getRemoteUserList(query) {
-      userSearch(query).then(response => {
-        if (!response.data.items) return
-        this.userListOptions = response.data.items.map(v => v.name)
-      })
     }
   }
 }

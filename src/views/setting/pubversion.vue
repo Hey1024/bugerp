@@ -61,7 +61,6 @@
 </template>
 
 <script>
-// import { getProject, getEnv } from '@/api/createarticle'
 import { addVersion } from '@/api/version'
 export default {
   name: 'Pubversion',

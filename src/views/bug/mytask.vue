@@ -158,9 +158,8 @@
 </template>
 
 <script>
-import { fetchPv, updateArticle } from '@/api/article'
 import { getUsers, getStatus } from '@/api/get'
-import { taskList, changetask, stoptask } from '@/api/table'
+import { taskList } from '@/api/bugs'
 import waves from '@/directive/waves' // 水波纹指令
 import { parseTime } from '@/utils'
 // import { getProject } from '@/utils/auth'
@@ -318,66 +317,66 @@ export default {
       this.stop.id = row.id
       this.stop.status = row.status
       this.stop.stop = row.stop
-      stoptask(this.stop).then(resp => {
-        const newlist = resp.data
-        if (resp.data === 'fail') {
-          this.$message({
-            message: '操作失败',
-            type: 'error'
-          })
-        } else {
-          const ll = this.list.length
-          for (let i = 0; i < ll; i++) {
-            if (this.list[i].id === row.id) {
-              this.list[i].status = newlist.status
-              this.list[i].stop = newlist.stop
-              this.list[i].disable = newlist.disable
-            }
-          }
-          this.$message({
-            message: '操作成功',
-            type: 'success'
-          })
-        }
-      }).catch(() => {
-        this.$message({
-          message: '操作失败',
-          type: 'fail'
-        })
-      })
+      // stoptask(this.stop).then(resp => {
+      //   const newlist = resp.data
+      //   if (resp.data === 'fail') {
+      //     this.$message({
+      //       message: '操作失败',
+      //       type: 'error'
+      //     })
+      //   } else {
+      //     const ll = this.list.length
+      //     for (let i = 0; i < ll; i++) {
+      //       if (this.list[i].id === row.id) {
+      //         this.list[i].status = newlist.status
+      //         this.list[i].stop = newlist.stop
+      //         this.list[i].disable = newlist.disable
+      //       }
+      //     }
+      //     this.$message({
+      //       message: '操作成功',
+      //       type: 'success'
+      //     })
+      //   }
+      // }).catch(() => {
+      //   this.$message({
+      //     message: '操作失败',
+      //     type: 'fail'
+      //   })
+      // })
     },
     handleModifyStatus(row) {
       this.changeaction.id = row.id
       this.changeaction.status = row.status
       this.changeaction.action = row.action
-      changetask(this.changeaction).then(resp => {
-        if (resp.data === 'ok') {
-          if (row.action === '完成') {
-            this.list = this.list.filter(item => {
-              return item.id !== row.id
-            })
-          }
-          if (row.action === '领取') {
-            row.status = '解决中'
-            const ll = this.list.length
-            for (let i = 0; i < ll; i++) {
-              if (row.id === this.list[i].id) {
-                this.list[i].action = '完成'
-              }
-            }
-            row.action === '完成'
-          }
-          this.$message({
-            message: '操作成功',
-            type: 'success'
-          })
-        }
-      }).catch(() => {
-        this.$message({
-          message: '操作失败',
-          type: 'error'
-        })
-      })
+      // changetask(this.changeaction).then(resp => {
+      //   if (resp.data === 'ok') {
+      //     if (row.action === '完成') {
+      //       this.list = this.list.filter(item => {
+      //         return item.id !== row.id
+      //       })
+      //     }
+      //     if (row.action === '领取') {
+      //       row.status = '解决中'
+      //       const ll = this.list.length
+      //       for (let i = 0; i < ll; i++) {
+      //         if (row.id === this.list[i].id) {
+      //           this.list[i].action = '完成'
+      //         }
+      //       }
+      //       row.action === '完成'
+      //     }
+      //     this.$message({
+      //       message: '操作成功',
+      //       type: 'success'
+      //     })
+      //   }
+      // }).catch(() => {
+      //   this.$message({
+      //     message: '操作失败',
+      //     type: 'error'
+      //   })
+      // })
     },
     handleCreate() {
       this.resetTemp()
@@ -397,26 +396,23 @@ export default {
       // })
     },
     updateData() {
-      console.log(this.temp)
       var data = this.temp
       const tl = this.temp.selectusers.length
-      console.log(tl)
       for (let i = 0; i < tl; i++) {
         data.selectusers[i] = this.temp.selectusers[i].split('(')[0]
       }
-      console.log(data)
-      updateArticle(this.temp).then(response => {
-        if (response.data === 'ok') {
-          // this.list = this.list.filter(item => {
-          //   return item.id !== this.temp.id
-          // })
-          this.$message({
-            message: '操作成功',
-            type: 'success'
-          })
-        }
-        this.dialogFormVisible = false
-      })
+      // updateArticle(this.temp).then(response => {
+      //   if (response.data === 'ok') {
+      //     // this.list = this.list.filter(item => {
+      //     //   return item.id !== this.temp.id
+      //     // })
+      //     this.$message({
+      //       message: '操作成功',
+      //       type: 'success'
+      //     })
+      //   }
+      //   this.dialogFormVisible = false
+      // })
     },
     handleDelete(row) {
       this.$notify({
@@ -429,10 +425,6 @@ export default {
       this.list.splice(index, 1)
     },
     handleFetchPv(pv) {
-      fetchPv(pv).then(response => {
-        this.pvData = response.data.pvData
-        this.dialogPvVisible = true
-      })
     },
     handleDownload() {
       this.downloadLoading = true

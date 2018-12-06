@@ -43,7 +43,7 @@
 </template>
 
 <script>
-import { chpwd } from '@/api/setting'
+import { updatePassword } from '@/api/user'
 export default {
   name: 'Changepwd',
   data() {
@@ -66,19 +66,19 @@ export default {
         oldpassword: this.oldpassword,
         newpassword: this.newpassword
       }
-      chpwd(ch).then(response => {
-        if (response.data === 'ok') {
+      updatePassword(ch).then(response => {
+        if (response.data.statuscode === 0) {
           this.$message({
             message: '修改密码成功',
             type: 'success'
           })
           this.clean()
-          return
+        } else {
+          this.$message({
+            message: '修改密码失败',
+            type: 'error'
+          })
         }
-        this.$message({
-          message: '修改密码失败',
-          type: 'error'
-        })
       })
     },
     clean() {

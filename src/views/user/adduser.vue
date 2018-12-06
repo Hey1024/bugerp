@@ -50,16 +50,13 @@
           clearable
           style="width: 60%;"/>
       </el-form-item>
-
-      <el-form-item style="margin-bottom: 40px;" label="权限：">
-        <el-select v-model="postForm.role" placeholder="请选择">
-          <el-option
-            v-for="item in rolelist"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"/>
-        </el-select>
-      </el-form-item>
+      <div style="margin-top: 30px;margin-bottom: 30px;padding-left: 20px">
+        <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
+        <div style="margin: 15px 0;"/>
+        <el-checkbox-group v-model="checkedRoles" @change="handleCheckedCitiesChange">
+          <el-checkbox v-for="(role, index) in rolelist" :label="role" :key="index">{{ role }}</el-checkbox>
+        </el-checkbox-group>
+      </div>
       <el-col :span="2" class="text-center">
         <el-button type="success" plain @click="adduser">添加</el-button>
       </el-col>
@@ -67,33 +64,13 @@
         <el-button type="warning" plain @click="clean">清空</el-button>
       </el-col>
       <div style="margin-bottom: 30px;height: 30px"/>
-    <!--<el-form-item style="margin-bottom: 40px;" label="环境：">-->
-      <!--<el-select v-model="postForm.envname" placeholder="请选择">-->
-      <!--<el-option-->
-      <!--v-for="item in envnames"-->
-      <!--:key="item.value"-->
-      <!--:label="item.label"-->
-      <!--:value="item.value">-->
-      <!--</el-option>-->
-      <!--</el-select>-->
-    <!--</el-form-item>-->
-
-    <!--<el-form-item style="margin-bottom: 40px;" label="类别：">-->
-      <!--<el-select v-model="postForm.selectclass" placeholder="请选择">-->
-      <!--<el-option-->
-      <!--v-for="item in classname"-->
-      <!--:key="item.value"-->
-      <!--:label="item.label"-->
-      <!--:value="item.value">-->
-      <!--</el-option>-->
-      <!--</el-select>-->
-    <!--</el-form-item>-->
     </div>
   </el-form >
 </template>
 
 <script>
-import { getroles, createuser } from '@/api/setting'
+import { createUser } from '@/api/user'
+import { getRoles } from '@/api/get'
 
 export default {
   name: 'Adduser',
@@ -104,25 +81,31 @@ export default {
         email: '',
         password: '',
         repassword: '',
-        role: 'guest',
         realname: ''
       },
-      rolelist: []
+      checkAll: false,
+      rolelist: [],
+      checkedRoles: [],
+      isIndeterminate: true
     }
   },
   created() {
-    this.showroles()
+    this.getroles()
   },
   methods: {
-    showroles() {
-      getroles().then(response => {
-        const data = response.data
-        const rl = data.length
-        for (let i = 0; i < rl; i++) {
-          const aa = {}
-          aa.label = data[i]
-          aa.value = data[i]
-          this.rolelist.push(aa)
+    handleCheckAllChange(val) {
+      this.checkedCities = val ? this.rolelist : []
+      this.isIndeterminate = false
+    },
+    handleCheckedCitiesChange(value) {
+      const checkedCount = value.length
+      this.checkAll = checkedCount === this.rolelist.length
+      this.isIndeterminate = checkedCount > 0 && checkedCount < this.rolelist.length
+    },
+    getroles() {
+      getRoles().then(response => {
+        if (response.data.statuscode === 0) {
+          this.rolelist = response.data.rolelist
         }
       })
     },
@@ -153,22 +136,21 @@ export default {
         nickname: this.postForm.nickname,
         email: this.postForm.email,
         password: this.postForm.password,
-        role: this.postForm.role,
+        role: this.checkedRoles,
         realname: this.postForm.realname
       }
-      createuser(senddata).then(response => {
-        if (response.data === 'fail') {
-          this.$message({
-            message: '添加用户失败',
-            type: 'error'
-          })
-        }
-        if (response.data === 'ok') {
+      createUser(senddata).then(response => {
+        if (response.data.statuscode === 0) {
           this.$message({
             message: '添加用户成功',
             type: 'success'
           })
           this.clean()
+        } else {
+          this.$message({
+            message: '添加用户失败',
+            type: 'error'
+          })
         }
       })
     },

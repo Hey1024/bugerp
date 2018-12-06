@@ -55,8 +55,6 @@
 <script>
 import { getlist, getprojectlist } from '@/api/dashboard'
 
-// import { getproject } from '@/api/createarticle'
-
 export default {
   data() {
     return {

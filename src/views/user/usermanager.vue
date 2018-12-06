@@ -90,7 +90,7 @@
       </el-table-column>
       <el-table-column :label="$t('table.actions')" align="center" width="230" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <el-button v-show="scope.row.show" type="primary" size="mini" @click="handleResetPwd(scope.row)">{{ $t('table.reset') }}</el-button>
+          <el-button type="primary" size="mini" @click="handleResetPwd(scope.row)">{{ $t('table.reset') }}</el-button>
           <!--<el-button  size="mini" type="success" :disabled="scope.row.disable" @click="handleModifyStatus(scope.row)">{{ scope.row.action }}-->
           <!--</el-button>-->
           <!--v-if="scope.row.status!='published'"-->
@@ -101,7 +101,6 @@
         </template>
       </el-table-column>
     </el-table>
-
     <!--<div class="pagination-container">-->
     <!--<el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="listQuery.page" :page-sizes="[10,20,30, 50]" :page-size="listQuery.limit" layout="total, sizes, prev, pager, next, jumper" :total="total">-->
     <!--</el-pagination>-->
@@ -173,12 +172,8 @@
 </template>
 
 <script>
-// import { fetchPv, updateArticle } from '@/api/article'
-// import { getuserlist } from '@/api/getuserlist'
-import { getuserlist, resetpwd } from '@/api/setting'
-// import { getlist, changetask, stoptask } from '@/api/table'
+import { userList, resetPwd } from '@/api/user'
 import waves from '@/directive/waves' // 水波纹指令
-// import { parseTime } from '@/utils'
 
 export default {
   name: 'Usermanager',
@@ -203,54 +198,7 @@ export default {
       admin: false,
       // total: null,
       listLoading: false,
-      // listQuery: {
-      //   page: 1,
-      //   limit: 5,
-      //   importance: undefined,
-      //   title: undefined,
-      //   type: undefined,
-      //   sort: '+id'
-      // },
-      // // importanceOptions: [1, 2, 3, 4, 5],
-      // calendarTypeOptions,
       sortOptions: [{ label: 'ID Ascending', key: '+id' }, { label: 'ID Descending', key: '-id' }]
-      // statusOptions: [],
-      // showReviewer: false,
-      // temp: {
-      //   id: undefined,
-      //   // importance: 1,
-      //   remark: '',
-      //   // timestamp: new Date(),
-      //   // title: '',
-      //   // type: '',
-      //   status: '新建',
-      //   selectusers: []
-      //   // status: 'published'
-      // },
-      // changeaction: {
-      //   id: 0,
-      //   status: '',
-      //   action: ''
-      // },
-      // dialogFormVisible: false,
-      // dialogStatus: '',
-      // textMap: {
-      //   update: 'Edit',
-      //   create: 'Create'
-      // },
-      // dialogPvVisible: false,
-      // pvData: [],
-      // stop: {
-      //   id: undefined,
-      //   stop: '',
-      //   status: ''
-      // },
-      // rules: {
-      //   type: [{ required: true, message: 'type is required', trigger: 'change' }],
-      //   timestamp: [{ type: 'date', required: true, message: 'timestamp is required', trigger: 'change' }],
-      //   title: [{ required: true, message: 'title is required', trigger: 'blur' }]
-      // },
-      // downloadLoading: false
     }
   },
   activated() {
@@ -261,9 +209,10 @@ export default {
   },
   methods: {
     getuserList() {
-      getuserlist().then(resp => {
-        if (resp.data !== 'fail') {
-          this.userlist = resp.data
+      userList().then(resp => {
+        if (resp.data.statuscode === 0) {
+          this.userlist = resp.data.userlist
+          console.log(this.userlist)
         }
       }).catch(err => {
         console.log(err)
@@ -278,91 +227,34 @@ export default {
     //   })
     // },
     handleResetPwd(row) {
-      resetpwd(row.id).then(resp => {
-        if (resp.data === 'ok') {
-          this.$message({
-            message: '密码重置成功',
-            type: 'success'
-          })
-          return
+      this.$prompt('请输入密码', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消'
+      }).then(({ value }) => {
+        const data = {
+          id: row.id,
+          newpassword: value
         }
+        resetPwd(data).then(resp => {
+          if (resp.data.statuscode === 0) {
+            this.$message({
+              type: 'success',
+              message: '你的密码是: ' + value
+            })
+            return
+          }
+          this.$message({
+            message: '密码重置失败',
+            type: 'error'
+          })
+        })
+      }).catch(() => {
         this.$message({
-          message: '密码重置失败',
-          type: 'error'
+          type: 'info',
+          message: '取消输入'
         })
       })
-      // this.info.
-      // console.log(this.info)
-      // getthistask(this.info).then(response => {
-      //   console.log(response.data)
-      // })
-      // this.dialogStatus = 'update'
-      // this.dialogFormVisible = true
-      // this.$nextTick(() => {
-      //   this.$refs['dataForm'].clearValidate()
-      // })
     }
-    // updateData() {
-    //   console.log(this.temp)
-    //   var data = this.temp
-    //   const tl = this.temp.selectusers.length
-    //   console.log(tl)
-    //   for (let i = 0; i < tl; i++) {
-    //     data.selectusers[i] = this.temp.selectusers[i].split('(')[0]
-    //   }
-    //   console.log(data)
-    //   updateArticle(this.temp).then(response => {
-    //     if (response.data === 'ok') {
-    //       // this.list = this.list.filter(item => {
-    //       //   return item.id !== this.temp.id
-    //       // })
-    //       this.$message({
-    //         message: '操作成功',
-    //         type: 'success'
-    //       })
-    //     }
-    //     this.dialogFormVisible = false
-    //   })
-    // },
-    // handleDelete(row) {
-    //   this.$notify({
-    //     title: '成功',
-    //     message: '删除成功',
-    //     type: 'success',
-    //     duration: 2000
-    //   })
-    //   const index = this.list.indexOf(row)
-    //   this.list.splice(index, 1)
-    // },
-    // handleFetchPv(pv) {
-    //   fetchPv(pv).then(response => {
-    //     this.pvData = response.data.pvData
-    //     this.dialogPvVisible = true
-    //   })
-    // },
-    // handleDownload() {
-    //   this.downloadLoading = true
-    //   import('@/vendor/Export2Excel').then(excel => {
-    //     const tHeader = ['timestamp', 'title', 'type', 'importance', 'status']
-    //     const filterVal = ['timestamp', 'title', 'type', 'importance', 'status']
-    //     const data = this.formatJson(filterVal, this.list)
-    //     excel.export_json_to_excel({
-    //       header: tHeader,
-    //       data,
-    //       filename: 'table-list'
-    //     })
-    //     this.downloadLoading = false
-    //   })
-    // },
-    // formatJson(filterVal, jsonData) {
-    //   return jsonData.map(v => filterVal.map(j => {
-    //     if (j === 'timestamp') {
-    //       return parseTime(v[j])
-    //     } else {
-    //       return v[j]
-    //     }
-    //   }))
-    // }
   }
 }
 </script>

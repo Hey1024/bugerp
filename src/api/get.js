@@ -41,3 +41,10 @@ export function getOs() {
     method: 'post'
   })
 }
+
+export function getRoles() {
+  return request({
+    url: '/get/role',
+    method: 'post'
+  })
+}
