@@ -4,7 +4,7 @@
    [bugarp](http://bug.hyahm.com "bugarp")
    
 ###  正在进行  
-   检查代码中，
+   操作bug状态
 
 ### 版本更新内容   
  添加部门支持
