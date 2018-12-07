@@ -75,7 +75,8 @@ export default {
     env: '环境管理',
     runos: '运行平台',
     uploadhead: '上传头像',
-    mytask: '我的任务'
+    mytask: '我的任务',
+    department: '部门'
   },
   navbar: {
     logOut: '退出登录',
@@ -155,7 +156,8 @@ export default {
     role: '角色',
     email: '邮箱',
     reset: '重置密码',
-    remove: '删除'
+    remove: '删除',
+    changepassword: '修改密码'
   },
   errorLog: {
     tips: '请点击右上角bug小图标',

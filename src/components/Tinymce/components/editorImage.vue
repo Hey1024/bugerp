@@ -23,7 +23,7 @@
 
 <script>
 // import { getToken } from 'api/qiniu'
-import { uploadimg } from '@/api/article'
+// import { uploadImg } from '@/api/upload'
 import g from '@/config/config'
 
 export default {
@@ -48,6 +48,7 @@ export default {
   methods: {
     checkAllSuccess() {
       console.log(this.listObj)
+      console.log('success')
       return Object.keys(this.listObj).every(item => this.listObj[item].hasSuccess)
     },
     handleSubmit() {
@@ -56,11 +57,11 @@ export default {
         return
       }
       const arr = Object.keys(this.listObj).map(v => this.listObj[v])
-      uploadimg(arr[0]).then(res => {
-        console.log(res.data)
-      }).catch(error => {
-        console.log(error)
-      })
+      // uploadImg(arr[0]).then(res => {
+      //   console.log(res.data)
+      // }).catch(error => {
+      //   console.log(error)
+      // })
       this.$emit('successCBK', arr)
       this.listObj = {}
       this.fileList = []

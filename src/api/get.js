@@ -48,3 +48,17 @@ export function getRoles() {
     method: 'post'
   })
 }
+
+export function getGroup() {
+  return request({
+    url: '/get/group',
+    method: 'post'
+  })
+}
+
+export function getPermStatus() {
+  return request({
+    url: '/get/permstatus',
+    method: 'post'
+  })
+}

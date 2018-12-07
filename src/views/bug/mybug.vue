@@ -100,7 +100,7 @@ import { getAllBugs, closeBug, removeBug } from '@/api/bugs'
 import { changeStatus } from '@/api/bugs'
 import { searchMyBugs } from '@/api/search'
 import waves from '@/directive/waves' // 水波纹指令
-import { getProject, getStatus } from '@/api/get'
+import { getProject, getPermStatus } from '@/api/get'
 
 const calendarTypeOptions = [
   { key: 'CN', display_name: 'China' },
@@ -162,7 +162,7 @@ export default {
   },
   methods: {
     getstatus() {
-      getStatus().then(response => {
+      getPermStatus().then(response => {
         if (response.data.statuscode === 0) {
           this.statuslist = response.data.statuslist
         }

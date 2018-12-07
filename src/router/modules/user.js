@@ -49,6 +49,16 @@ const userRoute = {
         icon: 'user',
         roles: ['admin', 'manager']
       }
+    },
+    {
+      path: 'department',
+      component: () => import('@/views/user/department'),
+      name: 'department',
+      meta: {
+        title: 'department',
+        icon: 'user',
+        roles: ['admin', 'manager']
+      }
     }
   ]
 }

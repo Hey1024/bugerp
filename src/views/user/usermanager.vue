@@ -90,7 +90,7 @@
       </el-table-column>
       <el-table-column :label="$t('table.actions')" align="center" width="230" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <el-button type="primary" size="mini" @click="handleResetPwd(scope.row)">{{ $t('table.reset') }}</el-button>
+          <el-button type="primary" size="mini" @click="handleResetPwd(scope.row)">{{ $t('table.changepassword') }}</el-button>
           <!--<el-button  size="mini" type="success" :disabled="scope.row.disable" @click="handleModifyStatus(scope.row)">{{ scope.row.action }}-->
           <!--</el-button>-->
           <!--v-if="scope.row.status!='published'"-->

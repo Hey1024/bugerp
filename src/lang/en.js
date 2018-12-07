@@ -76,7 +76,8 @@ export default {
     env: 'env',
     runos: 'runos',
     uploadhead: 'uploadhead',
-    mytask: 'mytask'
+    mytask: 'mytask',
+    department: 'department'
   },
   navbar: {
     logOut: 'Log Out',
@@ -155,7 +156,8 @@ export default {
     role: 'role',
     email: 'email',
     reset: 'reset',
-    remove: 'remove'
+    remove: 'remove',
+    changepassword: 'changepassword'
   },
   errorLog: {
     tips: 'Please click the bug icon in the upper right corner',

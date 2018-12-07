@@ -50,6 +50,12 @@
           clearable
           style="width: 60%;"/>
       </el-form-item>
+
+      <el-form-item style="margin-bottom: 40px;" prop="title" label="所属部门:">
+        <el-select v-model="postForm.group" class="filter-item" style="width: 130px">
+          <el-option v-for="(group, index) in groups" :key="index" :label="group" :value="group"/>
+        </el-select>
+      </el-form-item>
       <div style="margin-top: 30px;margin-bottom: 30px;padding-left: 20px">
         <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
         <div style="margin: 15px 0;"/>
@@ -70,7 +76,7 @@
 
 <script>
 import { createUser } from '@/api/user'
-import { getRoles } from '@/api/get'
+import { getRoles, getGroup } from '@/api/get'
 
 export default {
   name: 'Adduser',
@@ -81,18 +87,31 @@ export default {
         email: '',
         password: '',
         repassword: '',
-        realname: ''
+        realname: '',
+        group: ''
       },
       checkAll: false,
       rolelist: [],
       checkedRoles: [],
-      isIndeterminate: true
+      isIndeterminate: true,
+      groups: null
     }
   },
   created() {
     this.getroles()
+    this.getgroup()
   },
   methods: {
+    getgroup() {
+      getGroup().then(resp => {
+        if (resp.data.statuscode === 0) {
+          this.groups = resp.data.groups
+        }
+        if (this.groups.length === 0) {
+          this.$message.warning('请先添加部门')
+        }
+      })
+    },
     handleCheckAllChange(val) {
       this.checkedCities = val ? this.rolelist : []
       this.isIndeterminate = false
@@ -132,12 +151,20 @@ export default {
         })
         return
       }
+      if (this.postForm.group === '') {
+        this.$message({
+          message: '请选择部门',
+          type: 'error'
+        })
+        return
+      }
       const senddata = {
         nickname: this.postForm.nickname,
         email: this.postForm.email,
         password: this.postForm.password,
         role: this.checkedRoles,
-        realname: this.postForm.realname
+        realname: this.postForm.realname,
+        group: this.postForm.group
       }
       createUser(senddata).then(response => {
         if (response.data.statuscode === 0) {

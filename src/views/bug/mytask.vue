@@ -47,7 +47,7 @@
 
       <el-table-column :label="$t('table.title')" min-width="150px" align="center">
         <template slot-scope="scope">
-          <router-link :to="'/components/back-to-top/'+scope.row.id" class="link-type">
+          <router-link :to="'/showbug/'+scope.row.id" class="link-type">
             <span class="link-type" >{{ scope.row.title }}</span>
           </router-link>
           <!--<el-tag>{{scope.row.type | typeFilter}}</el-tag>-->
@@ -158,7 +158,7 @@
 </template>
 
 <script>
-import { getUsers, getStatus } from '@/api/get'
+import { getUsers, getPermStatus } from '@/api/get'
 import { taskList } from '@/api/bugs'
 import waves from '@/directive/waves' // 水波纹指令
 import { parseTime } from '@/utils'
@@ -264,7 +264,7 @@ export default {
   },
   methods: {
     getstatus() {
-      getStatus().then(response => {
+      getPermStatus().then(response => {
         if (response.data.statuscode === 0) {
           this.statusOptions = response.data.statuslist
         }

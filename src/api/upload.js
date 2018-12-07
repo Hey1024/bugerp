@@ -1,8 +1,8 @@
 import request from '@/utils/request'
 
-export function gettotalcount() {
+export function uploadImg() {
   return request({
-    url: '/article/gettotalcount',
+    url: '/get/status',
     method: 'post'
   })
 }

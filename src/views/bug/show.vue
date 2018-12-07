@@ -81,7 +81,7 @@
 <script>
 // import BackToTop from '@/components/BackToTop'
 import { showBug, passBug } from '@/api/bugs'
-import { getUsers, getStatus } from '@/api/get'
+import { getUsers, getPermStatus } from '@/api/get'
 import Sticky from '@/components/Sticky' // 粘性header组件
 // import { getProject } from '@/utils/auth'
 
@@ -132,19 +132,11 @@ export default {
   },
   methods: {
     getstatus() {
-      getStatus().then(response => {
+      getPermStatus().then(response => {
         if (response.data.statuscode === 0) {
           const tmp = response.data.statuslist
           this.statusOptions = tmp
         }
-
-        // const sl = tmp.length
-        // for (let i = 0; i < sl; i++) {
-        //   const aa = {}
-        //   aa.value = tmp[i]
-        //   aa.label = tmp[i]
-        //   this.statusOptions.push(aa)
-        // }
       })
     },
     draftForm() {

@@ -181,7 +181,7 @@
 import { changeStatus } from '@/api/bugs'
 import { getAllBugs } from '@/api/bugs'
 import { searchAllBugs } from '@/api/search'
-import { getProject, getStatus } from '@/api/get'
+import { getProject, getPermStatus } from '@/api/get'
 import waves from '@/directive/waves' // 水波纹指令
 import { parseTime } from '@/utils'
 
@@ -317,7 +317,7 @@ export default {
       })
     },
     getstatus() {
-      getStatus().then(response => {
+      getPermStatus().then(response => {
         if (response.data.statuscode === 0) {
           const arr = response.data.statuslist
           const sl = arr.length
