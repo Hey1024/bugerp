@@ -1,7 +1,7 @@
 文档地址： https://www.hyahm.com/article/257  
 
 ### 展示页面： 
-    [bugarp](http://bug.hyahm.com)
+    [bugarp](http://bug.hyahm.com "bugarp")
 
 ### 版本更新内容   
  
