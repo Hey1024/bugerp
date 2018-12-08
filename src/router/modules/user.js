@@ -17,7 +17,7 @@ const userRoute = {
       meta: {
         title: 'adduser',
         icon: 'edit',
-        roles: ['admin', 'manager', 'testmanager', 'gomanager', 'phpmanager', 'cocosmanager']
+        roles: ['admin', 'create user']
       }
     },
     {
@@ -37,7 +37,7 @@ const userRoute = {
       meta: {
         title: 'usermanager',
         icon: 'user',
-        roles: ['admin', 'manager']
+        roles: ['admin']
       }
     },
     {
@@ -47,7 +47,7 @@ const userRoute = {
       meta: {
         title: 'uploadhead',
         icon: 'user',
-        roles: ['admin', 'manager']
+        roles: ['admin']
       }
     },
     {
@@ -57,7 +57,7 @@ const userRoute = {
       meta: {
         title: 'department',
         icon: 'user',
-        roles: ['admin', 'manager']
+        roles: ['admin']
       }
     }
   ]

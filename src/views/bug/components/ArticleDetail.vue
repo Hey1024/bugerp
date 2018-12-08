@@ -184,17 +184,17 @@ export default {
     }
   },
   data() {
-    const validateRequire = (rule, value, callback) => {
-      if (value === '') {
-        this.$message({
-          message: rule + '为必传项',
-          type: 'error'
-        })
-        callback(null)
-      } else {
-        callback()
-      }
-    }
+    // const validateRequire = (rule, value, callback) => {
+    //   if (value === '') {
+    //     this.$message({
+    //       message: rule + '为必传项',
+    //       type: 'error'
+    //     })
+    //     callback(null)
+    //   } else {
+    //     callback()
+    //   }
+    // }
     const validateSourceUri = (rule, value, callback) => {
       if (value) {
         if (validateURL(value)) {
@@ -215,9 +215,9 @@ export default {
       loading: false,
       userListOptions: [],
       rules: {
-        image_uri: [{ validator: validateRequire }],
-        title: [{ validator: validateRequire }],
-        content: [{ validator: validateRequire }],
+        // image_uri: [{ validator: validateRequire }],
+        // title: [{ validator: validateRequire }],
+        // content: [{ validator: validateRequire }],
         source_uri: [{ validator: validateSourceUri }]
         // source_uri: [{ validator: validateSourceUri, trigger: 'blur' }]
       },
@@ -241,9 +241,9 @@ export default {
     }
   },
   computed: {
-    contentShortLength() {
-      return this.postForm.content_short.length
-    }
+    // contentShortLength() {
+    //   return this.postForm.content_short.length
+    // }
   },
   activated() {
     this.getuser()
@@ -327,7 +327,6 @@ export default {
     fetchData(id) {
       fetchBug(id).then(response => {
         if (response.data.statuscode === 0) {
-          console.log(response.data)
           const dd = response.data
           this.postForm.title = dd.title
           this.postForm.content = dd.content
@@ -368,19 +367,18 @@ export default {
         if (valid) {
           console.log(this.postForm)
           createBug(this.postForm).then(resp => {
-            console.log(resp.data)
             if (resp.data.statuscode === 0) {
-              if (this.postForm.id > 0) {
+              if (this.postForm.id === -1) {
                 this.$notify({
                   title: '成功',
-                  message: '发布' + this.postForm.selectclass + '成功',
+                  message: '发布成功',
                   type: 'success',
                   duration: 2000
                 })
               } else {
                 this.$notify({
                   title: '成功',
-                  message: '修改' + this.postForm.selectclass + '成功',
+                  message: '修改成功',
                   type: 'success',
                   duration: 2000
                 })

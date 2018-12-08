@@ -17,7 +17,7 @@ const setting = {
       meta: {
         title: 'pubversion',
         icon: 'guide',
-        roles: ['admin', 'manager', 'cocosmanager', 'cocos']
+        roles: ['admin', 'create version']
       }
     },
     {
@@ -27,7 +27,7 @@ const setting = {
       meta: {
         title: 'versionlist',
         icon: 'bug',
-        roles: ['admin', 'manager', 'cocosmanager', 'cocos']
+        roles: ['admin', 'create version']
       }
     },
     {
@@ -37,7 +37,7 @@ const setting = {
       meta: {
         title: 'project',
         icon: 'bug',
-        roles: ['admin', 'manager', 'cocosmanager', 'cocos']
+        roles: ['admin', 'create project']
       }
     },
     {
@@ -47,7 +47,7 @@ const setting = {
       meta: {
         title: 'env',
         icon: 'bug',
-        roles: ['admin', 'manager', 'cocosmanager', 'cocos']
+        roles: ['admin', 'create env']
       }
     }
     // {

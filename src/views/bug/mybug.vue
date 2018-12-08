@@ -76,7 +76,7 @@
             <el-button type="primary" size="mini" >{{ $t('list.edit') }}</el-button>
           </router-link>
           <el-button type="success" size="mini" @click="handleClose(scope.row)">{{ $t('list.close') }}</el-button>
-          <el-button type="danger" size="mini" @click="handleRemove(scope.row)">{{ $t('list.remove') }}</el-button>
+          <!--<el-button type="danger" size="mini" @click="handleRemove(scope.row)">{{ $t('list.remove') }}</el-button>-->
         </template>
       </el-table-column>
     </el-table>
@@ -96,11 +96,11 @@
 </template>
 
 <script>
-import { getAllBugs, closeBug, removeBug } from '@/api/bugs'
+import { getMyBugs, closeBug } from '@/api/bugs'
 import { changeStatus } from '@/api/bugs'
 import { searchMyBugs } from '@/api/search'
 import waves from '@/directive/waves' // 水波纹指令
-import { getProject, getPermStatus } from '@/api/get'
+import { getProject, getStatus } from '@/api/get'
 
 const calendarTypeOptions = [
   { key: 'CN', display_name: 'China' },
@@ -162,7 +162,7 @@ export default {
   },
   methods: {
     getstatus() {
-      getPermStatus().then(response => {
+      getStatus().then(response => {
         if (response.data.statuscode === 0) {
           this.statuslist = response.data.statuslist
         }
@@ -183,7 +183,6 @@ export default {
       }).then(() => {
         closeBug(row.id).then(response => {
           if (response.data.statuscode === 0) {
-            console.log(response.data)
             this.list = this.list.filter(items => {
               return items.id !== row.id
             })
@@ -240,42 +239,49 @@ export default {
       this.listQuery.page = val
       this.getList()
     },
-    handleRemove(row) {
-      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        removeBug(row.id).then(response => {
-          if (response.data === 'ok') {
-            this.$message({
-              message: '已删除',
-              type: 'success'
-            })
-            this.list = this.list.filter(items => {
-              return items.id !== row.id
-            })
-          } else {
-            this.$message({
-              message: '操作失败',
-              type: 'error'
-            })
-          }
-        })
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消删除'
-        })
-      })
-    },
+    // handleRemove(row) {
+    //   this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+    //     confirmButtonText: '确定',
+    //     cancelButtonText: '取消',
+    //     type: 'warning'
+    //   }).then(() => {
+    //     removeBug(row.id).then(response => {
+    //       if (response.data === 'ok') {
+    //         this.$message({
+    //           message: '已删除',
+    //           type: 'success'
+    //         })
+    //         this.list = this.list.filter(items => {
+    //           return items.id !== row.id
+    //         })
+    //       } else {
+    //         this.$message({
+    //           message: '操作失败',
+    //           type: 'error'
+    //         })
+    //       }
+    //     })
+    //   }).catch(() => {
+    //     this.$message({
+    //       type: 'info',
+    //       message: '已取消删除'
+    //     })
+    //   })
+    // },
     getList() {
       this.listLoading = true
-      getAllBugs(this.listQuery).then(response => {
-        console.log(response.data)
+      const pager = {
+        page: this.listQuery.page,
+        limit: this.listQuery.limit
+      }
+      getMyBugs(pager).then(response => {
         if (response.data.statuscode === 0) {
+          if (response.data.total === 0) {
+            this.listLoading = false
+            return
+          }
           this.list = response.data.articlelist
-          this.total = response.data.articlelist.length
+          this.total = response.data.total
         }
         this.listLoading = false
       })

@@ -11,7 +11,7 @@ const componentsRouter = {
     {
       path: ':id',
       component: () => import('@/views/bug/show'),
-      name: 'backToTop-demo',
+      name: 'showbug',
       meta: { title: 'backToTop' }
     }
   ]

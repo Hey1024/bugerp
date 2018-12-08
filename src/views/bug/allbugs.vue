@@ -289,11 +289,13 @@ export default {
   },
   methods: {
     getprojectname() {
+      // const now = new Date().getTime()
       getProject().then(response => {
         if (response.data.statuscode === 0) {
           this.projectnames = response.data.projectlist
         }
       })
+      // console.log('time:' + (new Date().getTime() - now))
     },
     changestatus(row) {
       const param = {
@@ -332,7 +334,10 @@ export default {
     },
     getList() {
       this.listLoading = true
+      const now = new Date().valueOf()
+      console.log(now)
       getAllBugs(this.listQuery).then(response => {
+        console.log(response.data)
         if (response.data.statuscode === 0) {
           this.total = response.data.total
           this.list = response.data.articlelist

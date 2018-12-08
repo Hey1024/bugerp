@@ -8,10 +8,11 @@ export function getAllBugs(query) {
   })
 }
 
-export function getMyBugs() {
+export function getMyBugs(data) {
   return request({
-    url: '/bug/getlist',
-    method: 'post'
+    url: '/bug/mybugs',
+    method: 'post',
+    data: data
   })
 }
 
