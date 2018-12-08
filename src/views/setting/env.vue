@@ -12,7 +12,7 @@
         </template>
       </el-table-column>
       <el-table-column
-        label="项目名"
+        label="环境名"
         width="180">
         <template slot-scope="scope">
           <span style="margin-left: 10px">{{ scope.row.envname }}</span>
