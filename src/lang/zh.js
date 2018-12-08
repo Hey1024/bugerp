@@ -157,7 +157,8 @@ export default {
     email: '邮箱',
     reset: '重置密码',
     remove: '删除',
-    changepassword: '修改密码'
+    changepassword: '修改密码',
+    statusperm: '状态权限'
   },
   errorLog: {
     tips: '请点击右上角bug小图标',

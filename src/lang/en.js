@@ -157,7 +157,8 @@ export default {
     email: 'email',
     reset: 'reset',
     remove: 'remove',
-    changepassword: 'changepassword'
+    changepassword: 'changepassword',
+    statusperm: 'statuspermission'
   },
   errorLog: {
     tips: 'Please click the bug icon in the upper right corner',

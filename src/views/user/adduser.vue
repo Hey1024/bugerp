@@ -123,6 +123,7 @@ export default {
     },
     getroles() {
       getRoles().then(response => {
+        console.log(response.data)
         if (response.data.statuscode === 0) {
           this.rolelist = response.data.rolelist
         }
