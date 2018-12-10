@@ -30,3 +30,18 @@ export function resetPwd(data) {
     data: data
   })
 }
+
+export function updateInfo(data) {
+  return request({
+    url: '/info/update',
+    method: 'post',
+    data: data
+  })
+}
+
+export function getInfo() {
+  return request({
+    url: '/get/info',
+    method: 'post'
+  })
+}

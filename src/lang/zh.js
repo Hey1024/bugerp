@@ -77,7 +77,8 @@ export default {
     uploadhead: '上传头像',
     mytask: '我的任务',
     department: '部门',
-    email: '邮箱'
+    email: '邮箱',
+    changeinfo: '修改信息'
   },
   navbar: {
     logOut: '退出登录',

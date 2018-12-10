@@ -37,7 +37,7 @@ const userRoute = {
       meta: {
         title: 'usermanager',
         icon: 'user',
-        roles: ['admin']
+        roles: ['admin', 'create user']
       }
     },
     {
@@ -46,8 +46,16 @@ const userRoute = {
       name: 'uploadhead',
       meta: {
         title: 'uploadhead',
-        icon: 'user',
-        roles: ['admin']
+        icon: 'user'
+      }
+    },
+    {
+      path: 'changeinfo',
+      component: () => import('@/views/user/changeinfo'),
+      name: 'changeinfo',
+      meta: {
+        title: 'changeinfo',
+        icon: 'user'
       }
     }
   ]

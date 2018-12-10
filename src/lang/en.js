@@ -78,7 +78,8 @@ export default {
     uploadhead: 'uploadhead',
     mytask: 'mytask',
     department: 'department',
-    email: 'email'
+    email: 'email',
+    changeinfo: 'changeinfo'
   },
   navbar: {
     logOut: 'Log Out',
