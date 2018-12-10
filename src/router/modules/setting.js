@@ -49,17 +49,17 @@ const setting = {
         icon: 'bug',
         roles: ['admin', 'create env']
       }
+    },
+    {
+      path: 'department',
+      component: () => import('@/views/setting/department'),
+      name: 'department',
+      meta: {
+        title: 'department',
+        icon: 'user',
+        roles: ['admin']
+      }
     }
-    // {
-    //   path: 'runos',
-    //   component: () => import('@/views/setting/runos'),
-    //   name: 'osmanager',
-    //   meta: {
-    //     title: 'runos',
-    //     icon: 'bug',
-    //     roles: ['admin', 'manager', 'cocosmanager', 'cocos']
-    //   }
-    // }
   ]
 }
 

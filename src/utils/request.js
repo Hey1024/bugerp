@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { Message } from 'element-ui'
 import store from '@/store'
-import { getToken, setTimeout } from '@/utils/auth'
+import { getToken, setTimeout, removeToken } from '@/utils/auth'
 import g from '@/config/config'
 
 // create an axios instance
@@ -30,17 +30,17 @@ service.interceptors.request.use(
 
 // respone interceptor
 service.interceptors.response.use(
-  response => response,
-  // response => {
-  //   const url = response.request.responseURL
-  //   if (url.indexOf('/login/login') <= 0) {
-  //     if (response.data === 'deadline') {
-  //       removeToken()
-  //       this.$router.push('/login')
-  //     }
-  //   }
-  //   return response
-  // },
+  // response => response,
+  response => {
+    const url = response.request.responseURL
+    if (url.indexOf('/login/login') < 0) {
+      if (response.data.statuscode === 400) {
+        removeToken()
+        this.$router.push('/login')
+      }
+    }
+    return response
+  },
   /**
    * 下面的注释为通过在response里，自定义code来标示请求状态
    * 当code返回如下情况则说明权限有问题，登出并返回到登录页

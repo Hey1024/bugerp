@@ -89,7 +89,7 @@
       </el-table-column>
       <el-table-column :label="$t('table.actions')" align="center" width="230" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">{{ $t('table.pass') }}</el-button>
+          <el-button type="primary" size="mini" @click="handlePass(scope.row)">{{ $t('table.pass') }}</el-button>
           <el-button :disabled="scope.row.disable" size="mini" type="success" @click="handleModifyStatus(scope.row)">{{ scope.row.action }}
           </el-button>
           <!--v-if="scope.row.status!='published'"-->
@@ -131,7 +131,6 @@
         <el-form-item style="margin-bottom: 40px;" label="任务给：">
           <el-select
             v-model="temp.selectusers"
-            multiple
             filterable
             allow-create
             default-first-option
@@ -159,7 +158,7 @@
 
 <script>
 import { getUsers, getPermStatus } from '@/api/get'
-import { taskList } from '@/api/bugs'
+import { taskList, passBug } from '@/api/bugs'
 import waves from '@/directive/waves' // 水波纹指令
 import { parseTime } from '@/utils'
 // import { getProject } from '@/utils/auth'
@@ -223,7 +222,7 @@ export default {
         // title: '',
         // type: '',
         status: '新建',
-        selectusers: []
+        selectusers: ''
         // status: 'published'
       },
       changeaction: {
@@ -386,33 +385,29 @@ export default {
         this.$refs['dataForm'].clearValidate()
       })
     },
-    handleUpdate(row) {
-      // this.temp.id = row.id // copy obj
-      console.log(row.id)
-      // this.dialogStatus = 'update'
-      // this.dialogFormVisible = true
-      // this.$nextTick(() => {
-      //   this.$refs['dataForm'].clearValidate()
-      // })
+    handlePass(row) {
+      this.temp.id = parseInt(row.id) // copy obj
+      this.dialogFormVisible = true
     },
     updateData() {
-      var data = this.temp
-      const tl = this.temp.selectusers.length
-      for (let i = 0; i < tl; i++) {
-        data.selectusers[i] = this.temp.selectusers[i].split('(')[0]
-      }
-      // updateArticle(this.temp).then(response => {
-      //   if (response.data === 'ok') {
-      //     // this.list = this.list.filter(item => {
-      //     //   return item.id !== this.temp.id
-      //     // })
-      //     this.$message({
-      //       message: '操作成功',
-      //       type: 'success'
-      //     })
-      //   }
-      //   this.dialogFormVisible = false
-      // })
+      // var data = this.temp
+      // const tl = this.temp.selectusers.length
+      // for (let i = 0; i < tl; i++) {
+      // this.temp.selectusers = this.temp.selectusers.split('(')[0]
+      // }
+      passBug(this.temp).then(response => {
+        if (response.data.statuscode === 0) {
+          const data = response.data
+          this.temp.remark = ''
+          this.temp.status = data.status
+          this.temp.selectusers = ''
+          this.$message({
+            message: '操作成功',
+            type: 'success'
+          })
+        }
+      })
+      this.dialogFormVisible = false
     },
     handleDelete(row) {
       this.$notify({
@@ -423,8 +418,6 @@ export default {
       })
       const index = this.list.indexOf(row)
       this.list.splice(index, 1)
-    },
-    handleFetchPv(pv) {
     },
     handleDownload() {
       this.downloadLoading = true
