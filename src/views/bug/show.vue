@@ -17,9 +17,9 @@
 
       <el-card class="box-card" style="background-color: #8cbda4">
         <el-row>
-          <el-col :span="5">
-            <span>类型: {{ bug.selectclass }}</span>
-          </el-col>
+          <!--<el-col :span="5">-->
+          <!--<span>类型: {{ bug.selectclass }}</span>-->
+          <!--</el-col>-->
           <el-col :span="5">
             <span>版本：{{ bug.appversion }}</span>
           </el-col>
@@ -92,7 +92,12 @@ export default {
     return {
       users: [],
       loading: false,
-      bug: {},
+      bug: {
+        title: '',
+        appversion: '',
+        status: '',
+        comment: []
+      },
       statusOptions: [],
       dialogFormVisible: false,
       textMap: {

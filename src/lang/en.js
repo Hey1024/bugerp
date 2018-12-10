@@ -77,7 +77,8 @@ export default {
     runos: 'runos',
     uploadhead: 'uploadhead',
     mytask: 'mytask',
-    department: 'department'
+    department: 'department',
+    email: 'email'
   },
   navbar: {
     logOut: 'Log Out',

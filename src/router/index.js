@@ -10,6 +10,7 @@ import Layout from '@/views/layout/Layout'
 import componentsRouter from './modules/components'
 // import chartsRouter from './modules/charts'
 // import tableRouter from './modules/table'
+import system from './modules/system'
 import setting from './modules/setting'
 import userRoute from './modules/user'
 // import nestedRouter from './modules/nested'
@@ -153,6 +154,7 @@ export const asyncRouterMap = [
   // chartsRouter,
   // nestedRouter,
   // tableRouter,
+  system,
   userRoute,
 
   {

@@ -76,7 +76,8 @@ export default {
     runos: '运行平台',
     uploadhead: '上传头像',
     mytask: '我的任务',
-    department: '部门'
+    department: '部门',
+    email: '邮箱'
   },
   navbar: {
     logOut: '退出登录',
