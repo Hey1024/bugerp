@@ -7,10 +7,14 @@
    [bugarp](http://bug.hyahm.com "bugarp")
    
 ###  正在进行  
-   增加admin用户的信息重置接口
+   增加修改邮箱，昵称，姓名页面
 
 ### 版本更新内容   
-   无法创建admin用户的权限
+   增加admin用户的信息重置接口  
+   如果要修改admin权限的密码为123，如下所示，只能在go服务器那台机器上执行
+```
+   curl http://127.0.0.1:10001/admin/reset?password=123
+```
 
 ### 项目优势  
  1， 部署简单  
