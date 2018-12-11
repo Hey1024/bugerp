@@ -91,12 +91,14 @@
       <el-table-column :label="$t('table.actions')" align="center" width="230" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button type="primary" size="mini" @click="handleResetPwd(scope.row)">{{ $t('table.changepassword') }}</el-button>
-          <!--<el-button  size="mini" type="success" :disabled="scope.row.disable" @click="handleModifyStatus(scope.row)">{{ scope.row.action }}-->
+          <!--<el-button size="mini" type="success" :disabled="scope.row.disable" @click="handleModifyStatus(scope.row)">{{ scope.row.action }}-->
           <!--</el-button>-->
           <!--v-if="scope.row.status!='published'"-->
           <!--<el-button v-if="scope.row.status!='draft'" size="mini" @click="handleModifyStatus(scope.row,'draft')">{{$t('table.draft')}}-->
           <!--</el-button>-->
           <el-button size="mini" type="danger" @click="handlePermission(scope.row)">{{ $t('table.updatepermission') }}
+          </el-button>
+          <el-button size="mini" type="danger" @click="handleRemove(scope.row)">{{ $t('table.remove') }}
           </el-button>
         </template>
       </el-table-column>
@@ -191,7 +193,7 @@
 </template>
 
 <script>
-import { userList, resetPwd, updateRoles } from '@/api/user'
+import { userList, resetPwd, updateRoles, userRemove } from '@/api/user'
 import { getRoles, getThisRole } from '@/api/get'
 import waves from '@/directive/waves' // 水波纹指令
 
@@ -290,6 +292,25 @@ export default {
       // this.$nextTick(() => {
       //   this.$refs['dataForm'].clearValidate()
       // })
+    },
+    handleRemove(row) {
+      userRemove(row.id).then(resp => {
+        if (resp.data.statuscode === 600) {
+          this.$message.warning('这个用户有bug，请先移除')
+          return
+        }
+        if (resp.data.statuscode === 0) {
+          this.$message.warning('删除成功')
+          const l = this.userlist.length
+          for (let i = 1; i < l; i++) {
+            if (this.userlist[i].id === row.id) {
+              this.userlist.splice(i, 1)
+            }
+          }
+          return
+        }
+        this.$message.warning('删除失败')
+      })
     },
     handleResetPwd(row) {
       this.$prompt('请输入密码', '提示', {

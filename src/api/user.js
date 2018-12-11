@@ -54,3 +54,10 @@ export function updateRoles(data) {
   })
 }
 
+export function userRemove(id) {
+  return request({
+    url: '/user/remove',
+    method: 'get',
+    params: { id }
+  })
+}
