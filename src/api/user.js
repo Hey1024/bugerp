@@ -45,3 +45,12 @@ export function getInfo() {
     method: 'post'
   })
 }
+
+export function updateRoles(data) {
+  return request({
+    url: '/role/update',
+    method: 'post',
+    data: data
+  })
+}
+

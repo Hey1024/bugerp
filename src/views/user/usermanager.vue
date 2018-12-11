@@ -96,11 +96,30 @@
           <!--v-if="scope.row.status!='published'"-->
           <!--<el-button v-if="scope.row.status!='draft'" size="mini" @click="handleModifyStatus(scope.row,'draft')">{{$t('table.draft')}}-->
           <!--</el-button>-->
-          <!--<el-button  size="mini" type="danger" @click="handleStopStatus(scope.row)">{{ scope.row.stop }}-->
-          <!--</el-button>-->
+          <el-button size="mini" type="danger" @click="handlePermission(scope.row)">{{ $t('table.updatepermission') }}
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
+
+    <el-dialog
+      :visible.sync="dialogVisible"
+      :before-close="handleClose"
+      title="提示"
+      width="30%">
+      <el-form ref="postForm" class="form-container" style="padding: 20px">
+        <el-checkbox-group v-model="checkroles" style="padding: 20px">
+          <div v-for="(status, index) in rolelist" :key="index" style="margin: 5px;">
+            <el-checkbox :label="status"/>
+          </div>
+        </el-checkbox-group>
+        <!--<el-button type="success" round @click="HandlerAddGroup">添加部门</el-button>-->
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="HandlerUpdateRoles">确 定</el-button>
+      </span>
+    </el-dialog>
     <!--<div class="pagination-container">-->
     <!--<el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="listQuery.page" :page-sizes="[10,20,30, 50]" :page-size="listQuery.limit" layout="total, sizes, prev, pager, next, jumper" :total="total">-->
     <!--</el-pagination>-->
@@ -172,7 +191,8 @@
 </template>
 
 <script>
-import { userList, resetPwd } from '@/api/user'
+import { userList, resetPwd, updateRoles } from '@/api/user'
+import { getRoles, getThisRole } from '@/api/get'
 import waves from '@/directive/waves' // 水波纹指令
 
 export default {
@@ -192,6 +212,10 @@ export default {
   },
   data() {
     return {
+      uid: -1,
+      rolelist: [],
+      checkroles: [],
+      dialogVisible: false,
       // users: [],
       tableKey: 0,
       userlist: null,
@@ -206,8 +230,38 @@ export default {
   },
   created() {
     this.getuserList()
+    this.getroles()
   },
   methods: {
+    getroles() {
+      getRoles().then(resp => {
+        console.log(resp.data)
+        if (resp.data.statuscode === 0) {
+          this.rolelist = resp.data.rolelist
+        }
+      })
+    },
+    HandlerUpdateRoles() {
+      const data = {
+        id: this.uid,
+        rolelist: this.checkroles
+      }
+      updateRoles(data).then(resp => {
+        if (resp.data.statuscode === 0) {
+          const l = this.userlist.length
+          for (let i = 0; i < l; i++) {
+            if (this.userlist[i].id === this.uid) {
+              this.userlist[i].role = resp.data.rolestring
+            }
+          }
+          this.$message.success('修改成功')
+        }
+      })
+      this.dialogVisible = false
+    },
+    handleClose() {
+      this.dialogVisible = false
+    },
     getuserList() {
       userList().then(resp => {
         if (resp.data.statuscode === 0) {
@@ -218,14 +272,25 @@ export default {
         console.log(err)
       })
     },
-    // handleCreate() {
-    //   this.resetTemp()
-    //   this.dialogStatus = 'create'
-    //   this.dialogFormVisible = true
-    //   this.$nextTick(() => {
-    //     this.$refs['dataForm'].clearValidate()
-    //   })
-    // },
+    handlePermission(row) {
+      this.uid = parseInt(row.id)
+      getThisRole(this.uid).then(resp => {
+        if (resp.data.statuscode === 0) {
+          this.checkroles = resp.data.rolelist
+          this.dialogVisible = true
+        } else {
+          this.$message.error('Network error')
+          return
+        }
+      })
+
+      // this.resetTemp()
+      // this.dialogStatus = 'create'
+      // this.dialogFormVisible = true
+      // this.$nextTick(() => {
+      //   this.$refs['dataForm'].clearValidate()
+      // })
+    },
     handleResetPwd(row) {
       this.$prompt('请输入密码', '提示', {
         confirmButtonText: '确定',

@@ -160,7 +160,8 @@ export default {
     reset: '重置密码',
     remove: '删除',
     changepassword: '修改密码',
-    statusperm: '状态权限'
+    statusperm: '状态权限',
+    updatepermission: '修改权限'
   },
   errorLog: {
     tips: '请点击右上角bug小图标',

@@ -62,3 +62,11 @@ export function getPermStatus() {
     method: 'post'
   })
 }
+
+export function getThisRole(id) {
+  return request({
+    url: '/get/thisrole',
+    method: 'get',
+    params: { id }
+  })
+}

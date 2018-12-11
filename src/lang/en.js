@@ -160,7 +160,8 @@ export default {
     reset: 'reset',
     remove: 'remove',
     changepassword: 'changepassword',
-    statusperm: 'statuspermission'
+    statusperm: 'statuspermission',
+    updatepermission: 'updatepermission'
   },
   errorLog: {
     tips: 'Please click the bug icon in the upper right corner',

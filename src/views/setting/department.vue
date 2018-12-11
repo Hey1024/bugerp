@@ -131,6 +131,9 @@ export default {
         }
       })
     },
+    handleClose() {
+      this.dialogVisible = false
+    },
     HandlerAddGroup() {
       if (this.id === -1) {
         const data = {
