@@ -195,8 +195,8 @@ export const asyncRouterMap = [
         name: 'bugs',
         meta: {
           title: 'allbugs',
-          icon: 'bug'
-          // roles: ['admin', 'testmanager', 'testpre', 'test', 'manager']
+          icon: 'bug',
+          roles: ['admin', 'see allbug']
         }
       },
       {
