@@ -249,6 +249,7 @@ export default {
         rolelist: this.checkroles
       }
       updateRoles(data).then(resp => {
+        console.log(data)
         if (resp.data.statuscode === 0) {
           const l = this.userlist.length
           for (let i = 0; i < l; i++) {

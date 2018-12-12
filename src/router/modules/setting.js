@@ -7,7 +7,8 @@ const setting = {
   name: 'setting',
   meta: {
     title: 'setting',
-    icon: 'setting'
+    icon: 'setting',
+    roles: ['admin', 'create version', 'create project', 'create env']
   },
   children: [
     {
