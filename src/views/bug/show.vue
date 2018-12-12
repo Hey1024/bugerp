@@ -2,15 +2,15 @@
 
   <div>
     <div>
-      <sticky :class-name="'sub-navbar'">
-        <!--<CommentDropdown v-model="postForm.comment_disabled" />-->
+      <!--<sticky :class-name="'sub-navbar'">-->
+      <!--&lt;!&ndash;<CommentDropdown v-model="postForm.comment_disabled" />&ndash;&gt;-->
 
-        <!--<SourceUrlDropdown v-model="postForm.source_uri" />-->
-        <el-button v-loading="loading" style="margin-left: 10px;" type="success" @click="submitForm">转交
-        </el-button>
-        <!--<el-button v-loading="loading" type="warning" @click="handleModifyStatus">关闭</el-button>-->
-        <!--<el-button v-loading="loading" type="warning" @click="draftForm">删除</el-button>-->
-      </sticky>
+      <!--&lt;!&ndash;<SourceUrlDropdown v-model="postForm.source_uri" />&ndash;&gt;-->
+      <!--<el-button v-loading="loading" style="margin-left: 10px;" type="success" @click="submitForm">转交-->
+      <!--</el-button>-->
+      <!--&lt;!&ndash;<el-button v-loading="loading" type="warning" @click="handleModifyStatus">关闭</el-button>&ndash;&gt;-->
+      <!--&lt;!&ndash;<el-button v-loading="loading" type="warning" @click="draftForm">删除</el-button>&ndash;&gt;-->
+      <!--</sticky>-->
     </div>
     <div class="components-container">
       <code style="text-align: center">{{ bug.title }}</code>
@@ -57,6 +57,7 @@
         <el-form-item style="margin-bottom: 40px;" label="任务给：">
           <el-select
             v-model="temp.selectusers"
+            multiple
             placeholder="请选择指定的用户">
             <el-option
               v-for="(item, index) in users"
@@ -81,7 +82,7 @@
 <script>
 // import BackToTop from '@/components/BackToTop'
 import { showBug, passBug } from '@/api/bugs'
-import { getUsers, getPermStatus } from '@/api/get'
+// import { getUsers, getPermStatus } from '@/api/get'
 import Sticky from '@/components/Sticky' // 粘性header组件
 // import { getProject } from '@/utils/auth'
 
@@ -129,21 +130,21 @@ export default {
   },
   created() {
     this.create()
-    this.getusers()
-    this.getstatus()
+    // this.getusers()
+    // this.getstatus()
   },
   activated() {
-    this.getstatus()
+    // this.getstatus()
   },
   methods: {
-    getstatus() {
-      getPermStatus().then(response => {
-        if (response.data.statuscode === 0) {
-          const tmp = response.data.statuslist
-          this.statusOptions = tmp
-        }
-      })
-    },
+    // getstatus() {
+    //   getPermStatus().then(response => {
+    //     if (response.data.statuscode === 0) {
+    //       const tmp = response.data.statuslist
+    //       this.statusOptions = tmp
+    //     }
+    //   })
+    // },
     draftForm() {
       console.log(11)
     },
@@ -154,19 +155,19 @@ export default {
       //   this.$refs['dataForm'].clearValidate()
       // })
     },
-    getusers() {
-      getUsers().then(response => {
-        if (response.data.statuscode === 0) {
-          const data = response.data.users
-          const l = data.length
-          for (let i = 0; i < l; i++) {
-            this.users.push(data[i].nickname + '(' + data[i].realname + ')')
-          }
-        }
-      }).catch(err => {
-        console.log(err)
-      })
-    },
+    // getusers() {
+    //   getUsers().then(response => {
+    //     if (response.data.statuscode === 0) {
+    //       const data = response.data.users
+    //       const l = data.length
+    //       for (let i = 0; i < l; i++) {
+    //         this.users.push(data[i].nickname + '(' + data[i].realname + ')')
+    //       }
+    //     }
+    //   }).catch(err => {
+    //     console.log(err)
+    //   })
+    // },
     create() {
       const url = window.location.href
       const ul = url.split('/')

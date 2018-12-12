@@ -99,10 +99,7 @@
           </el-col>
           <el-col :span="8">
             <el-form-item style="margin-bottom: 40px;" label="分配任务：">
-              <el-select
-                v-model="postForm.selectuser"
-                default-first-option
-                placeholder="请选择指定的用户">
+              <el-select v-model="postForm.selectuser" multiple placeholder="分配任务">
                 <el-option
                   v-for="item in users"
                   :key="item.value"
@@ -184,17 +181,6 @@ export default {
     }
   },
   data() {
-    // const validateRequire = (rule, value, callback) => {
-    //   if (value === '') {
-    //     this.$message({
-    //       message: rule + '为必传项',
-    //       type: 'error'
-    //     })
-    //     callback(null)
-    //   } else {
-    //     callback()
-    //   }
-    // }
     const validateSourceUri = (rule, value, callback) => {
       if (value) {
         if (validateURL(value)) {
@@ -365,8 +351,8 @@ export default {
       }
       this.$refs.postForm.validate(valid => {
         if (valid) {
-          console.log(this.postForm)
           createBug(this.postForm).then(resp => {
+            console.log(resp.data)
             if (resp.data.statuscode === 0) {
               if (this.postForm.id === -1) {
                 this.$notify({

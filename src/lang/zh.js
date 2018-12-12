@@ -78,7 +78,9 @@ export default {
     mytask: '我的任务',
     department: '部门',
     email: '邮箱',
-    changeinfo: '修改信息'
+    changeinfo: '修改信息',
+    system: '系统设置',
+    bugmanager: 'bug管理'
   },
   navbar: {
     logOut: '退出登录',
@@ -161,7 +163,8 @@ export default {
     remove: '删除',
     changepassword: '修改密码',
     statusperm: '状态权限',
-    updatepermission: '修改权限'
+    updatepermission: '修改权限',
+    dustbin: '垃圾箱'
   },
   errorLog: {
     tips: '请点击右上角bug小图标',

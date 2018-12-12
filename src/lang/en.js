@@ -79,7 +79,9 @@ export default {
     mytask: 'mytask',
     department: 'department',
     email: 'email',
-    changeinfo: 'changeinfo'
+    changeinfo: 'changeinfo',
+    system: 'system',
+    bugmanager: 'bugmanager'
   },
   navbar: {
     logOut: 'Log Out',
@@ -161,7 +163,8 @@ export default {
     remove: 'remove',
     changepassword: 'changepassword',
     statusperm: 'statuspermission',
-    updatepermission: 'updatepermission'
+    updatepermission: 'updatepermission',
+    dustbin: 'dustbin'
   },
   errorLog: {
     tips: 'Please click the bug icon in the upper right corner',

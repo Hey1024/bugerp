@@ -23,3 +23,11 @@ export function userSearch(name) {
     params: { name }
   })
 }
+
+export function bugFilter(data) {
+  return request({
+    url: '/search/bugmanager',
+    method: 'post',
+    data: data
+  })
+}

@@ -59,6 +59,7 @@ const user = {
       // const username = userInfo.username.trim()
       return new Promise((resolve, reject) => {
         loginByUsername(userInfo).then(response => {
+          console.log(response.data)
           const data = response.data
           if (data.statuscode === 0) {
             commit('SET_TOKEN', data.token)

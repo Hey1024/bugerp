@@ -6,7 +6,7 @@ const system = {
   redirect: '/system/list',
   name: 'system',
   meta: {
-    title: 'setting',
+    title: 'system',
     icon: 'setting',
     roles: ['admin']
   },
@@ -17,6 +17,16 @@ const system = {
       name: 'email',
       meta: {
         title: 'email',
+        icon: 'email',
+        roles: ['admin']
+      }
+    },
+    {
+      path: 'bugmanager',
+      component: () => import('@/views/system/bugmanager'),
+      name: 'bugmanager',
+      meta: {
+        title: 'bugmanager',
         icon: 'email',
         roles: ['admin']
       }

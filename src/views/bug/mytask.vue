@@ -81,22 +81,24 @@
       <!--<span v-else>0</span>-->
       <!--</template>-->
       <!--</el-table-column>-->
-      <el-table-column :label="$t('table.status')" class-name="status-col" width="100">
+      <el-table-column :label="$t('table.status')" class-name="status-col" width="120">
         <template slot-scope="scope">
-          <span>{{ scope.row.status }}</span>
+          <el-select v-model="scope.row.status" style="width: 200px" class="filter-item" placeholder="修改状态" @change="changestatus(scope.row)">
+            <el-option v-for="(item, index) in statuslist" :key="index" :label="item" :value="item"/>
+          </el-select>
           <!--<el-tag :type="scope.row.status | statusFilter">{{scope.row.status}}</el-tag>-->
         </template>
       </el-table-column>
-      <el-table-column :label="$t('table.actions')" align="center" width="230" class-name="small-padding fixed-width">
+      <el-table-column :label="$t('table.actions')" align="center" width="130" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button type="primary" size="mini" @click="handlePass(scope.row)">{{ $t('table.pass') }}</el-button>
-          <el-button :disabled="scope.row.disable" size="mini" type="success" @click="handleModifyStatus(scope.row)">{{ scope.row.action }}
-          </el-button>
+          <!--<el-button :disabled="scope.row.disable" size="mini" type="success" @click="handleModifyStatus(scope.row)">{{ scope.row.action }}-->
+          <!--</el-button>-->
           <!--v-if="scope.row.status!='published'"-->
           <!--<el-button v-if="scope.row.status!='draft'" size="mini" @click="handleModifyStatus(scope.row,'draft')">{{$t('table.draft')}}-->
           <!--</el-button>-->
-          <el-button size="mini" type="danger" @click="handleStopStatus(scope.row)">{{ scope.row.stop }}
-          </el-button>
+          <!--<el-button size="mini" type="danger" @click="handleStopStatus(scope.row)">{{ scope.row.stop }}-->
+          <!--</el-button>-->
         </template>
       </el-table-column>
     </el-table>
@@ -122,7 +124,7 @@
         <!--</el-form-item>-->
         <el-form-item :label="$t('table.status')">
           <el-select v-model="temp.status" class="filter-item" placeholder="Please select">
-            <el-option v-for="(item, index) in statusOptions" :key="index" :label="item" :value="item"/>
+            <el-option v-for="(item, index) in statuslist" :key="index" :label="item" :value="item"/>
           </el-select>
         </el-form-item>
         <!--<el-form-item :label="$t('table.importance')">-->
@@ -132,6 +134,7 @@
           <el-select
             v-model="temp.selectusers"
             filterable
+            multiple
             allow-create
             default-first-option
             placeholder="请选择指定的用户">
@@ -158,7 +161,7 @@
 
 <script>
 import { getUsers, getPermStatus } from '@/api/get'
-import { taskList, passBug } from '@/api/bugs'
+import { taskList, passBug, changeStatus } from '@/api/bugs'
 import waves from '@/directive/waves' // 水波纹指令
 import { parseTime } from '@/utils'
 // import { getProject } from '@/utils/auth'
@@ -212,7 +215,7 @@ export default {
       importanceOptions: [1, 2, 3, 4, 5],
       calendarTypeOptions,
       sortOptions: [{ label: 'ID Ascending', key: '+id' }, { label: 'ID Descending', key: '-id' }],
-      statusOptions: [],
+      statuslist: [],
       showReviewer: false,
       temp: {
         id: undefined,
@@ -265,15 +268,10 @@ export default {
     getstatus() {
       getPermStatus().then(response => {
         if (response.data.statuscode === 0) {
-          this.statusOptions = response.data.statuslist
+          this.statuslist = response.data.statuslist
+          console.log('--------')
+          console.log(this.statuslist)
         }
-        // const sl = tmp.length
-        // for (let i = 0; i < sl; i++) {
-        //   const aa = {}
-        //   aa.value = tmp[i]
-        //   aa.label = tmp[i]
-        //   this.statusOptions.push(aa)
-        // }
       })
     },
     getspuser() {
@@ -431,6 +429,27 @@ export default {
           filename: 'table-list'
         })
         this.downloadLoading = false
+      })
+    },
+    changestatus(row) {
+      const param = {
+        id: row.id,
+        status: row.status
+      }
+      changeStatus(param).then(response => {
+        if (response.data.statuscode === 0) {
+          this.$notify({
+            title: '成功',
+            message: '修改成功',
+            type: 'success'
+          })
+        } else {
+          this.$notify({
+            title: '失败',
+            message: '操作失败',
+            type: 'error'
+          })
+        }
       })
     },
     formatJson(filterVal, jsonData) {
