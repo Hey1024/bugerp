@@ -81,7 +81,8 @@ export default {
     email: 'email',
     changeinfo: 'changeinfo',
     system: 'system',
-    bugmanager: 'bugmanager'
+    bugmanager: 'bugmanager',
+    log: 'log'
   },
   navbar: {
     logOut: 'Log Out',

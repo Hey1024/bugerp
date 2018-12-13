@@ -80,7 +80,8 @@ export default {
     email: '邮箱',
     changeinfo: '修改信息',
     system: '系统设置',
-    bugmanager: 'bug管理'
+    bugmanager: 'bug管理',
+    log: '日志'
   },
   navbar: {
     logOut: '退出登录',
