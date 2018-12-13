@@ -4,7 +4,13 @@ const baseUrl = 'http://192.168.1.55:10001'
 const g = {
   uploadUrl: baseUrl + '/uploadimg',
   headImgUrl: baseUrl + '/upload/headimg',
-  apiUrl: baseUrl
+  apiUrl: baseUrl,
+  pubkey: `-----BEGIN PUBLIC KEY-----
+MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCyXfaibtNAqJtvDrsEGZG7yi4D
+BPNkSHZD4DYQtNDHNJUkP4pTB9tZvQ1+d02Tt/YHNy8N+z0rRSVQwISt2VuPwNta
+ldeprfs35msB5BFP4H0OlwZ2Woz7ImhNq7TrR0Usc6ExjlCxZg6zxnEL90vE4y/i
+kiMMhwhKp/HYBQjlfQIDAQAB
+-----END PUBLIC KEY-----`
 }
 
 export default g
