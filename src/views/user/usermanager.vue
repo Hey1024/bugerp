@@ -64,7 +64,7 @@
       <!--<span style='color:red;'>{{scope.row.reviewer}}</span>-->
       <!--</template>-->
       <!--</el-table-column>-->
-      <el-table-column :label="$t('table.role')" width="130px" align="center">
+      <el-table-column :label="$t('table.role')" width="100px" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.role }}</span>
           <!--<svg-icon v-for="n in +scope.row.importance" icon-class="star" class="meta-item__icon" :key="n"></svg-icon>-->
@@ -88,7 +88,14 @@
           <!--<el-tag :type="scope.row.status | statusFilter">{{scope.row.status}}</el-tag>-->
         </template>
       </el-table-column>
-      <el-table-column :label="$t('table.actions')" align="center" width="230" class-name="small-padding fixed-width">
+      <el-table-column :label="$t('table.status')" class-name="status-col" width="60">
+        <template slot-scope="scope">
+          <span v-if="scope.row.disable==1">{{ $t('table.enable') }}</span>
+          <span v-else>{{ $t('table.disable') }}</span>
+          <!--<el-tag :type="scope.row.status | statusFilter">{{scope.row.status}}</el-tag>-->
+        </template>
+      </el-table-column>
+      <el-table-column :label="$t('table.actions')" align="center" width="300" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button type="primary" size="mini" @click="handleResetPwd(scope.row)">{{ $t('table.changepassword') }}</el-button>
           <!--<el-button size="mini" type="success" :disabled="scope.row.disable" @click="handleModifyStatus(scope.row)">{{ scope.row.action }}-->
@@ -99,6 +106,10 @@
           <el-button size="mini" type="danger" @click="handlePermission(scope.row)">{{ $t('table.updatepermission') }}
           </el-button>
           <el-button size="mini" type="danger" @click="handleRemove(scope.row)">{{ $t('table.remove') }}
+          </el-button>
+          <el-button v-if="scope.row.disable==0" size="mini" type="danger" @click="handleDisable(scope.row)">{{ $t('table.enable') }}
+          </el-button>
+          <el-button v-else size="mini" type="danger" @click="handleDisable(scope.row)">{{ $t('table.disable') }}
           </el-button>
         </template>
       </el-table-column>
@@ -193,7 +204,7 @@
 </template>
 
 <script>
-import { userList, resetPwd, updateRoles, userRemove } from '@/api/user'
+import { userList, resetPwd, updateRoles, userRemove, userDisable } from '@/api/user'
 import { getRoles, getThisRole } from '@/api/get'
 import waves from '@/directive/waves' // 水波纹指令
 
@@ -220,7 +231,7 @@ export default {
       dialogVisible: false,
       // users: [],
       tableKey: 0,
-      userlist: null,
+      userlist: [],
       admin: false,
       // total: null,
       listLoading: false,
@@ -237,7 +248,6 @@ export default {
   methods: {
     getroles() {
       getRoles().then(resp => {
-        console.log(resp.data)
         if (resp.data.statuscode === 0) {
           this.rolelist = resp.data.rolelist
         }
@@ -249,7 +259,6 @@ export default {
         rolelist: this.checkroles
       }
       updateRoles(data).then(resp => {
-        console.log(data)
         if (resp.data.statuscode === 0) {
           const l = this.userlist.length
           for (let i = 0; i < l; i++) {
@@ -267,9 +276,13 @@ export default {
     },
     getuserList() {
       userList().then(resp => {
+        // console.log(JSON.stringify(resp.data))
+        // let str = JSON.stringify(resp.data)
+        // let s = JSON.parse(str)
+        // console.log(s)
+        console.log(resp)
         if (resp.data.statuscode === 0) {
           this.userlist = resp.data.userlist
-          console.log(this.userlist)
         }
       }).catch(err => {
         console.log(err)
@@ -311,6 +324,19 @@ export default {
           return
         }
         this.$message.warning('删除失败')
+      })
+    },
+    handleDisable(row) {
+      userDisable(row.id).then(resp => {
+        if (resp.data.statuscode === 0) {
+          const l = this.userlist.length
+          for (let i = 0; i < l; i++) {
+            if (this.userlist[i].id === row.id) {
+              this.userlist[i].disable = Math.abs(this.userlist[i].disable - 1)
+              break
+            }
+          }
+        }
       })
     },
     handleResetPwd(row) {

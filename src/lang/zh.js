@@ -164,7 +164,9 @@ export default {
     changepassword: '修改密码',
     statusperm: '状态权限',
     updatepermission: '修改权限',
-    dustbin: '垃圾箱'
+    dustbin: '垃圾箱',
+    disable: '禁用',
+    enable: '启用'
   },
   errorLog: {
     tips: '请点击右上角bug小图标',

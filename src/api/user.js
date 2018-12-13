@@ -61,3 +61,11 @@ export function userRemove(id) {
     params: { id }
   })
 }
+
+export function userDisable(id) {
+  return request({
+    url: '/user/disable',
+    method: 'get',
+    params: { id }
+  })
+}

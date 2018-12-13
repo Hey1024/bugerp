@@ -164,7 +164,9 @@ export default {
     changepassword: 'changepassword',
     statusperm: 'statuspermission',
     updatepermission: 'updatepermission',
-    dustbin: 'dustbin'
+    dustbin: 'dustbin',
+    disable: 'disable',
+    enable: 'enable'
   },
   errorLog: {
     tips: 'Please click the bug icon in the upper right corner',
