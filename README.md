@@ -7,7 +7,7 @@
    [bugarp](http://bug.hyahm.com "bugarp")
    
 ###  正在进行  
-   
+   增加过滤的状态
 
 ### 版本更新内容   
    
