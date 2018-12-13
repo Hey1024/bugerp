@@ -60,11 +60,18 @@
         </template>
       </el-table-column>
 
+      <el-table-column :label="$t('table.handle')" width="100px" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row.handle }}</span>
+        </template>
+      </el-table-column>
+
       <el-table-column :label="$t('table.status')" align="center" width="110">
         <template slot-scope="scope">
-          <el-select v-model="scope.row.status" style="width: 100px" class="filter-item" @change="changestatus(scope.row)" >
-            <el-option v-for="(item, index) in statuslist" :key="index" :label="item" :value="item"/>
-          </el-select>
+          <span>{{ scope.row.status }}</span>
+          <!--<el-select v-model="scope.row.status" style="width: 100px" class="filter-item" @change="changestatus(scope.row)" >-->
+          <!--<el-option v-for="(item, index) in statuslist" :key="index" :label="item" :value="item"/>-->
+          <!--</el-select>-->
           <!--<el-tag :type="scope.row.status | statusFilter">{{scope.row.status}}</el-tag>-->
         </template>
       </el-table-column>
@@ -129,13 +136,21 @@ export default {
     }
   },
   created() {
-    // this.getlist()
+    // this.getstatus()
   },
   methods: {
+    // getstatus() {
+    //   getStatus().then(resp => {
+    //     this.
+    //   })
+    // },
     handleFilter() {
       if (this.listQuery.id > 0 || this.listQuery.title.length > 0 || this.listQuery.author.length > 0) {
         bugFilter(this.listQuery).then(resp => {
-          console.log(resp.data)
+          console.log(resp.data.articlelist)
+          if (resp.data.statuscode === 0) {
+            this.list = resp.data.articlelist
+          }
         })
       } else {
         this.$message.warning('必须添加搜索条件')

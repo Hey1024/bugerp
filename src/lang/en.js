@@ -166,7 +166,9 @@ export default {
     updatepermission: 'updatepermission',
     dustbin: 'dustbin',
     disable: 'disable',
-    enable: 'enable'
+    enable: 'enable',
+    classify: 'classify',
+    opration: 'opration'
   },
   errorLog: {
     tips: 'Please click the bug icon in the upper right corner',

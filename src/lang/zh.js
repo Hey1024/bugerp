@@ -166,7 +166,9 @@ export default {
     updatepermission: '修改权限',
     dustbin: '垃圾箱',
     disable: '禁用',
-    enable: '启用'
+    enable: '启用',
+    classify: '类别',
+    opration: '操作说明'
   },
   errorLog: {
     tips: '请点击右上角bug小图标',

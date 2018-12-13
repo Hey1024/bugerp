@@ -30,6 +30,16 @@ const system = {
         icon: 'email',
         roles: ['admin']
       }
+    },
+    {
+      path: 'log',
+      component: () => import('@/views/system/oprationlog'),
+      name: 'log',
+      meta: {
+        title: 'log',
+        icon: 'email',
+        roles: ['admin']
+      }
     }
   ]
 }

@@ -90,7 +90,7 @@
       </el-table-column>
       <el-table-column :label="$t('table.status')" class-name="status-col" width="60">
         <template slot-scope="scope">
-          <span v-if="scope.row.disable==1">{{ $t('table.enable') }}</span>
+          <span v-if="scope.row.disable==0">{{ $t('table.enable') }}</span>
           <span v-else>{{ $t('table.disable') }}</span>
           <!--<el-tag :type="scope.row.status | statusFilter">{{scope.row.status}}</el-tag>-->
         </template>
@@ -107,7 +107,7 @@
           </el-button>
           <el-button size="mini" type="danger" @click="handleRemove(scope.row)">{{ $t('table.remove') }}
           </el-button>
-          <el-button v-if="scope.row.disable==0" size="mini" type="danger" @click="handleDisable(scope.row)">{{ $t('table.enable') }}
+          <el-button v-if="scope.row.disable==1" size="mini" type="danger" @click="handleDisable(scope.row)">{{ $t('table.enable') }}
           </el-button>
           <el-button v-else size="mini" type="danger" @click="handleDisable(scope.row)">{{ $t('table.disable') }}
           </el-button>

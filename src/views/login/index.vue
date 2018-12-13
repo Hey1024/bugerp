@@ -66,7 +66,7 @@
 import { isvalidUsername } from '@/utils/validate'
 import LangSelect from '@/components/LangSelect'
 import SocialSign from './socialsignin'
-import { setProject, encrypt } from '@/utils/auth'
+import { encrypt } from '@/utils/auth'
 
 export default {
   name: 'Login',
@@ -125,7 +125,6 @@ export default {
           }
           this.$store.dispatch('LoginByUsername', login).then(() => {
             this.loading = false
-            setProject('all')
             console.log('loading.....')
             this.$router.push('/dashboard')
             console.log('333333')
