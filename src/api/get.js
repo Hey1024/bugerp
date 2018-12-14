@@ -7,6 +7,13 @@ export function getStatus() {
   })
 }
 
+export function getMyStatus() {
+  return request({
+    url: '/get/mystatus',
+    method: 'post'
+  })
+}
+
 export function getEnv() {
   return request({
     url: '/get/env',

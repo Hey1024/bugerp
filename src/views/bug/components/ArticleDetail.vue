@@ -3,9 +3,9 @@
     <el-form ref="postForm" :model="postForm" :rules="rules" class="form-container" >
 
       <sticky :class-name="'sub-navbar ' + postForm.status">
-        <!--<CommentDropdown v-model="postForm.comment_disabled" />-->
-
-        <!--<SourceUrlDropdown v-model="postForm.source_uri" />-->
+        <CommentDropdown v-model="postForm.comment_disabled" />
+        <PlatformDropdown v-model="postForm.platforms" />
+        <SourceUrlDropdown v-model="postForm.source_uri" />
         <el-button v-loading="loading" style="margin-left: 10px;" type="success" @click="submitForm">发布
         </el-button>
         <!--<el-button v-loading="loading" type="warning" @click="draftForm">草稿</el-button>-->
@@ -157,7 +157,8 @@ const defaultForm = {
   envname: '',
   importance: '一般',
   // selectclass: 'bug',
-  appversion: '1.25'
+  appversion: '1.25',
+  platforms: 'iphone'
   // selectoses: []
 }
 

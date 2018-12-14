@@ -32,6 +32,14 @@ export function changeStatus(query) {
   })
 }
 
+export function changeMyStatus(data) {
+  return request({
+    url: '/bug/changemystatus',
+    method: 'post',
+    data: data
+  })
+}
+
 export function showBug(id) {
   return request({
     url: '/bug/show',

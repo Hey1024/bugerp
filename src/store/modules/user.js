@@ -1,4 +1,5 @@
 import { loginByUsername, logout, getUserInfo } from '@/api/login'
+import { getMyStatus } from '@/api/get'
 import { getToken, setToken, removeToken, encrypt } from '@/utils/auth'
 
 const user = {
@@ -11,6 +12,7 @@ const user = {
     avatar: '',
     introduction: '',
     roles: [],
+    platformsOptions: [],
     setting: {
       articlePlatform: []
     },
@@ -54,12 +56,36 @@ const user = {
   },
 
   actions: {
+    // 获取用户显示的状态
+    GetUserStatusList({ commit }, userInfo) {
+      // const username = userInfo.username.trim()
+      return new Promise((resolve, reject) => {
+        getMyStatus().then(response => {
+          console.log(response.data)
+          // const data = response.data
+          // if (data.statuscode === 0) {
+          //   commit('SET_TOKEN', data.token)
+          //   setToken(data.token)
+          //   resolve()
+          // } else if (data.statuscode === 10) {
+          //   this.$message.error('username or password error')
+          //   reject()
+          // } else {
+          //   reject()
+          // }
+        }).catch(error => {
+          reject(error)
+        })
+      })
+    },
     // 用户名登录
     LoginByUsername({ commit }, userInfo) {
       // const username = userInfo.username.trim()
       return new Promise((resolve, reject) => {
         loginByUsername(userInfo).then(response => {
-          console.log(response.data)
+          getMyStatus().then(response => {
+            console.log(response.data)
+          })
           const data = response.data
           if (data.statuscode === 0) {
             commit('SET_TOKEN', data.token)

@@ -2,15 +2,16 @@
   <div class="app-container">
     <div class="filter-container">
       <el-input :placeholder="$t('table.title')" v-model="listQuery.title" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter"/>
-      <el-select v-model="listQuery.status" :placeholder="$t('table.status')" clearable style="width: 90px" class="filter-item">
-        <el-option v-for="(item, index) in statuslist" :key="index" :label="item" :value="item"/>
-      </el-select>
+      <!--<el-select v-model="listQuery.status" :placeholder="$t('table.status')" clearable style="width: 90px" class="filter-item">-->
+      <!--<el-option v-for="(item, index) in statuslist" :key="index" :label="item" :value="item"/>-->
+      <!--</el-select>-->
       <el-select v-model="listQuery.level" :placeholder="$t('table.level')" clearable style="width: 90px" class="filter-item">
         <el-option v-for="(item, index) in levels" :key="index" :label="item" :value="item"/>
       </el-select>
       <el-select v-model="listQuery.project" :placeholder="$t('table.project')" clearable class="filter-item" style="width: 130px">
         <el-option v-for="(item, index) in projectnames" :key="index" :label="item" :value="item"/>
       </el-select>
+
       <!--<el-select @change='handleFilter' style="width: 140px" class="filter-item" v-model="listQuery.sort">-->
       <!--<el-option v-for="item in sortOptions" :key="item.key" :label="item.label" :value="item.key">-->
       <!--</el-option>-->
@@ -19,7 +20,21 @@
       <!--<el-button class="filter-item" style="margin-left: 10px;" @click="handleCreate" type="primary" icon="el-icon-edit">{{$t('table.add')}}</el-button>-->
       <!--<el-button class="filter-item" type="primary" :loading="downloadLoading" v-waves icon="el-icon-download" @click="handleDownload">{{$t('table.export')}}</el-button>-->
       <!--<el-checkbox class="filter-item" style='margin-left:15px;' @change='tableKey=tableKey+1' v-model="showReviewer">{{$t('table.reviewer')}}</el-checkbox>-->
+      <el-dropdown :hide-on-click="false" :show-timeout="100" trigger="click">
+        <el-button plain >
+          状态({{ statuslength }})
+          <i class="el-icon-caret-bottom el-icon--right"/>
+        </el-button>
+        <el-dropdown-menu slot="dropdown" class="no-border" >
+          <el-checkbox-group v-model="checkstatus" style="padding-left: 15px;" @change="HandleChange">
+            <el-checkbox v-for="(item, index) in platformsOptions" :label="item" :key="index">
+              {{ item }}
+            </el-checkbox>
+          </el-checkbox-group>
+        </el-dropdown-menu>
+      </el-dropdown>
     </div>
+    <!--<PlatformDropdown v-model="listQuery.status" />-->
     <el-table v-loading="listLoading" :data="list" border fit highlight-current-row style="width: 100%">
 
       <el-table-column :label="$t('table.id')" align="center" width="50">
@@ -96,11 +111,12 @@
 </template>
 
 <script>
-import { getMyBugs, closeBug } from '@/api/bugs'
-import { changeStatus } from '@/api/bugs'
+import { closeBug } from '@/api/bugs'
+import { changeStatus, changeMyStatus } from '@/api/bugs'
 import { searchMyBugs } from '@/api/search'
 import waves from '@/directive/waves' // 水波纹指令
-import { getProject, getStatus } from '@/api/get'
+import { getProject, getStatus, getMyStatus } from '@/api/get'
+// import { PlatformDropdown } from './components/Dropdown'
 
 const calendarTypeOptions = [
   { key: 'CN', display_name: 'China' },
@@ -144,27 +160,67 @@ export default {
         level: undefined,
         project: undefined,
         title: undefined,
-        status: undefined
+        status: []
       },
       projectnames: [],
+      platformsOptions: [],
       statuslist: [],
-      levels: ['高', '中', '低']
+      checkstatus: [],
+      levels: ['高', '中', '低'],
+      statuslength: 0
     }
+  },
+  mounted() {
+    this.getstatus()
   },
   activated() {
     this.getList()
     this.getpname()
   },
   created() {
-    this.getList()
     this.getstatus()
+    this.getList()
     this.getpname()
+    this.getmystatus()
   },
   methods: {
+    HandleChange() {
+      const data = {
+        checkstatus: this.checkstatus
+      }
+      changeMyStatus(data).then(resp => {
+        if (resp.data.statuscode === 0) {
+          if (resp.data.checkstatus !== null) {
+            this.checkstatus = resp.data.checkstatus
+            this.statuslength = this.checkstatus.length
+          }
+          this.listLoading = true
+          searchMyBugs(this.listQuery).then(resp => {
+            console.log(resp.data)
+            if (resp.data.statuscode === 0) {
+              this.list = resp.data.articlelist
+              this.total = resp.data.total
+              this.listQuery.page = resp.data.page
+            }
+          })
+          this.listLoading = false
+        }
+      })
+    },
     getstatus() {
-      getStatus().then(response => {
-        if (response.data.statuscode === 0) {
-          this.statuslist = response.data.statuslist
+      getStatus().then(resp => {
+        if (resp.data.statuscode === 0) {
+          this.platformsOptions = resp.data.statuslist
+        }
+      })
+    },
+    getmystatus() {
+      getMyStatus().then(resp => {
+        if (resp.data.statuscode === 0) {
+          if (resp.data.checkstatus !== null) {
+            this.checkstatus = resp.data.checkstatus
+            this.statuslength = this.checkstatus.length
+          }
         }
       })
     },
@@ -227,9 +283,16 @@ export default {
     },
     handleFilter() {
       this.listQuery.page = 1
+      this.listLoading = true
       searchMyBugs(this.listQuery).then(resp => {
         console.log(resp.data)
+        if (resp.data.statuscode === 0) {
+          this.list = resp.data.articlelist
+          this.total = resp.data.total
+          this.listQuery.page = resp.data.page
+        }
       })
+      this.listLoading = false
     },
     handleSizeChange(val) {
       this.listQuery.limit = val
@@ -274,17 +337,15 @@ export default {
         page: this.listQuery.page,
         limit: this.listQuery.limit
       }
-      getMyBugs(pager).then(response => {
-        if (response.data.statuscode === 0) {
-          if (response.data.total === 0) {
-            this.listLoading = false
-            return
-          }
-          this.list = response.data.articlelist
-          this.total = response.data.total
+      searchMyBugs(pager).then(resp => {
+        console.log(resp.data)
+        if (resp.data.statuscode === 0) {
+          this.list = resp.data.articlelist
+          this.total = resp.data.total
+          this.listQuery.page = resp.data.page
         }
-        this.listLoading = false
       })
+      this.listLoading = false
     }
   }
 }

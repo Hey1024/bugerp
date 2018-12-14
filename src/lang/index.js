@@ -26,5 +26,5 @@ const i18n = new VueI18n({
   // set locale messages
   messages
 })
-
+console.log(444)
 export default i18n
