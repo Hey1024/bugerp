@@ -31,3 +31,11 @@ export function bugFilter(data) {
     data: data
   })
 }
+
+export function searchMyTasks(data) {
+  return request({
+    url: '/search/mytasks',
+    method: 'post',
+    data: data
+  })
+}

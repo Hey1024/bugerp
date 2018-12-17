@@ -3,10 +3,10 @@
     <el-form ref="postForm" :model="postForm" :rules="rules" class="form-container" >
 
       <sticky :class-name="'sub-navbar ' + postForm.status">
-        <CommentDropdown v-model="postForm.comment_disabled" />
-        <PlatformDropdown v-model="postForm.platforms" />
-        <SourceUrlDropdown v-model="postForm.source_uri" />
-        <el-button v-loading="loading" style="margin-left: 10px;" type="success" @click="submitForm">发布
+        <!--<CommentDropdown v-model="postForm.comment_disabled" />-->
+        <!--<PlatformDropdown v-model="postForm.platforms" />-->
+        <!--<SourceUrlDropdown v-model="postForm.source_uri" />-->
+        <el-button v-loading="loading" :disabled="ispub" style="margin-left: 10px;" type="success" @click="submitForm">发布
         </el-button>
         <!--<el-button v-loading="loading" type="warning" @click="draftForm">草稿</el-button>-->
       </sticky>
@@ -48,12 +48,12 @@
           </el-col>
           <el-col :span="8">
             <el-form-item style="margin-bottom: 40px;" label="应用版本：">
-              <el-select v-model="postForm.version" placeholder="请选择">
+              <el-select v-model="postForm.appversion" placeholder="请选择">
                 <el-option
-                  v-for="item in versions"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"/>
+                  v-for="(item, index) in versions"
+                  :key="index"
+                  :label="item"
+                  :value="item"/>
               </el-select>
             </el-form-item>
           </el-col>
@@ -142,9 +142,9 @@ import Sticky from '@/components/Sticky' // 粘性header组件
 import { validateURL } from '@/utils/validate'
 import { fetchBug, createBug } from '@/api/bugs'
 import { getEnv, getProject, getUsers, getVersion } from '@/api/get'
-import Warning from './Warning'
+// import Warning from './Warning'
 // import { removeToken } from '@/utils/auth'
-import { CommentDropdown, PlatformDropdown, SourceUrlDropdown } from './Dropdown'
+// import { CommentDropdown, PlatformDropdown, SourceUrlDropdown } from './Dropdown'
 
 const defaultForm = {
   // status: 'draft',
@@ -157,7 +157,7 @@ const defaultForm = {
   envname: '',
   importance: '一般',
   // selectclass: 'bug',
-  appversion: '1.25',
+  appversion: '',
   platforms: 'iphone'
   // selectoses: []
 }
@@ -169,11 +169,11 @@ export default {
     MDinput,
     Upload,
     Multiselect,
-    Sticky,
-    Warning,
-    CommentDropdown,
-    PlatformDropdown,
-    SourceUrlDropdown
+    Sticky
+    // Warning
+    // CommentDropdown,
+    // PlatformDropdown,
+    // SourceUrlDropdown
   },
   props: {
     isEdit: {
@@ -201,6 +201,7 @@ export default {
       postForm: Object.assign({}, defaultForm),
       loading: false,
       userListOptions: [],
+      ispub: false,
       rules: {
         // image_uri: [{ validator: validateRequire }],
         // title: [{ validator: validateRequire }],
@@ -283,13 +284,7 @@ export default {
     getversion() {
       getVersion().then(response => {
         if (response.data.statuscode === 0) {
-          const arr = response.data.versionlist
-          for (let i = 0; i < arr.length; i++) {
-            const aa = {}
-            aa.value = arr[i]
-            aa.label = arr[i]
-            this.versions.push(aa)
-          }
+          this.versions = response.data.versionlist
         }
       }).catch(err => {
         console.log(err)
@@ -328,12 +323,14 @@ export default {
       })
     },
     submitForm() {
+      this.ispub = true
       // this.postForm.display_time = parseInt(this.display_time / 1000)
       if (this.postForm.title.length > 40) {
         this.$message({
           message: '标题长度必须小于40位',
           type: 'error'
         })
+        this.ispub = false
         return
       }
       if (this.postForm.selectuser.length < 1) {
@@ -341,6 +338,7 @@ export default {
           message: '请选择指定给谁',
           type: 'error'
         })
+        this.ispub = false
         return
       }
       if (this.postForm.projectname.length < 1) {
@@ -348,10 +346,12 @@ export default {
           message: '请选择项目名称',
           type: 'error'
         })
+        this.ispub = false
         return
       }
       this.$refs.postForm.validate(valid => {
         if (valid) {
+          console.log('this.verion:' + this.postForm.appversion)
           createBug(this.postForm).then(resp => {
             console.log(resp.data)
             if (resp.data.statuscode === 0) {
@@ -371,9 +371,11 @@ export default {
                 })
               }
             }
+            this.ispub = false
             // this.$router.push('/bug/allbugs')
           })
         } else {
+          this.ispub = false
           return false
         }
       })

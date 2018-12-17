@@ -115,7 +115,7 @@ import { closeBug } from '@/api/bugs'
 import { changeStatus, changeMyStatus } from '@/api/bugs'
 import { searchMyBugs } from '@/api/search'
 import waves from '@/directive/waves' // 水波纹指令
-import { getProject, getStatus, getMyStatus } from '@/api/get'
+import { getProject, getStatus, getMyStatus, getPermStatus } from '@/api/get'
 // import { PlatformDropdown } from './components/Dropdown'
 
 const calendarTypeOptions = [
@@ -178,10 +178,9 @@ export default {
     this.getpname()
   },
   created() {
-    this.getstatus()
+    this.getmystatus()
     this.getList()
     this.getpname()
-    this.getmystatus()
   },
   methods: {
     HandleChange() {
@@ -211,6 +210,11 @@ export default {
       getStatus().then(resp => {
         if (resp.data.statuscode === 0) {
           this.platformsOptions = resp.data.statuslist
+        }
+      })
+      getPermStatus().then(resp => {
+        if (resp.data.statuscode === 0) {
+          this.statuslist = resp.data.statuslist
         }
       })
     },

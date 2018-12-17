@@ -2,9 +2,6 @@
   <div class="app-container">
     <div class="filter-container">
       <el-input :placeholder="$t('table.title')" v-model="listQuery.title" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter"/>
-      <el-select v-model="listQuery.status" :placeholder="$t('table.status')" clearable style="width: 90px" class="filter-item">
-        <el-option v-for="(item, index) in statuslist" :key="index" :label="item.value" :value="item.label"/>
-      </el-select>
       <el-select v-model="listQuery.level" :placeholder="$t('table.level')" clearable style="width: 90px" class="filter-item">
         <el-option v-for="(item, index) in levels" :key="index" :label="item" :value="item"/>
       </el-select>
@@ -19,6 +16,19 @@
       <!--<el-button class="filter-item" style="margin-left: 10px;" @click="handleCreate" type="primary" icon="el-icon-edit">{{$t('table.add')}}</el-button>-->
       <!--<el-button class="filter-item" type="primary" :loading="downloadLoading" v-waves icon="el-icon-download" @click="handleDownload">{{$t('table.export')}}</el-button>-->
       <!--<el-checkbox class="filter-item" style='margin-left:15px;' @change='tableKey=tableKey+1' v-model="showReviewer">{{$t('table.reviewer')}}</el-checkbox>-->
+      <el-dropdown :hide-on-click="false" :show-timeout="100" trigger="click" style="vertical-align: top;">
+        <el-button plain >
+          状态({{ statuslength }})
+          <i class="el-icon-caret-bottom el-icon--right"/>
+        </el-button>
+        <el-dropdown-menu slot="dropdown" class="no-border" >
+          <el-checkbox-group v-model="checkstatus" style="padding-left: 15px;" @change="HandleChange">
+            <el-checkbox v-for="(item, index) in platformsOptions" :label="item" :key="index">
+              {{ item }}
+            </el-checkbox>
+          </el-checkbox-group>
+        </el-dropdown-menu>
+      </el-dropdown>
     </div>
 
     <el-table
@@ -93,7 +103,7 @@
       <el-table-column :label="$t('table.actions')" align="center" width="230" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-select v-model="scope.row.status" style="width: 200px" class="filter-item" placeholder="修改状态" @change="changestatus(scope.row)">
-            <el-option v-for="(item, index) in statuslist" :key="index" :label="item.value" :value="item.label"/>
+            <el-option v-for="(item, index) in statuslist" :key="index" :label="item" :value="item"/>
           </el-select>
         </template>
       </el-table-column>
@@ -178,10 +188,9 @@
 </template>
 
 <script>
-import { changeStatus } from '@/api/bugs'
-import { getAllBugs } from '@/api/bugs'
+import { changeStatus, changeMyStatus } from '@/api/bugs'
 import { searchAllBugs } from '@/api/search'
-import { getProject, getPermStatus } from '@/api/get'
+import { getProject, getPermStatus, getMyStatus, getStatus } from '@/api/get'
 import waves from '@/directive/waves' // 水波纹指令
 import { parseTime } from '@/utils'
 
@@ -274,7 +283,10 @@ export default {
       },
       downloadLoading: false,
       statuslist: [],
-      levels: ['高', '中', '低']
+      levels: ['高', '中', '低'],
+      checkstatus: [],
+      statuslength: 0,
+      platformsOptions: []
     }
   },
   activated() {
@@ -282,12 +294,36 @@ export default {
     this.getprojectname()
   },
   created() {
-    this.getList()
     this.getstatus()
+    this.getmystatus()
+    this.getList()
     this.getprojectname()
     // this.gettaskstatus()
   },
   methods: {
+    HandleChange() {
+      const data = {
+        checkstatus: this.checkstatus
+      }
+      changeMyStatus(data).then(resp => {
+        if (resp.data.statuscode === 0) {
+          if (resp.data.checkstatus !== null) {
+            this.checkstatus = resp.data.checkstatus
+            this.statuslength = this.checkstatus.length
+          }
+          this.listLoading = true
+          searchAllBugs(this.listQuery).then(resp => {
+            console.log(resp.data)
+            if (resp.data.statuscode === 0) {
+              this.list = resp.data.articlelist
+              this.total = resp.data.total
+              this.listQuery.page = resp.data.page
+            }
+          })
+          this.listLoading = false
+        }
+      })
+    },
     getprojectname() {
       // const now = new Date().getTime()
       getProject().then(response => {
@@ -318,25 +354,9 @@ export default {
         }
       })
     },
-    getstatus() {
-      getPermStatus().then(response => {
-        if (response.data.statuscode === 0) {
-          const arr = response.data.statuslist
-          const sl = arr.length
-          for (let i = 0; i < sl; i++) {
-            const aa = {}
-            aa.value = arr[i]
-            aa.label = arr[i]
-            this.statuslist.push(aa)
-          }
-        }
-      })
-    },
     getList() {
       this.listLoading = true
-      const now = new Date().valueOf()
-      console.log(now)
-      getAllBugs(this.listQuery).then(response => {
+      searchAllBugs(this.listQuery).then(response => {
         console.log(response.data)
         if (response.data.statuscode === 0) {
           this.total = response.data.total
@@ -398,6 +418,30 @@ export default {
           return v[j]
         }
       }))
+    },
+    getmystatus() {
+      getPermStatus().then(resp => {
+        if (resp.data.statuscode === 0) {
+          console.log('perm')
+          console.log(resp.data)
+          this.statuslist = resp.data.statuslist
+        }
+      })
+      getMyStatus().then(resp => {
+        if (resp.data.statuscode === 0) {
+          if (resp.data.checkstatus !== null) {
+            this.checkstatus = resp.data.checkstatus
+            this.statuslength = this.checkstatus.length
+          }
+        }
+      })
+    },
+    getstatus() {
+      getStatus().then(resp => {
+        if (resp.data.statuscode === 0) {
+          this.platformsOptions = resp.data.statuslist
+        }
+      })
     }
   }
 }

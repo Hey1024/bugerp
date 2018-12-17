@@ -2,6 +2,13 @@
   <div class="app-container">
     <div class="filter-container">
       <el-input :placeholder="$t('table.title')" v-model="listQuery.title" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter"/>
+      <el-select v-model="listQuery.level" :placeholder="$t('table.level')" clearable style="width: 90px" class="filter-item">
+        <el-option v-for="(item, index) in levels" :key="index" :label="item" :value="item"/>
+      </el-select>
+      <el-select v-model="listQuery.project" :placeholder="$t('table.project')" clearable class="filter-item" style="width: 130px">
+        <el-option v-for="(item, index) in projectnames" :key="index" :label="item" :value="item"/>
+      </el-select>
+
       <!--<el-select clearable style="width: 90px" class="filter-item" v-model="listQuery.importance" :placeholder="$t('table.importance')">-->
       <!--<el-option v-for="item in importanceOptions" :key="item" :label="item" :value="item">-->
       <!--</el-option>-->
@@ -18,6 +25,19 @@
       <!--<el-button class="filter-item" style="margin-left: 10px;" @click="handleCreate" type="primary" icon="el-icon-edit">{{$t('table.add')}}</el-button>-->
       <!--<el-button class="filter-item" type="primary" :loading="downloadLoading" v-waves icon="el-icon-download" @click="handleDownload">{{$t('table.export')}}</el-button>-->
       <!--<el-checkbox class="filter-item" style='margin-left:15px;' @change='tableKey=tableKey+1' v-model="showReviewer">{{$t('table.reviewer')}}</el-checkbox>-->
+      <el-dropdown :hide-on-click="false" :show-timeout="100" trigger="click" style="vertical-align: top;">
+        <el-button plain >
+          状态({{ statuslength }})
+          <i class="el-icon-caret-bottom el-icon--right"/>
+        </el-button>
+        <el-dropdown-menu slot="dropdown" class="no-border" >
+          <el-checkbox-group v-model="checkstatus" style="padding-left: 15px;" @change="HandleChange">
+            <el-checkbox v-for="(item, index) in platformsOptions" :label="item" :key="index">
+              {{ item }}
+            </el-checkbox>
+          </el-checkbox-group>
+        </el-dropdown-menu>
+      </el-dropdown>
     </div>
 
     <el-table
@@ -124,7 +144,7 @@
         <!--</el-form-item>-->
         <el-form-item :label="$t('table.status')">
           <el-select v-model="temp.status" class="filter-item" placeholder="Please select">
-            <el-option v-for="(item, index) in statuslist" :key="index" :label="item" :value="item"/>
+            <el-option v-for="(item, index) in platformsOptions" :key="index" :label="item" :value="item"/>
           </el-select>
         </el-form-item>
         <!--<el-form-item :label="$t('table.importance')">-->
@@ -160,8 +180,9 @@
 </template>
 
 <script>
-import { getUsers, getPermStatus } from '@/api/get'
-import { taskList, passBug, changeStatus } from '@/api/bugs'
+import { getUsers, getPermStatus, getProject, getStatus, getMyStatus } from '@/api/get'
+import { changeMyStatus, passBug, changeStatus } from '@/api/bugs'
+import { searchMyTasks } from '@/api/search'
 import waves from '@/directive/waves' // 水波纹指令
 import { parseTime } from '@/utils'
 // import { getProject } from '@/utils/auth'
@@ -215,7 +236,6 @@ export default {
       importanceOptions: [1, 2, 3, 4, 5],
       calendarTypeOptions,
       sortOptions: [{ label: 'ID Ascending', key: '+id' }, { label: 'ID Descending', key: '-id' }],
-      statuslist: [],
       showReviewer: false,
       temp: {
         id: undefined,
@@ -240,6 +260,8 @@ export default {
         create: 'Create'
       },
       dialogPvVisible: false,
+      platformsOptions: [],
+      statuslist: [],
       pvData: [],
       stop: {
         id: undefined,
@@ -251,26 +273,75 @@ export default {
         timestamp: [{ type: 'date', required: true, message: 'timestamp is required', trigger: 'change' }],
         title: [{ required: true, message: 'title is required', trigger: 'blur' }]
       },
-      downloadLoading: false
+      downloadLoading: false,
+      levels: ['高', '中', '低'],
+      projectnames: [],
+      checkstatus: [],
+      statuslength: 0
     }
   },
   activated() {
+    this.getstatus
     this.getList()
-    this.getstatus()
   },
   created() {
+    this.getstatus()
+    this.getmystatus()
     this.getspuser()
     this.getList()
-    this.getstatus()
+    this.getpname()
     // this.gettaskstatus()
   },
   methods: {
     getstatus() {
-      getPermStatus().then(response => {
+      getStatus().then(resp => {
+        if (resp.data.statuscode === 0) {
+          this.platformsOptions = resp.data.statuslist
+        }
+      })
+      getPermStatus().then(resp => {
+        if (resp.data.statuscode === 0) {
+          this.statuslist = resp.data.statuslist
+        }
+      })
+    },
+    HandleChange() {
+      const data = {
+        checkstatus: this.checkstatus
+      }
+      changeMyStatus(data).then(resp => {
+        if (resp.data.statuscode === 0) {
+          if (resp.data.checkstatus !== null) {
+            this.checkstatus = resp.data.checkstatus
+            this.statuslength = this.checkstatus.length
+          }
+          this.listLoading = true
+          searchMyTasks(this.listQuery).then(resp => {
+            console.log(resp.data)
+            if (resp.data.statuscode === 0) {
+              this.list = resp.data.articlelist
+              this.total = resp.data.total
+              this.listQuery.page = resp.data.page
+            }
+          })
+          this.listLoading = false
+        }
+      })
+    },
+    getpname() {
+      getProject().then(response => {
         if (response.data.statuscode === 0) {
-          this.statuslist = response.data.statuslist
-          console.log('--------')
-          console.log(this.statuslist)
+          this.projectnames = response.data.projectlist
+        }
+      })
+    },
+    getmystatus() {
+      getMyStatus().then(response => {
+        if (response.data.statuscode === 0) {
+          if (response.data.statuslist !== null) {
+            this.checkstatus = response.data.statuslist
+            this.statuslength = this.checkstatus.length
+          }
         }
       })
     },
@@ -289,14 +360,16 @@ export default {
     },
     getList() {
       this.listLoading = true
-      console.log(1111)
-      taskList().then(response => {
-        console.log(response.data)
-        if (response.data.statuscode === 0) {
-          this.list = response.data.articlelist
+
+      searchMyTasks(this.listQuery).then(resp => {
+        console.log(resp.data)
+        if (resp.data.statuscode === 0) {
+          this.list = resp.data.articlelist
+          this.total = resp.data.total
+          this.listQuery.page = resp.data.page
         }
-        this.listLoading = false
       })
+      this.listLoading = false
     },
     handleFilter() {
       this.listQuery.page = 1
@@ -310,70 +383,10 @@ export default {
       this.listQuery.page = val
       this.getList()
     },
-    handleStopStatus(row) {
-      this.stop.id = row.id
-      this.stop.status = row.status
-      this.stop.stop = row.stop
-      // stoptask(this.stop).then(resp => {
-      //   const newlist = resp.data
-      //   if (resp.data === 'fail') {
-      //     this.$message({
-      //       message: '操作失败',
-      //       type: 'error'
-      //     })
-      //   } else {
-      //     const ll = this.list.length
-      //     for (let i = 0; i < ll; i++) {
-      //       if (this.list[i].id === row.id) {
-      //         this.list[i].status = newlist.status
-      //         this.list[i].stop = newlist.stop
-      //         this.list[i].disable = newlist.disable
-      //       }
-      //     }
-      //     this.$message({
-      //       message: '操作成功',
-      //       type: 'success'
-      //     })
-      //   }
-      // }).catch(() => {
-      //   this.$message({
-      //     message: '操作失败',
-      //     type: 'fail'
-      //   })
-      // })
-    },
     handleModifyStatus(row) {
       this.changeaction.id = row.id
       this.changeaction.status = row.status
       this.changeaction.action = row.action
-      // changetask(this.changeaction).then(resp => {
-      //   if (resp.data === 'ok') {
-      //     if (row.action === '完成') {
-      //       this.list = this.list.filter(item => {
-      //         return item.id !== row.id
-      //       })
-      //     }
-      //     if (row.action === '领取') {
-      //       row.status = '解决中'
-      //       const ll = this.list.length
-      //       for (let i = 0; i < ll; i++) {
-      //         if (row.id === this.list[i].id) {
-      //           this.list[i].action = '完成'
-      //         }
-      //       }
-      //       row.action === '完成'
-      //     }
-      //     this.$message({
-      //       message: '操作成功',
-      //       type: 'success'
-      //     })
-      //   }
-      // }).catch(() => {
-      //   this.$message({
-      //     message: '操作失败',
-      //     type: 'error'
-      //   })
-      // })
     },
     handleCreate() {
       this.resetTemp()
