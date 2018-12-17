@@ -2,6 +2,8 @@
 const baseUrl = 'http://127.0.0.1:10001'
 
 const g = {
+  username: 'admin@qq.com',
+  password: 'admin',
   uploadUrl: baseUrl + '/uploadimg',
   headImgUrl: baseUrl + '/upload/headimg',
   apiUrl: baseUrl,

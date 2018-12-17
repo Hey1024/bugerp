@@ -67,6 +67,7 @@ import { isvalidUsername } from '@/utils/validate'
 import LangSelect from '@/components/LangSelect'
 import SocialSign from './socialsignin'
 import { encrypt } from '@/utils/auth'
+import g from '@/config/config'
 
 export default {
   name: 'Login',
@@ -88,8 +89,8 @@ export default {
     }
     return {
       loginForm: {
-        username: 'admin@qq.com',
-        password: 'admin'
+        username: g.username,
+        password: g.password
       },
       loginRules: {
         username: [{ required: true, trigger: 'blur', validator: validateUsername }],
